@@ -1,12 +1,7 @@
 package com.gofore.aws.workshop.fetcher;
 
-import com.gofore.aws.workshop.common.net.HtmlClient;
-import com.gofore.aws.workshop.common.net.HttpClient;
+import com.gofore.aws.workshop.common.di.AwsModule;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
-import com.gofore.aws.workshop.common.s3.S3Client;
-import com.gofore.aws.workshop.common.s3.S3ClientProvider;
-import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
-import com.gofore.aws.workshop.common.sqs.SqsClient;
 import com.gofore.aws.workshop.fetcher.images.GoogleImagesFetcher;
 import com.gofore.aws.workshop.fetcher.images.ImageFetcher;
 import com.google.inject.AbstractModule;
@@ -17,34 +12,16 @@ public class FetcherModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(HtmlClient.class).in(Singleton.class);
-        bind(HttpClient.class).in(Singleton.class);
+        install(new AwsModule());
         bind(ImageFetcher.class).to(GoogleImagesFetcher.class).in(Singleton.class);
-        
-        bind(S3Client.class).toProvider(S3ClientProvider.class).in(Singleton.class);
     }
 
     @Provides @Singleton
-    public ApplicationProperties provideApplicationProperties() {
+    public ApplicationProperties applicationProperties() {
         return new ApplicationProperties()
                 .withSystemPropertyLoader()
+                .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
                 .withClasspathPropertyLoader("fetcher.properties");
     }
     
-    @Provides @Singleton
-    public SimpleDBClient provideSimpleDBClient(ApplicationProperties properties) {
-        String accessKey = properties.lookup("aws.access.key");
-        String secretKey = properties.lookup("aws.secret.key");
-        String endpoint = properties.lookup("aws.simpledb.endpoint");
-        return new SimpleDBClient(accessKey, secretKey, endpoint);
-    }
-    
-    @Provides
-    @Singleton
-    public SqsClient provideSqsClient(ApplicationProperties properties) {
-        String accessKey = properties.lookup("aws.access.key");
-        String secretKey = properties.lookup("aws.secret.key");
-        String endpoint = properties.lookup("aws.sqs.endpoint");
-        return new SqsClient(accessKey, secretKey, endpoint);
-    }
 }

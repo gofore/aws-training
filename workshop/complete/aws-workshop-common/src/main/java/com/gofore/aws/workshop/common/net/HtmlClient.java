@@ -3,21 +3,24 @@ package com.gofore.aws.workshop.common.net;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.gofore.aws.workshop.common.async.ShutdownHelper;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+@Singleton
 public class HtmlClient {
 
     private static final String USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36";
     
     private final ExecutorService executor;
     
-    public HtmlClient() {
-        this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        ShutdownHelper.addShutdownHook(() -> this.executor);
+    @Inject
+    public HtmlClient(ExecutorService executor) {
+        ShutdownHelper.addShutdownHook(() -> executor);
+        this.executor = executor;
     }
     
     public CompletableFuture<Document> load(String url) {

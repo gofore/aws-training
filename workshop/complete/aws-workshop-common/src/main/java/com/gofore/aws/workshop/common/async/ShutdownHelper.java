@@ -4,7 +4,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ShutdownHelper {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShutdownHelper.class);
     
     private static final int TERMINATION_AWAIT_SECONDS = 10;
 
@@ -19,7 +24,7 @@ public class ShutdownHelper {
                 executorService.shutdown();
                 executorService.awaitTermination(TERMINATION_AWAIT_SECONDS, TimeUnit.SECONDS);
             } catch (InterruptedException ex) {
-                //LOGGER.error("Failed to stop SQS client in time, some jobs might be lost", ex);
+                LOGGER.error("Failed to stop SQS client in time, some jobs might be lost", ex);
             }
             shutdown.run();
         }));

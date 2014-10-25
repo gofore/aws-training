@@ -6,10 +6,12 @@ import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.RestletServer;
 import com.gofore.aws.workshop.loader.rest.GoogleImagesUpsertResource;
 import com.gofore.aws.workshop.loader.rest.QueueAttributesResource;
+import com.google.inject.Singleton;
 import org.restlet.Restlet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.routing.Router;
 
+@Singleton
 public class LoaderApplication extends GuiceApplication {
 
     @Inject

@@ -2,10 +2,8 @@ package com.gofore.aws.workshop.loader;
 
 import javax.inject.Singleton;
 
+import com.gofore.aws.workshop.common.di.AwsModule;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
-import com.gofore.aws.workshop.common.sqs.SqsClient;
-import com.gofore.aws.workshop.common.sqs.SqsClientProvider;
-import com.gofore.aws.workshop.loader.rest.GoogleImagesUpsertResource;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
@@ -13,15 +11,13 @@ public class LoaderModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(LoaderApplication.class).in(Singleton.class);
-        bind(GoogleImagesUpsertResource.class);
-        
-        bind(SqsClient.class).toProvider(SqsClientProvider.class).in(Singleton.class);
+        install(new AwsModule());
     }
 
     @Provides @Singleton
-    public ApplicationProperties provideApplicationProperties() {
+    public ApplicationProperties applicationProperties() {
         return new ApplicationProperties().withSystemPropertyLoader()
+                                          .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
                                           .withClasspathPropertyLoader("loader.properties");
     }
 }

@@ -1,6 +1,6 @@
 package com.gofore.aws.workshop.fetcher.images;
 
-import static com.gofore.aws.workshop.common.functional.Objects.set;
+import static com.gofore.aws.workshop.common.functional.Objects.setPresent;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -102,9 +102,9 @@ public class Updater {
 
     private ObjectMetadata createContentMetaData(HttpEntity entity) {
         ObjectMetadata meta = new ObjectMetadata();
-        set(meta::setContentLength, Optional.of(entity.getContentLength()));
-        set(meta::setContentEncoding, Optional.ofNullable(entity.getContentEncoding()).map(Header::getValue));
-        set(meta::setContentType, Optional.ofNullable(entity.getContentType()).map(Header::getValue));
+        setPresent(meta::setContentLength, Optional.of(entity.getContentLength()));
+        setPresent(meta::setContentEncoding, Optional.ofNullable(entity.getContentEncoding()).map(Header::getValue));
+        setPresent(meta::setContentType, Optional.ofNullable(entity.getContentType()).map(Header::getValue));
         return meta;
     }
     

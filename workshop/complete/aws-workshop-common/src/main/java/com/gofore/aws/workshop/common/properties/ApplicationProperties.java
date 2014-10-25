@@ -1,35 +1,29 @@
 package com.gofore.aws.workshop.common.properties;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.stream.Stream;
 
-public class ApplicationProperties implements PropertyLoader {
+public class ApplicationProperties extends AbstractPropertyLoader {
 
-    private final List<PropertyLoader> loaders = new ArrayList<>();
+    private final PropertyLoaderChain chain = new PropertyLoaderChain();
+    private final PropertyLoader interpolator = new PropertyInterpolator(chain);
     
     public ApplicationProperties withSystemPropertyLoader() {
-        loaders.add(new SystemPropertyLoader());
+        chain.add(new SystemPropertyLoader());
+        return this;
+    }
+
+    public ApplicationProperties withAwsCredentialsCsvLoader(String csvFile) {
+        chain.add(new AwsCredentialsCsvLoader(csvFile));
         return this;
     }
     
     public ApplicationProperties withClasspathPropertyLoader(String propertyFile) {
-        loaders.add(new ClasspathPropertyLoader(propertyFile));
+        chain.add(new ClasspathPropertyLoader(propertyFile));
         return this;
     }
 
     @Override
-    public String lookup(String name) throws NoSuchElementException {
-        return lookupOptional(name).get();
-    }
-
-    @Override
     public Optional<String> lookupOptional(String name) {
-        return loaders.stream()
-                .map(loader -> loader.lookupOptional(name))
-                .flatMap(o -> o.map(Stream::of).orElseGet(Stream::empty))
-                .findFirst();
+        return interpolator.lookupOptional(name);
     }
 }

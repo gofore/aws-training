@@ -5,7 +5,9 @@ import javax.inject.Inject;
 import com.gofore.aws.workshop.fetcher.images.Receiver;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 
+@Singleton
 public class FetcherApplication implements Runnable {
 
     private final Receiver receiver;

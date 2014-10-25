@@ -4,15 +4,27 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 public class Objects {
-    
-    public static <T> void set(Consumer<T> setter, Optional<T> value) {
+
+    /**
+     * Sets only value that is present.
+     * 
+     * @param setter the setter method reference
+     * @param value value to be set
+     */
+    public static <T> void setPresent(Consumer<T> setter, Optional<T> value) {
         if (value.isPresent()) {
             setter.accept(value.get());
         }
     }
-    
-    public static <T> void set(Consumer<T> setter, T value) {
-        set(setter, Optional.ofNullable(value));
+
+    /**
+     * Sets only value that is not <code>null</code>.
+     * 
+     * @param setter the setter method reference
+     * @param value value to be set
+     */
+    public static <T> void setNonNull(Consumer<T> setter, T value) {
+        setPresent(setter, Optional.ofNullable(value));
     }
     
     private Objects() { }
