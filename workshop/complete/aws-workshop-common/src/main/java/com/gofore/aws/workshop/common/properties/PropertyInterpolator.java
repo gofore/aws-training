@@ -16,21 +16,17 @@ public class PropertyInterpolator extends AbstractPropertyLoader {
 
     @Override
     public Optional<String> lookupOptional(String name) {
-        return delegate.lookupOptional(name).flatMap(this::replace);
+        return delegate.lookupOptional(name).map(this::replace);
     }
     
-    private Optional<String> replace(String value) {
+    private String replace(String value) {
         StringBuffer replaced = new StringBuffer();
         Matcher m = INTERPOLATION_PATTERN.matcher(value);
         while (m.find()) {
             Optional<String> val = delegate.lookupOptional(m.group(1));
-            if (!val.isPresent()) {
-                return val;
-            } else {
-                m.appendReplacement(replaced, val.get());
-            }
+            m.appendReplacement(replaced, val.orElse(m.group()));
         }
         m.appendTail(replaced);
-        return Optional.of(replaced.toString());
+        return replaced.toString();
     }
 }
