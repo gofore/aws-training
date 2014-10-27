@@ -18,6 +18,7 @@ public class LoaderModule extends AbstractModule {
     public ApplicationProperties applicationProperties() {
         return new ApplicationProperties().withSystemPropertyLoader()
                                           .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
-                                          .withClasspathPropertyLoader("loader.properties");
+                                          .withClasspathPropertyLoader("loader.properties")
+                                          .withClasspathPropertyLoader("common.properties");
     }
 }

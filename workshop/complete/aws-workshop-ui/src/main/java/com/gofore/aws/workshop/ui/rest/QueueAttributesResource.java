@@ -1,4 +1,4 @@
-package com.gofore.aws.workshop.loader.rest;
+package com.gofore.aws.workshop.ui.rest;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class QueueAttributesResource extends RestServerResource {
     @Inject
     public QueueAttributesResource(ApplicationProperties properties, SqsClient sqsClient) {
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("aws.sqs.queue.url");
+        this.queueUrl = properties.lookup("images.queue.url");
     }
     
     @Get("json")

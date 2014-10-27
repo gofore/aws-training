@@ -26,7 +26,7 @@ public class GoogleImagesUpsertResource extends RestServerResource {
     @Inject
     public GoogleImagesUpsertResource(ApplicationProperties properties, SqsClient sqsClient) {
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("aws.sqs.queue.url");
+        this.queueUrl = properties.lookup("images.queue.url");
     }
 
     @Put("json")

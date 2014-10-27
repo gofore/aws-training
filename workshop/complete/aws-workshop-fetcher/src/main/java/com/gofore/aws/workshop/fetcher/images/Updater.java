@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -24,6 +26,7 @@ import com.gofore.aws.workshop.common.net.HttpClient;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.s3.S3Client;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
+import com.gofore.aws.workshop.fetcher.utils.TermsParser;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import org.apache.http.Header;
@@ -40,22 +43,24 @@ public class Updater {
     private static final String THUMBNAILS_SUBDIR = "thumbnails";
     
     private final S3Client s3Client;
-    private final SimpleDBClient simpleDbClient;
+    private final SimpleDBClient simpleDBClient;
     private final HttpClient httpClient;
+    private final TermsParser termsParser;
     private final HashFunction hashFunction;
     private final String s3endpoint;
     private final String s3bucket;
     private final String domain;
 
     @Inject
-    public Updater(ApplicationProperties properties, S3Client s3Client, SimpleDBClient simpleDbClient, HttpClient httpClient) {
+    public Updater(ApplicationProperties properties, S3Client s3Client, SimpleDBClient simpleDBClient, HttpClient httpClient, TermsParser termsParser) {
         this.s3Client = s3Client;
-        this.simpleDbClient = simpleDbClient;
+        this.simpleDBClient = simpleDBClient;
         this.httpClient = httpClient;
+        this.termsParser = termsParser;
         this.hashFunction = Hashing.murmur3_128();
         this.s3endpoint = properties.lookup("aws.s3.endpoint");
         this.s3bucket = properties.lookup("aws.s3.bucket");
-        this.domain = properties.lookup("aws.simpledb.domain");
+        this.domain = properties.lookup("images.domain");
     }
 
     public CompletableFuture<Image> update(Image image) {
@@ -87,13 +92,17 @@ public class Updater {
     }
     
     private CompletableFuture<Void> save(String id, Image image) {
-        List<ReplaceableAttribute> attributes = Arrays.asList(
+        Stream<ReplaceableAttribute> meta = Arrays.asList(
                 new ReplaceableAttribute("thumbnailUrl", getThumbnailUrl(id), true),
                 new ReplaceableAttribute("imageUrl", image.getImageUrl(), true),
                 new ReplaceableAttribute("description", image.getDescription(), true)
-        );
+        ).stream();
+        Stream<ReplaceableAttribute> terms = termsParser
+                .parse(image.getDescription())
+                .map(v -> new ReplaceableAttribute("term", v, true));
+        List<ReplaceableAttribute> attributes = Stream.concat(meta, terms).collect(Collectors.toList());
         PutAttributesRequest request = new PutAttributesRequest(domain, id, attributes);
-        CompletableFuture<Void> future = simpleDbClient.putAttributes(request);
+        CompletableFuture<Void> future = simpleDBClient.putAttributes(request);
         return future.whenComplete(Consumers.consumer(
                 (v) -> LOGGER.info("Successfully saved image {} metadata", id),
                 (e) -> LOGGER.error("Failed to save image {} metadata", id, e)

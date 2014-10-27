@@ -33,7 +33,7 @@ public class Receiver {
         this.sqsClient = sqsClient;
         this.imageFetcher = imageFetcher;
         this.updater = updater;
-        this.queueUrl = properties.lookup("aws.sqs.queue.url");
+        this.queueUrl = properties.lookup("images.queue.url");
     }
     
     public void start() {
@@ -44,7 +44,7 @@ public class Receiver {
                 ReceiveMessageResult result = sqsClient.receiveMessage(request).get();
                 result.getMessages().stream().forEach(this::handleMessage);
             } catch (Exception ex) {
-                LOGGER.error("Failed to receive mesage from {}", queueUrl, ex);
+                LOGGER.error("Failed to receive message from {}", queueUrl, ex);
             }
         }
     }

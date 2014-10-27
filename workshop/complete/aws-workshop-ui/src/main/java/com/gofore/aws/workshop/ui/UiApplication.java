@@ -4,11 +4,16 @@ import javax.inject.Inject;
 
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.RestletServer;
+import com.gofore.aws.workshop.ui.rest.QueriesResource;
+import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
+import com.gofore.aws.workshop.ui.rest.SearchResource;
+import com.google.inject.Singleton;
 import org.restlet.Restlet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
 
+@Singleton
 public class UiApplication extends GuiceApplication {
 
     @Inject
@@ -19,6 +24,9 @@ public class UiApplication extends GuiceApplication {
     @Override
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
+        router.attach("/api/queue", target(QueueAttributesResource.class));
+        router.attach("/api/search", target(SearchResource.class));
+        router.attach("/api/queries", target(QueriesResource.class));
         router.attach("/", createStaticResources());
         return router;
     }
