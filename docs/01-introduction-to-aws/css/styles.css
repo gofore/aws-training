@@ -1,0 +1,189 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:700);
+
+.reveal h1 {
+  font-size: 3em;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: "Roboto", sans-serif;
+  letter-spacing: -0.01em;
+  color: #ff7100;
+  margin-bottom: 48px;
+}
+
+.reveal h1 > a:not(.hidden),
+.reveal h2 > a:not(.hidden),
+.reveal h3 > a:not(.hidden),
+.reveal h4 > a:not(.hidden),
+.reveal h5 > a:not(.hidden),
+.reveal h6 > a:not(.hidden) {
+  color: inherit !important;
+}
+
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  color: white;
+}
+
+.reveal blockquote {
+  padding: 12px;
+}
+
+.reveal ul,
+.reveal ol,
+.reveal dl {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reveal li,
+.reveal dt,
+.reveal dd {
+  line-height: 140%;
+  margin-bottom: 0.3em;
+}
+
+.reveal dt {
+  float: left;
+  clear: left;
+  width: 25%;
+  text-align: right;
+  margin-right: 0.7em;
+  font-weight: bold;
+}
+
+.reveal dd {
+  text-align: left;
+}
+
+.reveal .clear {
+  clear: both;
+}
+
+.reveal .title {
+  margin-bottom: 80px;
+}
+
+.reveal .disclaimer {
+  margin-top: 120px;
+  font-size: 70%;
+}
+
+.reveal .stress {
+  font-size: 120%;
+  margin: 1em auto;
+}
+
+.reveal .profit {
+  color: #85bb65;
+  font-weight: bold;
+}
+
+.reveal .end-title {
+  width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reveal .end-note {
+  color: white;
+}
+
+.reveal .top-header {
+  margin-bottom: 8px;
+}
+
+.reveal .full-width {
+  width: 100%;
+}
+
+.reveal .half-width {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;  
+}
+
+.reveal .half-left {
+  width: 48%;
+  float: left;
+}
+
+.reveal .half-right {
+  width: 48%;
+  float: right;
+}
+
+.reveal .pale {
+  opacity: 0.5;
+}
+
+.reveal .half-left .fragment.entrance {
+  opacity: 0;
+  -webkit-transform: translate(-400px,0);
+  -moz-transform: translate(-400px,0);
+  -ms-transform: translate(-400px,0);
+  -o-transform: translate(-400px,0);
+  transform: translate(-400px,0);  
+}
+
+.reveal .half-right .fragment.entrance {
+  opacity: 0;
+  -webkit-transform: translate(400px,0);
+  -moz-transform: translate(400px,0);
+  -ms-transform: translate(400px,0);
+  -o-transform: translate(400px,0);
+  transform: translate(400px,0);
+}
+
+.reveal .fragment.entrance.visible {
+  opacity: 1;
+  -webkit-transform: translate(0,0);
+  -moz-transform: translate(0,0);
+  -ms-transform: translate(0,0);
+  -o-transform: translate(0,0);
+  transform: translate(0,0);
+}
+
+.reveal section .highlight {
+  background-color: #ffffff;
+  box-shadow: 0px 0px 10px 10px #ffffff;
+}
+
+.reveal section .tools {
+  margin-top: 3em;
+}
+
+.reveal section .tools img {
+  border: none;
+  box-shadow: none;
+  margin: 10px 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.reveal a.hidden,
+.reveal a.hidden:hover {
+  color: rgba(0,0,0,0);
+}
+
+.reveal a.gofore {
+  background: url('../img/gofore.png') no-repeat;
+  display: inline-block;
+  position: relative;
+  width: 171px;
+  height: 56px;
+  font-size: 52px;
+}
+
+#container-footer {
+  position: absolute;
+  bottom: 1.5em;
+  left: 2em;
+} 

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>AWS Workshop</title>
+        <link rel="stylesheet" href="../reveal.js-2.6.2/css/reveal.min.css">
+        <link rel="stylesheet" href="../reveal.js-2.6.2/css/theme/night.css" id="theme">
+        <link rel="stylesheet" href="../reveal.js-2.6.2/lib/css/zenburn.css">
+        <link rel="stylesheet" href="css/styles.css">
+
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown="slides.md"
+                         data-separator="^\n---\n$"
+                         data-vertical="^\n--\n$"
+                         data-notes="^Note:">
+                </section>
+            </div>
+        </div>
+
+        <script src="../reveal.js-2.6.2/lib/js/head.min.js"></script>
+        <script src="../reveal.js-2.6.2/js/reveal.min.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                width: 1280,
+                height: 768,
+                transition: 'linear',
+                dependencies: [
+                    { src: '../reveal.js-2.6.2/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../reveal.js-2.6.2/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../reveal.js-2.6.2/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                    ]
+            });
+        </script>
+    </body>
+</html>
