@@ -24,13 +24,13 @@
 
 --
 
-![AWS Services](/img/aws_list_of_services.png)
+![List of AWS Services](/img/aws_list_of_services.png)
 
 AWS Services
 
 ---
 
-# Elastic Compute Cloud (EC2)
+# Elastic Compute Cloud
 ## ![EC2 icon](/img/aws_icon_ec2.svg)
 
 --
@@ -43,24 +43,33 @@ AWS Services
 
 --
 
-## Geography
+![AWS Region map](/img/aws_map_regions.png)
+
+Regions
+
+Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney.
+
+Special regions are **GovCloud** and **Beijing**.
+
+--
+
+## Regions
 
 Each geographical *Region* is split into several *Availability Zones*. CDN content is distributed from *Edge Locations*.
 
-<pre>
-eu-central-1    EU (Frankfurt)
-eu-west-1       EU (Ireland)
-us-east-1       US East (N. Virginia)
-us-west-1       US West (N. California)
-us-west-2       US West (Oregon)
-sa-east-1       South America (Sao Paulo)
-ap-northeast-1  Asia Pacific (Tokyo)
-ap-southeast-1  Asia Pacific (Singapore)
-ap-southeast-2  Asia Pacific (Sydney)
+European regions include Ireland (eu-west-1) and Frankfurt (eu-central-1).
 
-us-gov-west-1   GovCloud
-cn-north-1      Beijing
-</pre>
+--
+
+## Security groups
+
+Each instance must belong to a *security group*.
+
+--
+
+## Demo: Launching an instance
+
+![AWS Management console](/img/aws_management_console.png)
 
 --
 
@@ -71,12 +80,6 @@ Usage is billed per *instance-hour* for running instances.
 Prices vary based on region, instance type, and operating system.
 
 Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
-
---
-
-![Web hosting architecture](/img/aws_reference_architecture_web_hosting.png)
-
-[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
 
 ---
 
@@ -122,3 +125,13 @@ cf.create_stack("Stack Name",
 ## Java SDK
 
 [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
+
+---
+
+# AWS-centric Application
+
+--
+
+![Web hosting reference architecture](/img/aws_reference_architecture_web_hosting.png)
+
+[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
