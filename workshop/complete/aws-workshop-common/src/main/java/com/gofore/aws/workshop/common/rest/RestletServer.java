@@ -11,6 +11,16 @@ import org.restlet.data.Protocol;
 import org.restlet.ext.guice.RestletGuice;
 
 public class RestletServer {
+
+    static {
+        try {
+            Class.forName("org.restlet.ext.slf4j.Slf4jLoggerFacade");
+            Class.forName("org.slf4j.Logger");
+            System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
+        } catch (ClassNotFoundException ex) {
+            // slf4j or restlet slf4j extension not found
+        }
+    }
     
     private int port;
     private Class<? extends Application> application;
