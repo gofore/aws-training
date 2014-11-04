@@ -1,0 +1,6 @@
+@import url(http://fonts.googleapis.com/css?family=Roboto:700);
+
+.reveal section img {
+  border: 2px solid #222;
+  background: rgba(255, 255, 255, 0.02);
+}
