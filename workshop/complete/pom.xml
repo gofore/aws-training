@@ -7,13 +7,15 @@
   <groupId>com.gofore.aws</groupId>
   <artifactId>aws-workshop</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  
   <modules>
     <module>aws-workshop-loader</module>
     <module>aws-workshop-common</module>
     <module>aws-workshop-fetcher</module>
     <module>aws-workshop-ui</module>
   </modules>
-  <packaging>pom</packaging>
+  
 
   <properties>
     <java.version>1.8</java.version>
@@ -126,6 +128,11 @@
         <version>${slf4j.version}</version>
       </dependency>
       <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.1.2</version>
+      </dependency>
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.11</version>
@@ -170,6 +177,13 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <extensions>
+      <extension>
+        <groupId>org.springframework.build</groupId>
+        <artifactId>aws-maven</artifactId>
+        <version>5.0.0.RELEASE</version>
+      </extension>
+    </extensions>
   </build>
 
   <repositories>
@@ -180,4 +194,17 @@
     </repository>
   </repositories>
 
+  <distributionManagement>
+    <repository>
+      <id>aws-release</id>
+      <name>AWS Release Repository</name>
+      <url>s3://aws-workshop-demo/release</url>
+    </repository>
+    <snapshotRepository>
+      <id>aws-snapshot</id>
+      <name>AWS Snapshot Repository</name>
+      <url>s3://aws-workshop-demo/snapshot</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
 </project>
