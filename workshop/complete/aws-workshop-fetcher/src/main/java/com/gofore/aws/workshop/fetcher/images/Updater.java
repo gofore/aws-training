@@ -50,6 +50,7 @@ public class Updater {
     private final String s3endpoint;
     private final String s3bucket;
     private final String domain;
+    private final String user;
 
     @Inject
     public Updater(ApplicationProperties properties, S3Client s3Client, SimpleDBClient simpleDBClient, HttpClient httpClient, TermsParser termsParser) {
@@ -61,6 +62,7 @@ public class Updater {
         this.s3endpoint = properties.lookup("aws.s3.endpoint");
         this.s3bucket = properties.lookup("aws.s3.bucket");
         this.domain = properties.lookup("images.domain");
+        this.user = properties.lookup("aws.user");
     }
 
     public CompletableFuture<Image> update(Image image) {
@@ -128,7 +130,7 @@ public class Updater {
     }
 
     private String getImageKey(String id) {
-        return THUMBNAILS_SUBDIR + "/" + id;
+        return THUMBNAILS_SUBDIR + "/" + user + "/" + id;
     }
     
     private String getThumbnailUrl(String id) {
