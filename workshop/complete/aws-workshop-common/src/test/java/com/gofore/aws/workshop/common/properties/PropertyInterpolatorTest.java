@@ -31,4 +31,15 @@ public class PropertyInterpolatorTest {
         String value = new PropertyInterpolator(loader).lookup("prop");
         assertEquals("{first}-second-{third}", value);
     }
+    
+    @Test
+    public void testRecursiveInterpolation() {
+        PropertyLoader loader = mock(PropertyLoader.class);
+        when(loader.lookupOptional("first")).thenReturn(Optional.of("F-{second}"));
+        when(loader.lookupOptional("second")).thenReturn(Optional.of("S-{third}"));
+        when(loader.lookupOptional("third")).thenReturn(Optional.of("T"));
+
+        String value = new PropertyInterpolator(loader).lookup("first");
+        assertEquals("F-S-T", value);
+    }
 }
