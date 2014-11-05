@@ -1,6 +1,6 @@
 
 # Amazon Web Services
-## Workshop (mainly) for developers
+### crash-course to cloud app development
 
 ---
 
@@ -17,10 +17,23 @@
 ## What you will need
 
 - Laptop with an IDE and JDK
+- Course material is available at github. TODO URL
 
 ---
 
 # Amazon Web Services
+
+--
+
+## Amazon Web Services (AWS)
+
+Extensive set of cloud services available in the web.
+
+Began as Amazon.com's internal infrastructure.
+
+Mainly IaaS, but ins some parts also PaaS.
+
+On-demand, self-service, pay-per-use.
 
 --
 
@@ -37,9 +50,10 @@ AWS Services
 
 ## Elastic Compute Cloud (EC2)
 
-- Core service
+- One of the core services of AWS
 - Virtual machines (or *instances*) as a service
 - ~20 different *instance types* that vary in computing power and memory
+- Instance is created from an *Amazon Machine Image (AMI)*
 
 --
 
@@ -47,15 +61,13 @@ AWS Services
 
 Regions
 
-Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney.
-
-Special regions are **GovCloud** and **Beijing**.
+Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney. Special regions are **GovCloud** and **Beijing**.
 
 --
 
 ## Regions
 
-Each geographical *Region* is split into several *Availability Zones*. CDN content is distributed from *Edge Locations*.
+Each geographical *Region* is split into several *Availability Zones (AZ)*. CDN content is distributed from *Edge Locations*.
 
 European regions include Ireland (eu-west-1) and Frankfurt (eu-central-1).
 
@@ -63,7 +75,7 @@ European regions include Ireland (eu-west-1) and Frankfurt (eu-central-1).
 
 ## Security groups
 
-Each instance must belong to a *security group*.
+Each instance must belong to a *security group*. TODO must?
 
 --
 
@@ -80,6 +92,15 @@ Usage is billed per *instance-hour* for running instances.
 Prices vary based on region, instance type, and operating system.
 
 Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
+
+---
+
+# Simple Storage Service
+
+--
+
+## Simple Storage Service (S3)
+
 
 ---
 
