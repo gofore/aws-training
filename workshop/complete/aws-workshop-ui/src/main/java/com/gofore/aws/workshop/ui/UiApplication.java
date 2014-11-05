@@ -27,6 +27,7 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/queue", target(QueueAttributesResource.class));
         router.attach("/api/search", target(SearchResource.class));
         router.attach("/api/queries", target(QueriesResource.class));
+        router.attach("/webjars", createWebjars());
         router.attach("/", createStaticResources());
         return router;
     }
@@ -36,6 +37,10 @@ public class UiApplication extends GuiceApplication {
         directory.setDeeplyAccessible(true);
         directory.setIndexName("index.html");
         return directory;
+    }
+    
+    private Directory createWebjars() {
+        return new Directory(getContext(), "clap://class/META-INF/resources/webjars");
     }
 
     public static void main(String[] args) throws Exception {
