@@ -184,6 +184,21 @@ cf.create_stack("Stack Name",
 
 --
 
+![Workshop application architecture](/img/aws_workshop_arch.png)
+
+--
+
 ![Web hosting reference architecture](/img/aws_reference_architecture_web_hosting.png)
 
 [aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
+
+
+---
+
+# Elasticity & Auto-scaling
+
+--
+
+Elastic Load balancer, Launch configuration, ASG and Scaling policy
+
+Indirectly uses SNS and CloudWatch

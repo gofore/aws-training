@@ -37,13 +37,13 @@
 
   "Mappings" : {
     "AWSInstanceType2Arch" : {
-      "t2.micro"    : { "Arch" : "64" },
-      "t2.small"    : { "Arch" : "64" }
+      "t2.micro" : { "Arch" : "64" },
+      "t2.small" : { "Arch" : "64" }
     },
 
     "AWSRegionArch2AMI" : {
-      "eu-west-1"      : { "32" : "ami-018bb975", "64" : "ami-f0b11187" },
-      "eu-central-1"      : { "32" : "ami-018bb975", "64" : "ami-b83c0aa5" }
+      "eu-west-1" : { "32" : "ami-018bb975", "64" : "ami-f0b11187" },
+      "eu-central-1" : { "32" : "ami-018bb975", "64" : "ami-b83c0aa5" }
     }
   },
 
