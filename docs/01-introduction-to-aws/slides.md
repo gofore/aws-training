@@ -107,6 +107,45 @@ sudo pip install boto
 <pre><code data-trim="" class="python">
 #!/usr/bin/env python
 
+import boto.ec2
+conn = boto.ec2.connect_to_region('eu-west-1',
+                                  aws_access_key_id='FOO',
+                                  aws_secret_access_key='BAR')
+conn.run_instances('ami-f0b11187',
+                   key_name='my-ssh-key',
+                   instance_type='t2.micro',
+                   security_groups=['my-security-group'])
+</code></pre>
+
+[github.com/boto/boto](https://github.com/boto/boto) | [docs.pythonboto.org](http://docs.pythonboto.org/)
+
+--
+
+## Java SDK
+
+[aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
+
+--
+
+## Cloudformation
+
+<pre><code data-trim="" class="json">
+{
+  "AWSTemplateFormatVersion" : "2010-09-09",
+  "Description" : "Example cloudformation template",
+  "Parameters" : {Set of parameters that must be given when creating a stack from this template},
+  "Mappings" : {Set of helper mappings},
+  "Conditions" : {Set of conditions},
+  "Resources" : {Set of resources to be created},
+  "Outputs" : {Set of outputs variables}
+}
+</code></pre>
+
+--
+
+<pre><code data-trim="" class="python">
+#!/usr/bin/env python
+
 import boto.cloudformation
 cf = boto.cloudformation.connect_to_region("eu-west-1",
                                            aws_access_key_id="FOO",
@@ -117,14 +156,6 @@ cf.create_stack("Stack Name",
                 tags={"project":"FooBar Project"},
                 timeout_in_minutes=5)
 </code></pre>
-
-[github.com/boto/boto](https://github.com/boto/boto) | [docs.pythonboto.org](http://docs.pythonboto.org/)
-
---
-
-## Java SDK
-
-[aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
 
 ---
 
