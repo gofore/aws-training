@@ -9,6 +9,8 @@ import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsync;
+import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsyncClient;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
@@ -96,6 +98,15 @@ public class AwsModule implements Module {
     @Singleton
     public SimpleDBClient simpleDBClient(AmazonSimpleDBAsync simpleDB) {
         return new SimpleDBClient(simpleDB);
+    }
+    
+    @Provides
+    @Singleton
+    public AmazonIdentityManagementAsync iam(AWSCredentialsProvider credentials,
+                                             ExecutorService executor) {
+        AmazonIdentityManagementAsyncClient iam = new AmazonIdentityManagementAsyncClient(credentials, executor);
+        ShutdownHelper.addShutdownHook(iam::getExecutorService, iam::shutdown);
+        return iam;
     }
     
     private static class PropertyLoaderCredentials implements AWSCredentials {
