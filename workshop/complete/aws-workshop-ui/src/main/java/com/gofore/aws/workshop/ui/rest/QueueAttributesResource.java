@@ -11,18 +11,18 @@ import org.restlet.resource.Get;
 
 public class QueueAttributesResource extends RestServerResource {
 
+    private final ApplicationProperties properties;
     private final SqsClient sqsClient;
-    private final String queueUrl;
     
     @Inject
     public QueueAttributesResource(ApplicationProperties properties, SqsClient sqsClient) {
+        this.properties = properties;
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("images.queue.url");
     }
     
     @Get("json")
     public GetQueueAttributesResult getAttributes() {
-        String url = getQueryValueAsString("url").orElse(queueUrl);
+        String url = properties.lookup(getAttribute("name"));
         String attr = getQueryValueAsString("attr").orElse("All");
         GetQueueAttributesRequest request = new GetQueueAttributesRequest()
                 .withQueueUrl(url)

@@ -1,17 +1,27 @@
 <!doctype html>
-<html ng-app>
+<html ng-app="aws">
 <head>
-    <script src="/webjars/angularjs/1.3.1/angular.js"></script>
-    <script src="/webjars/angularjs/1.3.1/angular-resource.js"></script>
-    <script src="/webjars/angularjs/1.3.1/angular-route.js"></script>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/aws-workshop.css">
+    
+    <script src="/webjars/lodash/2.4.1-6/lodash.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular-resource.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular-route.min.js"></script>
+    <script src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap.min.js"></script>
     <script src="/js/aws-workshop.js"></script>
 </head>
 <body>
-<div>
-    <label>Name:</label>
-    <input type="text" ng-model="yourName" placeholder="Enter a name here">
-    <hr>
-    <h1>Hello {{yourName}}!</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div sqs="queries.queue.url" class="panel panel-default"></div>
+            <div sqs="images.queue.url" class="panel panel-default"></div>
+        </div>
+        <div class="col-md-8">
+            <h2>Search</h2>
+        </div>
+    </div>
 </div>
 </body>
 </html>

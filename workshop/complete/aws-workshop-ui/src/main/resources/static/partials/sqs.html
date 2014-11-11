@@ -1,0 +1,15 @@
+<div class="panel-heading"><h4>{{ queue.QueueName }}</h4></div>
+<div class="panel-body">
+    <dl class="dl-horizontal">
+        <dt>Messages (approx)</dt>
+        <dd>{{ queue.ApproximateNumberOfMessages }}</dd>
+        <dt>Invisible messages (approx)</dt>
+        <dd>{{ queue.ApproximateNumberOfMessagesNotVisible}}</dd>
+        <dt>Delayed messages (approx)</dt>
+        <dd>{{ queue.ApproximateNumberOfMessagesDelayed }}</dd>
+        <dt>Message delay</dt>
+        <dd>{{ queue.DelaySeconds }} seconds</dd>
+        <dt>Visibility timeout</dt>
+        <dd>{{ queue.VisibilityTimeout }} seconds</dd>
+    </dl>
+</div>

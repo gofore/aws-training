@@ -2,6 +2,7 @@ package com.gofore.aws.workshop.ui;
 
 import javax.inject.Inject;
 
+import com.gofore.aws.workshop.common.rest.ConfigurationResource;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.RestletServer;
 import com.gofore.aws.workshop.ui.rest.QueriesResource;
@@ -24,9 +25,10 @@ public class UiApplication extends GuiceApplication {
     @Override
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
-        router.attach("/api/queue", target(QueueAttributesResource.class));
-        router.attach("/api/search", target(SearchResource.class));
+        router.attach("/api/properties/{name}", target(ConfigurationResource.class));
+        router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
         router.attach("/api/queries", target(QueriesResource.class));
+        router.attach("/api/search", target(SearchResource.class));
         router.attach("/webjars", createWebjars());
         router.attach("/", createStaticResources());
         return router;
