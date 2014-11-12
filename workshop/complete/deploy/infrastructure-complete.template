@@ -8,13 +8,27 @@
       "Description": "WebServer EC2 instance type",
       "Type": "String",
       "Default": "t2.micro",
-      "AllowedValues": ["t2.micro","t2.small","t2.medium"],
+      "AllowedValues": ["t2.micro", "t2.small", "t2.medium"],
       "ConstraintDescription": "must be a valid EC2 instance type."
     },
-    "WebServerPort": {
-      "Description": "The TCP port for the Web Server",
+    "UIPort": {
+      "Description": "The TCP port for the UI Server",
       "Type": "Number",
       "Default": "9001"
+    },
+    "LoaderPort": {
+      "Description": "The TCP port for the Loader Server",
+      "Type": "Number",
+      "Default": "9001"
+    },
+    "FetcherPort": {
+      "Description": "The TCP port for the Loader Server",
+      "Type": "Number",
+      "Default": "9001"
+    },
+    "AmiId": {
+      "Description": "AMI ID to be used with all the instances",
+      "Type": "String"
     },
     "UserEmail": {
       "Description": "Email address to notify if there are any scaling operations",
@@ -28,8 +42,8 @@
       "Description": "The EC2 Key Pair to allow SSH access to the instances",
       "Type": "String"
     },
-    "SSHLocation": {
-      "Description": "The IP address range that can be used to SSH to the EC2 instances",
+    "IPRange": {
+      "Description": "The IP address range that can be used to access the EC2 instances",
       "Type": "String",
       "MinLength": "9",
       "MaxLength": "18",
@@ -54,9 +68,10 @@
       "Properties": {
         "AvailabilityZones": { "Fn::GetAZs": ""},
         "LaunchConfigurationName": { "Ref": "UILaunchConfig" },
-        "MinSize": "1",
-        "MaxSize": "3",
+        "MinSize": "2",
+        "MaxSize": "4",
         "LoadBalancerNames": [ { "Ref": "UIElasticLoadBalancer" } ],
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"ui"]]}, "PropagateAtLaunch": true }],
         "NotificationConfiguration": {
           "TopicARN": { "Ref": "UIAutoScalingNotificationTopic" },
           "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
@@ -70,8 +85,8 @@
       "Type": "AWS::AutoScaling::LaunchConfiguration",
       "Properties": {
         "KeyName": { "Ref": "KeyName" },
-        "ImageId": "ami-ba77c3cd",
-        "UserData": { "Fn::Base64": { "Ref": "WebServerPort" }},
+        "ImageId": { "Ref": "AmiId" },
+        "UserData": { "Fn::Base64": { "Ref": "UIPort" }},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" }
       }
@@ -141,11 +156,11 @@
         "AvailabilityZones": { "Fn::GetAZs" : "" },
         "Listeners": [ {
           "LoadBalancerPort": "80",
-          "InstancePort": { "Ref": "WebServerPort" },
+          "InstancePort": { "Ref": "UIPort" },
           "Protocol": "HTTP"
         } ],
         "HealthCheck": {
-          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "WebServerPort" }, "/"]]},
+          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "UIPort" }, "/"]]},
           "HealthyThreshold": "3",
           "UnhealthyThreshold": "5",
           "Interval": "30",
@@ -153,22 +168,163 @@
         }
       }
     },
-    "UISecurityGroup" : {
+    "UISecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Enable SSH access and HTTP from the load balancer only",
+        "GroupDescription": "Enable SSH access and HTTP from specified address range",
         "SecurityGroupIngress": [ {
           "IpProtocol": "tcp",
           "FromPort": "22",
           "ToPort": "22",
-          "CidrIp": { "Ref": "SSHLocation"}
+          "CidrIp": { "Ref": "IPRange"}
         },
         {
-          "IpProtocol" : "tcp",
-          "FromPort" : { "Ref" : "WebServerPort" },
-          "ToPort" : { "Ref" : "WebServerPort" },
-          "SourceSecurityGroupOwnerId" : {"Fn::GetAtt" : ["UIElasticLoadBalancer", "SourceSecurityGroup.OwnerAlias"]},
-          "SourceSecurityGroupName" : {"Fn::GetAtt" : ["UIElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "UIPort" },
+          "ToPort": { "Ref" : "UIPort" },
+          "SourceSecurityGroupName": {"Fn::GetAtt": ["UIElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
+        } ]
+      }
+    },
+
+
+    "LoaderInstance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": { "Ref": "AmiId" },
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "loader"]]}}],
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroups": [ { "Ref": "LoaderSecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" }
+      }
+    },
+    "LoaderSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH access and HTTP from specified address range",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "IPRange"}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "LoaderPort" },
+          "ToPort": { "Ref" : "LoaderPort" },
+          "CidrIp": { "Ref": "IPRange"}
+        } ]
+      }
+    },
+
+
+    "FetcherAutoScalingNotificationTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [{
+            "Endpoint": { "Ref": "UserEmail" },
+            "Protocol": "email" }]
+      }
+    },
+    "FetcherAutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": ""},
+        "LaunchConfigurationName": { "Ref": "FetcherLaunchConfig" },
+        "MinSize": "2",
+        "MaxSize": "4",
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"fetcher"]]}, "PropagateAtLaunch": true }],
+        "NotificationConfiguration": {
+          "TopicARN": { "Ref": "FetcherAutoScalingNotificationTopic" },
+          "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
+                                 "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"]
+        }
+      }
+    },
+    "FetcherLaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "KeyName": { "Ref": "KeyName" },
+        "ImageId": { "Ref": "AmiId" },
+        "SecurityGroups": [ { "Ref": "FetcherSecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" }
+      }
+    },
+    "FetcherScaleUpPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "FetcherAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment": "1"
+      }
+    },
+    "FetcherScaleDownPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "FetcherAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment" : "-1"
+      }
+    },
+    "FetcherCPUAlarmHigh": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "300",
+        "EvaluationPeriods": "2",
+        "Threshold": "90",
+        "AlarmActions": [ { "Ref": "FetcherScaleUpPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "FetcherAutoScalingGroup" }
+          }
+        ],
+        "ComparisonOperator": "GreaterThanThreshold"
+      }
+    },
+    "FetcherCPUAlarmLow": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "300",
+        "EvaluationPeriods": "2",
+        "Threshold": "70",
+        "AlarmActions": [ { "Ref": "FetcherScaleDownPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "FetcherAutoScalingGroup" }
+          }
+        ],
+        "ComparisonOperator": "LessThanThreshold"
+      }
+    },
+    "FetcherSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH and HTTP access from specified address range",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "IPRange"}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "FetcherPort" },
+          "ToPort": { "Ref" : "FetcherPort" },
+          "CidrIp": { "Ref": "IPRange"}
         } ]
       }
     },

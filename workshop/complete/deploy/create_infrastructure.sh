@@ -11,4 +11,4 @@ fi
 USER_NAME="$1"
 EMAIL="$2"
 
-ansible-playbook -e "{\"user_name\":\"$USER_NAME\",\"user_email\":\"$EMAIL\"}" -v -i ansible-inventory-localhost create_infrastructure.yml
+ansible-playbook -e "{\"user_name\":\"$USER_NAME\",\"user_email\":\"$EMAIL\"}" -i ansible-inventory-localhost create_infrastructure.yml

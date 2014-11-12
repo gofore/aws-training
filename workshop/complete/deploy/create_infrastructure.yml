@@ -8,6 +8,7 @@
     args:
       template_parameters:
         KeyName: aws-workshop-2014-11-key
+        AmiId: ami-ba77c3cd
         InstanceType: t2.micro
         UserName: "{{ user_name }}"
         UserEmail: "{{ user_email }}"
