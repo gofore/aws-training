@@ -1,20 +1,20 @@
 {
-  "AWSTemplateFormatVersion" : "2010-09-09",
+  "AWSTemplateFormatVersion": "2010-09-09",
 
-  "Description" : "Infrastructure for AWS workshop demo application",
+  "Description": "Infrastructure for AWS workshop demo application",
 
-  "Parameters" : {
-    "InstanceType" : {
-      "Description" : "WebServer EC2 instance type",
-      "Type" : "String",
-      "Default" : "t2.micro",
-      "AllowedValues" : [ "t2.micro","t2.small"],
-      "ConstraintDescription" : "must be a valid EC2 instance type."
+  "Parameters": {
+    "InstanceType": {
+      "Description": "WebServer EC2 instance type",
+      "Type": "String",
+      "Default": "t2.micro",
+      "AllowedValues": ["t2.micro","t2.small","t2.medium"],
+      "ConstraintDescription": "must be a valid EC2 instance type."
     },
-    "WebServerPort" : {
-      "Description" : "The TCP port for the Web Server",
-      "Type" : "Number",
-      "Default" : "9001"
+    "WebServerPort": {
+      "Description": "The TCP port for the Web Server",
+      "Type": "Number",
+      "Default": "9001"
     },
     "UserEmail": {
       "Description": "Email address to notify if there are any scaling operations",
@@ -24,12 +24,12 @@
       "Description": "Username to identify resources created by different users",
       "Type": "String"
     },
-    "KeyName" : {
-      "Description" : "The EC2 Key Pair to allow SSH access to the instances",
-      "Type" : "String"
+    "KeyName": {
+      "Description": "The EC2 Key Pair to allow SSH access to the instances",
+      "Type": "String"
     },
-    "SSHLocation" : {
-      "Description" : "The IP address range that can be used to SSH to the EC2 instances",
+    "SSHLocation": {
+      "Description": "The IP address range that can be used to SSH to the EC2 instances",
       "Type": "String",
       "MinLength": "9",
       "MaxLength": "18",
@@ -39,62 +39,62 @@
    }
   },
 
-  "Resources" : {
-    "NotificationTopic": {
+  "Resources": {
+
+    "UIAutoScalingNotificationTopic": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
-        "Subscription": [ {
+        "Subscription": [{
             "Endpoint": { "Ref": "UserEmail" },
-            "Protocol": "email" } ]
+            "Protocol": "email" }]
       }
     },
-
-    "WebServerGroup" : {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
-      "Properties" : {
-        "AvailabilityZones" : { "Fn::GetAZs" : ""},
-        "LaunchConfigurationName" : { "Ref" : "LaunchConfig" },
-        "MinSize" : "1",
-        "MaxSize" : "3",
-        "LoadBalancerNames" : [ { "Ref" : "ElasticLoadBalancer" } ],
-        "NotificationConfiguration" : {
-          "TopicARN" : { "Ref" : "NotificationTopic" },
-          "NotificationTypes" : [ "autoscaling:EC2_INSTANCE_LAUNCH","autoscaling:EC2_INSTANCE_LAUNCH_ERROR","autoscaling:EC2_INSTANCE_TERMINATE", "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"]
+    "UIAutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": ""},
+        "LaunchConfigurationName": { "Ref": "UILaunchConfig" },
+        "MinSize": "1",
+        "MaxSize": "3",
+        "LoadBalancerNames": [ { "Ref": "UIElasticLoadBalancer" } ],
+        "NotificationConfiguration": {
+          "TopicARN": { "Ref": "UIAutoScalingNotificationTopic" },
+          "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
+                                 "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"]
         }
       }
     },
-
-    "LaunchConfig" : {
-      "Type" : "AWS::AutoScaling::LaunchConfiguration",
-      "Properties" : {
-        "KeyName" : { "Ref" : "KeyName" },
-        "ImageId" : "ami-ba77c3cd",
-        "UserData" : { "Fn::Base64" : { "Ref" : "WebServerPort" }},
-        "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
-        "InstanceType" : { "Ref" : "InstanceType" }
+    "UILaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "KeyName": { "Ref": "KeyName" },
+        "ImageId": "ami-ba77c3cd",
+        "UserData": { "Fn::Base64": { "Ref": "WebServerPort" }},
+        "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" }
       }
     },
-
-    "WebServerScaleUpPolicy" : {
-      "Type" : "AWS::AutoScaling::ScalingPolicy",
-      "Properties" : {
-        "AdjustmentType" : "ChangeInCapacity",
-        "AutoScalingGroupName" : { "Ref" : "WebServerGroup" },
-        "Cooldown" : "60",
-        "ScalingAdjustment" : "1"
+    "UIScaleUpPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "UIAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment": "1"
       }
     },
-    "WebServerScaleDownPolicy" : {
-      "Type" : "AWS::AutoScaling::ScalingPolicy",
-      "Properties" : {
-        "AdjustmentType" : "ChangeInCapacity",
-        "AutoScalingGroupName" : { "Ref" : "WebServerGroup" },
-        "Cooldown" : "60",
+    "UIScaleDownPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "UIAutoScalingGroup" },
+        "Cooldown": "60",
         "ScalingAdjustment" : "-1"
       }
     },
-
-    "CPUAlarmHigh": {
+    "UICPUAlarmHigh": {
      "Type": "AWS::CloudWatch::Alarm",
      "Properties": {
         "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
@@ -104,17 +104,17 @@
         "Period": "300",
         "EvaluationPeriods": "2",
         "Threshold": "90",
-        "AlarmActions": [ { "Ref": "WebServerScaleUpPolicy" } ],
+        "AlarmActions": [ { "Ref": "UIScaleUpPolicy" } ],
         "Dimensions": [
           {
             "Name": "AutoScalingGroupName",
-            "Value": { "Ref": "WebServerGroup" }
+            "Value": { "Ref": "UIAutoScalingGroup" }
           }
         ],
         "ComparisonOperator": "GreaterThanThreshold"
       }
     },
-    "CPUAlarmLow": {
+    "UICPUAlarmLow": {
      "Type": "AWS::CloudWatch::Alarm",
      "Properties": {
         "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
@@ -124,74 +124,72 @@
         "Period": "300",
         "EvaluationPeriods": "2",
         "Threshold": "70",
-        "AlarmActions": [ { "Ref": "WebServerScaleDownPolicy" } ],
+        "AlarmActions": [ { "Ref": "UIScaleDownPolicy" } ],
         "Dimensions": [
           {
             "Name": "AutoScalingGroupName",
-            "Value": { "Ref": "WebServerGroup" }
+            "Value": { "Ref": "UIAutoScalingGroup" }
           }
         ],
         "ComparisonOperator": "LessThanThreshold"
       }
     },
-
-    "ElasticLoadBalancer" : {
-      "Type" : "AWS::ElasticLoadBalancing::LoadBalancer",
-      "Properties" : {
-        "AvailabilityZones" : { "Fn::GetAZs" : "" },
-        "Listeners" : [ {
-          "LoadBalancerPort" : "80",
-          "InstancePort" : { "Ref" : "WebServerPort" },
-          "Protocol" : "HTTP"
+    "UIElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }]]},
+        "AvailabilityZones": { "Fn::GetAZs" : "" },
+        "Listeners": [ {
+          "LoadBalancerPort": "80",
+          "InstancePort": { "Ref": "WebServerPort" },
+          "Protocol": "HTTP"
         } ],
-        "HealthCheck" : {
-          "Target" : { "Fn::Join" : [ "", ["HTTP:", { "Ref" : "WebServerPort" }, "/"]]},
-          "HealthyThreshold" : "3",
-          "UnhealthyThreshold" : "5",
-          "Interval" : "30",
-          "Timeout" : "5"
+        "HealthCheck": {
+          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "WebServerPort" }, "/"]]},
+          "HealthyThreshold": "3",
+          "UnhealthyThreshold": "5",
+          "Interval": "30",
+          "Timeout": "5"
         }
       }
     },
-
-    "InstanceSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
-      "Properties" : {
-        "GroupDescription" : "Enable SSH access and HTTP from the load balancer only",
-        "SecurityGroupIngress" : [ {
-          "IpProtocol" : "tcp",
-          "FromPort" : "22",
-          "ToPort" : "22",
-          "CidrIp" : { "Ref" : "SSHLocation"}
+    "UISecurityGroup" : {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH access and HTTP from the load balancer only",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "SSHLocation"}
         },
         {
           "IpProtocol" : "tcp",
           "FromPort" : { "Ref" : "WebServerPort" },
           "ToPort" : { "Ref" : "WebServerPort" },
-          "SourceSecurityGroupOwnerId" : {"Fn::GetAtt" : ["ElasticLoadBalancer", "SourceSecurityGroup.OwnerAlias"]},
-          "SourceSecurityGroupName" : {"Fn::GetAtt" : ["ElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
+          "SourceSecurityGroupOwnerId" : {"Fn::GetAtt" : ["UIElasticLoadBalancer", "SourceSecurityGroup.OwnerAlias"]},
+          "SourceSecurityGroupName" : {"Fn::GetAtt" : ["UIElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
         } ]
       }
     },
 
+
     "QueueQueries": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref" : "UserName" }, "urls"]]}
+        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }, "-queries"]]}
       }
     },
-
-    "AlarmTopic": {
+    "QueueQueriesAlarmTopic": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "Subscription": [{
-          "Endpoint": { "Ref": "AlarmEMail" },
+          "Endpoint": { "Ref": "UserEmail" },
           "Protocol": "email"
         }]
       }
     },
-
-    "QueueDepthAlarm": {
+    "QueueQueriesDepthAlarm": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
         "AlarmDescription": "Alarm if queue depth grows beyond 10 messages",
@@ -199,25 +197,61 @@
         "MetricName": "ApproximateNumberOfMessagesVisible",
         "Dimensions": [{
           "Name": "QueueName",
-          "Value" : { "Fn::GetAtt" : ["MyQueue", "QueueName"] }
+          "Value": { "Fn::GetAtt": ["QueueQueries", "QueueName"] }
         }],
         "Statistic": "Sum",
         "Period": "300",
         "EvaluationPeriods": "1",
         "Threshold": "10",
         "ComparisonOperator": "GreaterThanThreshold",
-        "AlarmActions": [{ "Ref": "AlarmTopic" }],
-        "InsufficientDataActions": [{ "Ref": "AlarmTopic" }]
+        "AlarmActions": [{ "Ref": "QueueQueriesAlarmTopic" }],
+        "InsufficientDataActions": [{ "Ref": "QueueQueriesAlarmTopic" }]
+      }
+    },
+
+
+    "QueueUrls": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }, "-urls"]]}
+      }
+    },
+    "QueueUrlsAlarmTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [{
+          "Endpoint": { "Ref": "UserEmail" },
+          "Protocol": "email"
+        }]
+      }
+    },
+    "QueueUrlsDepthAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Alarm if queue depth grows beyond 10 messages",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [{
+          "Name": "QueueName",
+          "Value": { "Fn::GetAtt": ["QueueUrls", "QueueName"] }
+        }],
+        "Statistic": "Sum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "10",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "AlarmActions": [{ "Ref": "QueueUrlsAlarmTopic" }],
+        "InsufficientDataActions": [{ "Ref": "QueueUrlsAlarmTopic" }]
       }
     }
 
   },
 
 
-  "Outputs" : {
-    "URL" : {
-      "Description" : "The URL of the website",
-      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "ElasticLoadBalancer", "DNSName" ]}]]}
+  "Outputs": {
+    "URL": {
+      "Description": "The URL of the website",
+      "Value":  { "Fn::Join": [ "", [ "http://", { "Fn::GetAtt": [ "UIElasticLoadBalancer", "DNSName" ]}]]}
     }
   }
 }
