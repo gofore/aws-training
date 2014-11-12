@@ -7,7 +7,7 @@
     action: cloudformation stack_name="workshop-{{ user_name }}" state=present region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
     args:
       template_parameters:
-        KeyName: aws-workshop-2014-11-key
+        KeyName: "{{ key_name }}"
         AmiId: ami-ba77c3cd
         InstanceType: t2.micro
         UserName: "{{ user_name }}"
