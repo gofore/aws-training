@@ -14,10 +14,14 @@
     "WebServerPort" : {
       "Description" : "The TCP port for the Web Server",
       "Type" : "Number",
-      "Default" : "8888"
+      "Default" : "9001"
     },
-    "OperatorEmail": {
+    "UserEmail": {
       "Description": "Email address to notify if there are any scaling operations",
+      "Type": "String"
+    },
+    "UserName": {
+      "Description": "Username to identify resources created by different users",
       "Type": "String"
     },
     "KeyName" : {
@@ -35,24 +39,12 @@
    }
   },
 
-  "Mappings" : {
-    "AWSInstanceType2Arch" : {
-      "t2.micro" : { "Arch" : "64" },
-      "t2.small" : { "Arch" : "64" }
-    },
-
-    "AWSRegionArch2AMI" : {
-      "eu-west-1" : { "32" : "ami-018bb975", "64" : "ami-f0b11187" },
-      "eu-central-1" : { "32" : "ami-018bb975", "64" : "ami-b83c0aa5" }
-    }
-  },
-
   "Resources" : {
     "NotificationTopic": {
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "Subscription": [ {
-            "Endpoint": { "Ref": "OperatorEmail" },
+            "Endpoint": { "Ref": "UserEmail" },
             "Protocol": "email" } ]
       }
     },
@@ -76,9 +68,7 @@
       "Type" : "AWS::AutoScaling::LaunchConfiguration",
       "Properties" : {
         "KeyName" : { "Ref" : "KeyName" },
-        "ImageId" : { "Fn::FindInMap" : [ "AWSRegionArch2AMI", { "Ref" : "AWS::Region" },
-                                          { "Fn::FindInMap" : [ "AWSInstanceType2Arch", { "Ref" : "InstanceType" },
-                                          "Arch" ] } ] },
+        "ImageId" : "ami-ba77c3cd",
         "UserData" : { "Fn::Base64" : { "Ref" : "WebServerPort" }},
         "SecurityGroups" : [ { "Ref" : "InstanceSecurityGroup" } ],
         "InstanceType" : { "Ref" : "InstanceType" }
@@ -182,8 +172,47 @@
           "SourceSecurityGroupName" : {"Fn::GetAtt" : ["ElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
         } ]
       }
+    },
+
+    "QueueQueries": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref" : "UserName" }, "urls"]]}
+      }
+    },
+
+    "AlarmTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [{
+          "Endpoint": { "Ref": "AlarmEMail" },
+          "Protocol": "email"
+        }]
+      }
+    },
+
+    "QueueDepthAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Alarm if queue depth grows beyond 10 messages",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [{
+          "Name": "QueueName",
+          "Value" : { "Fn::GetAtt" : ["MyQueue", "QueueName"] }
+        }],
+        "Statistic": "Sum",
+        "Period": "300",
+        "EvaluationPeriods": "1",
+        "Threshold": "10",
+        "ComparisonOperator": "GreaterThanThreshold",
+        "AlarmActions": [{ "Ref": "AlarmTopic" }],
+        "InsufficientDataActions": [{ "Ref": "AlarmTopic" }]
+      }
     }
+
   },
+
 
   "Outputs" : {
     "URL" : {

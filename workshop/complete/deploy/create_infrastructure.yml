@@ -6,7 +6,7 @@
     - stack_name: UnnamedStack
   tasks:
   - name: Create CloudFormation stack
-    action: cloudformation stack_name="{{ stack_name }}" state=present region="eu-west-1" disable_rollback=false template="cloudformation_autoscaling.json"
+    action: cloudformation stack_name="{{ stack_name }}" state=present region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
     args:
       template_parameters:
         KeyName: aws-workshop-2014-11-key
