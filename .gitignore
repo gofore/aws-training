@@ -3,3 +3,4 @@ target
 *.iml
 dependency-reduced-pom.xml
 credentials.csv
+*.pem
