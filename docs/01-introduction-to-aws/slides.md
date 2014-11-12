@@ -16,8 +16,8 @@
 
 ## What you will need
 
-- Laptop with an IDE and JDK
-- Course material is available at github. TODO URL
+- Laptop with Java 8 SDK, Maven 3+ an IDE and JDK
+- Material is available at [github.com/gofore/aws-training](https://github.com/gofore/aws-training)
 
 ---
 
@@ -31,7 +31,7 @@ Extensive set of cloud services available in the web.
 
 Began as Amazon.com's internal infrastructure.
 
-Mainly IaaS, but ins some parts also PaaS.
+Mainly IaaS, but in some parts also PaaS.
 
 On-demand, self-service, pay-per-use.
 
@@ -118,6 +118,10 @@ Command-line tools
 
 --
 
+### Let's code the first version of our app
+
+--
+
 ## Boto for Python
 
 <pre><code data-trim="" class="shell">
@@ -150,15 +154,23 @@ conn.run_instances('ami-f0b11187',
 
 ## Cloudformation
 
+Create resources from a template. The collection of created resources is called a *stack*.
+
+Enables versioning of infrastructure.
+
+--
+
 <pre><code data-trim="" class="json">
 {
-  "AWSTemplateFormatVersion" : "2010-09-09",
-  "Description" : "Example cloudformation template",
-  "Parameters" : {Set of parameters that must be given when creating a stack from this template},
-  "Mappings" : {Set of helper mappings},
-  "Conditions" : {Set of conditions},
-  "Resources" : {Set of resources to be created},
-  "Outputs" : {Set of outputs variables}
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Structure of a cloudformation template",
+
+  "Mappings": { ...Set of helper mappings... },
+  "Conditions": { ...Set of conditions... },
+
+  "Parameters": { ...Set of parameters given when creating the stack... },
+  "Resources": { ...Set of resources to be created... },
+  "Outputs": { ...Set of outputs variables... }
 }
 </code></pre>
 
@@ -186,13 +198,6 @@ cf.create_stack("Stack Name",
 
 ![Workshop application architecture](/img/aws_workshop_arch.png)
 
---
-
-![Web hosting reference architecture](/img/aws_reference_architecture_web_hosting.png)
-
-[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
-
-
 ---
 
 # Elasticity & Auto-scaling
@@ -202,3 +207,26 @@ cf.create_stack("Stack Name",
 Elastic Load balancer, Launch configuration, ASG and Scaling policy
 
 Indirectly uses SNS and CloudWatch
+
+---
+
+# Recap
+
+--
+
+![Workshop application architecture](/img/aws_workshop_arch.png)
+
+--
+
+## What next?
+
+- Reference architectures [aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
+- Whitepapers [http://aws.amazon.com/whitepapers/](aws.amazon.com/whitepapers)
+
+- Register to Amazon Partner Network Portal and take the AWS Technical Professional or AWS Business Professional course
+
+--
+
+![Web hosting reference architecture](/img/aws_reference_architecture_web_hosting.png)
+
+[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
