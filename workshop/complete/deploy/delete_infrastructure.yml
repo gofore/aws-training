@@ -1,0 +1,7 @@
+---
+
+- hosts: localhost
+  connection: local
+  tasks:
+  - name: Delete CloudFormation stack
+    action: cloudformation stack_name="workshop-{{ user_name }}" state=absent region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
