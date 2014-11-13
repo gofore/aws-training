@@ -38,15 +38,10 @@ The Java application includes three modules (micro services):
 ## Initial setup
 
 Make sure your setup satisfies the defined prerequisites. After the tools are set up we are ready to roll.
-1. You should have received an email from your instructors that includes an AWS credentials CSV file. If not, contact
-   your instructors and ask one. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will
-   end up with file `~/.aws/credentials.csv`.
-2. Clone the `aws-training` repository to your local machine with git:
-   `git clone https://github.com/gofore/aws-training.git`
-3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You
-   should have internet access so that the integration tests can verify the access to AWS. The build should end with
-   `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your
-   instructors for help.
+
+1. You should have received an email from your instructors that includes an AWS credentials CSV file. If not, contact your instructors and ask one. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`.
+2. Clone the `aws-training` repository to your local machine with git: `git clone https://github.com/gofore/aws-training.git`
+3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
 4. Now you should have a working environment and you are ready to get hacking!
 
 A sucessful initial setup should look something like this:
