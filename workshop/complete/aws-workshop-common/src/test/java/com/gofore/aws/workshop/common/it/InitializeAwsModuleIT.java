@@ -23,7 +23,8 @@ public class InitializeAwsModuleIT {
             @Singleton
             public ApplicationProperties applicationProperties() {
                 return new ApplicationProperties()
-                        .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
+                        .withAwsCredentialsCsvLoader("credentials.csv")
+                        .withAwsCredentialsEnvLoader()
                         .withClasspathPropertyLoader("common.properties");
             }
         });
