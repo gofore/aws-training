@@ -13,10 +13,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     case RUBY_PLATFORM
     when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
       # Fix Windows file rights, otherwise Ansible tries to execute files
-      ytp.vm.synced_folder "./", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
+      aws.vm.synced_folder "./", "/vagrant", :mount_options => ["dmode=777","fmode=666"]
     else
       # Basic VM synced folder mount
-      ytp.vm.synced_folder "", "/vagrant"
+      aws.vm.synced_folder "", "/vagrant"
     end
 
     aws.vm.provision "shell", path: "workshop/install_prerequisites.sh"
