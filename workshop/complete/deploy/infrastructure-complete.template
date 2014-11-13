@@ -19,12 +19,7 @@
     "LoaderPort": {
       "Description": "The TCP port for the Loader Server",
       "Type": "Number",
-      "Default": "9001"
-    },
-    "FetcherPort": {
-      "Description": "The TCP port for the Loader Server",
-      "Type": "Number",
-      "Default": "9001"
+      "Default": "9002"
     },
     "AmiId": {
       "Description": "AMI ID to be used with all the instances",
@@ -316,17 +311,11 @@
     "FetcherSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
-        "GroupDescription": "Enable SSH and HTTP access from specified address range",
+        "GroupDescription": "Enable SSH access from specified address range",
         "SecurityGroupIngress": [ {
           "IpProtocol": "tcp",
           "FromPort": "22",
           "ToPort": "22",
-          "CidrIp": { "Ref": "IPRange"}
-        },
-        {
-          "IpProtocol": "tcp",
-          "FromPort": { "Ref" : "FetcherPort" },
-          "ToPort": { "Ref" : "FetcherPort" },
           "CidrIp": { "Ref": "IPRange"}
         } ]
       }
@@ -336,37 +325,9 @@
     "QueueQueries": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }, "-queries"]]},
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "queries"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
-      }
-    },
-    "QueueQueriesAlarmTopic": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "Subscription": [{
-          "Endpoint": { "Ref": "UserEmail" },
-          "Protocol": "email"
-        }]
-      }
-    },
-    "QueueQueriesDepthAlarm": {
-      "Type": "AWS::CloudWatch::Alarm",
-      "Properties": {
-        "AlarmDescription": "Alarm if queue depth grows beyond 10 messages",
-        "Namespace": "AWS/SQS",
-        "MetricName": "ApproximateNumberOfMessagesVisible",
-        "Dimensions": [{
-          "Name": "QueueName",
-          "Value": { "Fn::GetAtt": ["QueueQueries", "QueueName"] }
-        }],
-        "Statistic": "Sum",
-        "Period": "300",
-        "EvaluationPeriods": "1",
-        "Threshold": "10",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "AlarmActions": [{ "Ref": "QueueQueriesAlarmTopic" }],
-        "InsufficientDataActions": [{ "Ref": "QueueQueriesAlarmTopic" }]
       }
     },
 
@@ -374,7 +335,7 @@
     "QueueUrls": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }, "-urls"]]},
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "urls"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
       }
