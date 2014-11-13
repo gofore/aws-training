@@ -32,8 +32,8 @@
                         </span>
                     </div>
                 </div>
-                <div ng-message="success" class="panel-footer" style="background-color: blue;">Successfully sent query with message id {{ status.id }}</div>
-                <div ng-message="error" class="panel-footer" style="background-color: red;">Failed to sent query</div>
+                <div ng-message="success" class="panel-footer bg-success">Successfully sent query with message id {{ status.id }}</div>
+                <div ng-message="error" class="panel-footer bg-warning">Failed to sent query</div>
             </div>
             <div ng-controller="SearchCtrl" class="panel panel-default">
                 <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/img/ajax-loader.gif"></h2></div>
