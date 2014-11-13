@@ -37,14 +37,14 @@ On-demand, self-service, pay-per-use.
 
 --
 
-![List of AWS Services](/img/aws_list_of_services.png)
+![List of AWS Services](/images/aws_list_of_services.png)
 
 AWS Services
 
 ---
 
 # Elastic Compute Cloud
-## ![EC2 icon](/img/aws_icon_ec2.svg)
+## ![EC2 icon](/images/aws_icon_ec2.svg)
 
 --
 
@@ -57,7 +57,7 @@ AWS Services
 
 --
 
-![AWS Region map](/img/aws_map_regions.png)
+![AWS Region map](/images/aws_map_regions.png)
 
 Regions
 
@@ -81,7 +81,7 @@ Each instance must belong to a *security group*. TODO must?
 
 ## Demo: Launching an instance
 
-![AWS Management console](/img/aws_management_console.png)
+![AWS Management console](/images/aws_management_console.png)
 
 --
 
@@ -196,7 +196,7 @@ cf.create_stack("Stack Name",
 
 --
 
-![Workshop application architecture](/img/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch.png)
 
 ---
 
@@ -214,7 +214,7 @@ Indirectly uses SNS and CloudWatch
 
 --
 
-![Workshop application architecture](/img/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch.png)
 
 --
 
@@ -227,6 +227,6 @@ Indirectly uses SNS and CloudWatch
 
 --
 
-![Web hosting reference architecture](/img/aws_reference_architecture_web_hosting.png)
+![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
 
 [aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
