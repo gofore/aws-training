@@ -20,7 +20,8 @@ public class FetcherModule extends AbstractModule {
     public ApplicationProperties applicationProperties() {
         return new ApplicationProperties()
                 .withSystemPropertyLoader()
-                .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
+                .withAwsCredentialsCsvLoader("credentials.csv")
+                .withAwsCredentialsEnvLoader()
                 .withClasspathPropertyLoader("fetcher.properties")
                 .withClasspathPropertyLoader("common.properties");
     }

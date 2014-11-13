@@ -17,9 +17,11 @@ public class UiModule extends AbstractModule {
     @Provides
     @Singleton
     public ApplicationProperties applicationProperties() {
-        return new ApplicationProperties().withSystemPropertyLoader()
-                                          .withAwsCredentialsCsvLoader("aws-workshop-credentials.csv")
-                                          .withClasspathPropertyLoader("ui.properties")
-                                          .withClasspathPropertyLoader("common.properties");
+        return new ApplicationProperties()
+                .withSystemPropertyLoader()
+                .withAwsCredentialsCsvLoader("credentials.csv")
+                .withAwsCredentialsEnvLoader()
+                .withClasspathPropertyLoader("ui.properties")
+                .withClasspathPropertyLoader("common.properties");
     }
 }
