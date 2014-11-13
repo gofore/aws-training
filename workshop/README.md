@@ -35,7 +35,17 @@ The Java application includes three modules (micro services):
 - Ability to read HTML and JavaScript (the UI is [AngularJS](https://docs.angularjs.org/tutorial) based)
 
 
-## Initial setup
+## Getting started using Vagrant (recommended)
+
+1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/).
+2. Clone the git repository to your computer with `git clone https://github.com/gofore/aws-training.git` or by copying the zip file from GitHub.
+3. Copy the credentials.csv file you received to your working directory under the `workshop` directory
+4. Run `vagrant up`, and after the virtual machine is running, SSH into the machine with `vagrant ssh`.
+5. Inside the virtual machine, run `mvn clean verify`. After a few minutes, the build should succeed.
+
+## Getting started manually (under construction)
+
+If you do not want to use Vagrant, you can also install everything manually.
 
 Make sure your setup satisfies the defined prerequisites. After the tools are set up we are ready to roll.
 
@@ -44,7 +54,7 @@ Make sure your setup satisfies the defined prerequisites. After the tools are se
 3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
 4. Now you should have a working environment and you are ready to get hacking!
 
-A sucessful initial setup should look something like this:
+A successful initial setup should look something like this:
 ```
 $ ls ~/.aws/
 credentials.csv

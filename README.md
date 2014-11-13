@@ -7,11 +7,14 @@ Welcome to *AWS for Developers* workshop!
 
 This is a one-day workshop that teaches the basics of AWS via the Java SDK. We will develop a Java web application that consists of several backend services, and we will deploy it to AWS as an auto-scaling cluster of servers.
 
-AWS services that will be introduced during this workshop include: EC2, S3, SimpleDB, SQS, CloudFormation, IAM
+AWS services that will be introduced during this workshop include: EC2, S3, SimpleDB, SQS, CloudFormation and IAM.
 
-Before the workshop, you should have received an e-mail with your personal credentials. You should also have the prerequisites listed below, making sure that you have installed the tools successfully.
-
+Before the workshop, you should have received an e-mail with your personal credentials. You should also do the preliminary tasks linked below, making sure that you have installed the tools successfully. We encourage you to use Vagrant, but you may also install everything on a Linux host if you are brave enough.
 
 ## Where to start?
 
 See [initial setup](workshop/README.md) documentation for more information.
+
+## Presentation slides
+
+You can follow the presentation as an [online document](docs/01-introduction-to-aws/slides.md), or you can run the reveal.js slides on your local computer by running `./start_presentation.sh`.
