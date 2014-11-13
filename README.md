@@ -1,3 +1,6 @@
+
+![AWS for Developers](/images/banner.png)
+
 # AWS for Developers
 
 Welcome to *AWS for Developers* workshop!
