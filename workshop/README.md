@@ -39,9 +39,10 @@ The Java application includes three modules (micro services):
 
 1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/).
 2. Clone the git repository to your computer with `git clone https://github.com/gofore/aws-training.git` or by copying the zip file from GitHub.
-3. Copy the credentials.csv file you received to your working directory under the `workshop` directory
-4. Run `vagrant up`, and after the virtual machine is running, SSH into the machine with `vagrant ssh`.
-5. Inside the virtual machine, run `mvn clean verify`. After a few minutes, the build should succeed.
+3. Copy the credentials.csv file you received to your working directory under the `workshop` directory.
+4. Run `vagrant up` in the main directory of the project, and wait until the provisioning has succeeded.
+5. Once the virtual machine is running, SSH into the machine with `vagrant ssh`.
+6. Inside the virtual machine, change directory to `cd /vagrant/workshop/complete` and run `mvn clean verify`. After a few minutes, the build should succeed.
 
 ## Getting started manually (under construction)
 
@@ -49,7 +50,7 @@ If you do not want to use Vagrant, you can also install everything manually.
 
 Make sure your setup satisfies the defined prerequisites. After the tools are set up we are ready to roll.
 
-1. You should have received an email from your instructors that includes an AWS credentials CSV file. If not, contact your instructors and ask one. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`.
+1. You should have received an email from your instructors that includes an AWS credentials CSV file. If not, contact your instructors and ask one. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`. You can also place the file under `workshop`.
 2. Clone the `aws-training` repository to your local machine with git: `git clone https://github.com/gofore/aws-training.git`
 3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
 4. Now you should have a working environment and you are ready to get hacking!
