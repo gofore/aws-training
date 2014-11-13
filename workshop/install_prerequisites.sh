@@ -12,8 +12,11 @@ wget http://ppa.launchpad.net/natecarlson/maven3/ubuntu/pool/main/m/maven3/maven
 sudo dpkg -i maven3_3.2.1-0~ppa1_all.deb
 sudo ln -s /usr/bin/mvn3 /usr/bin/mvn
 
+
 # Export AWS credentials from CSV file
-if [ "$USER" == "vagrant" ]
+VAGRANT_WORKSHOP_DIRECTORY="/vagrant/workshop"
+if [ -d "$VAGRANT_WORKSHOP_DIRECTORY" ]
   then
-    echo ". /vagrant/workshop/export_env_variables.sh" >> ~/.bashrc
+    echo ". $VAGRANT_WORKSHOP_DIRECTORY/export_env_variables.sh $VAGRANT_WORKSHOP_DIRECTORY/credentials.csv" >> /home/vagrant/.bashrc
+    echo "Added AWS environment variables exporter to vagrant's .bashrc file"
 fi
