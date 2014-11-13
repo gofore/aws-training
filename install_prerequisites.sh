@@ -6,3 +6,7 @@ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | su
 sudo apt-get update
 sudo apt-get install -y python-dev python-pip git oracle-java8-installer
 sudo pip install boto ansible
+
+wget http://ppa.launchpad.net/natecarlson/maven3/ubuntu/pool/main/m/maven3/maven3_3.2.1-0~ppa1_all.deb
+sudo dpkg -i maven3_3.2.1-0~ppa1_all.deb
+sudo ln -s /usr/bin/mvn3 /usr/bin/mvn
