@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Install prerequisite packages
 sudo add-apt-repository -y ppa:webupd8team/java
@@ -13,4 +13,7 @@ sudo dpkg -i maven3_3.2.1-0~ppa1_all.deb
 sudo ln -s /usr/bin/mvn3 /usr/bin/mvn
 
 # Export AWS credentials from CSV file
-# echo "\n. /vagrant/workshop/export_env_variables.sh\n" >> ~/.bashrc
+if [ "$USER" == "vagrant" ]
+  then
+    echo ". /vagrant/workshop/export_env_variables.sh" >> ~/.bashrc
+fi
