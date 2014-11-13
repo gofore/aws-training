@@ -369,7 +369,7 @@
       }
     },
 
-    "MetadataSDBDomain": {
+    "Images": {
       "Type": "AWS::SDB::Domain"
     }
 

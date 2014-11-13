@@ -4,7 +4,7 @@
   connection: local
   tasks:
   - name: Create CloudFormation stack
-    action: cloudformation stack_name="workshop-{{ user_name }}" state=present region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
+    action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=present region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
     args:
       template_parameters:
         KeyName: "{{ key_name }}"
@@ -13,4 +13,4 @@
         UserName: "{{ user_name }}"
         UserEmail: "{{ user_email }}"
       tags:
-        Name: "workshop-{{ user_name }}"
+        Name: "aws-workshop-{{ user_name }}"
