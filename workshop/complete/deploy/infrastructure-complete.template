@@ -88,7 +88,8 @@
         "ImageId": { "Ref": "AmiId" },
         "UserData": { "Fn::Base64": { "Ref": "UIPort" }},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
-        "InstanceType": { "Ref": "InstanceType" }
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-ui-role"
       }
     },
     "UIScaleUpPolicy": {
@@ -195,7 +196,8 @@
         "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "loader"]]}}],
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroups": [ { "Ref": "LoaderSecurityGroup" } ],
-        "InstanceType": { "Ref": "InstanceType" }
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-loader-role"
       }
     },
     "LoaderSecurityGroup": {
@@ -249,7 +251,8 @@
         "KeyName": { "Ref": "KeyName" },
         "ImageId": { "Ref": "AmiId" },
         "SecurityGroups": [ { "Ref": "FetcherSecurityGroup" } ],
-        "InstanceType": { "Ref": "InstanceType" }
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-fetcher-role"
       }
     },
     "FetcherScaleUpPolicy": {
