@@ -23,10 +23,10 @@ public class QueueAttributesResource extends RestServerResource {
     @Get("json")
     public GetQueueAttributesResult getAttributes() throws Exception {
         String url = properties.lookup(getAttribute("name"));
-        String attr = getQueryValueAsString("attr").orElse("All");
+        String attributes = getQueryValueAsString("attr").orElse("All");
         GetQueueAttributesRequest request = new GetQueueAttributesRequest()
                 .withQueueUrl(url)
-                .withAttributeNames(attr);
+                .withAttributeNames(attributes);
         return sqsClient.getQueueAttributes(request).join();
     }
 }

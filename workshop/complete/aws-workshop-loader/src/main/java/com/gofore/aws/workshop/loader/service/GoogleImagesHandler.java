@@ -1,12 +1,16 @@
 package com.gofore.aws.workshop.loader.service;
 
+import static com.gofore.aws.workshop.common.async.FutureHelper.sequence;
+
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import com.amazonaws.services.sqs.model.DeleteMessageRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
+import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gofore.aws.workshop.common.functional.Consumers;
@@ -43,24 +47,25 @@ public class GoogleImagesHandler implements Consumer<Message> {
             String originQueueUrl = root.get("origin").asText();
             PageFinder pageFinder = new GoogleImagesFinder(query, limit);
             Stream<String> pageUrls = pageFinder.findPageUrls();
-            pageUrls.forEach(sendUrl(message, originQueueUrl));
+            sequence(pageUrls.map(this::sendUrl)).thenRun(() -> deleteMessage(message, originQueueUrl));
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
     }
 
-    private Consumer<String> sendUrl(Message message, String originQueueUrl) {
-        return (url) -> {
-            SendMessageRequest request = new SendMessageRequest(queueUrl, url);
-            sqsClient.sendMessage(request).whenComplete(Consumers.consumer(
-                    (v) -> LOGGER.info("Successfully sent {} to {}", url, queueUrl),
-                    (e) -> LOGGER.error("Failed to send {} to {}", url, queueUrl, e)
-            )).thenApply(
-                    (v) -> sqsClient.deleteMessage(new DeleteMessageRequest(originQueueUrl, message.getReceiptHandle()))
-            ).whenComplete(Consumers.consumer(
-                    (v) -> LOGGER.info("Successfully deleted {}", message),
-                    (e) -> LOGGER.error("Failed to delete {}", message, e)
-            ));
-        };
+    private CompletableFuture<SendMessageResult> sendUrl(String url) {
+        SendMessageRequest request = new SendMessageRequest(queueUrl, url);
+        return sqsClient.sendMessage(request).whenComplete(Consumers.consumer(
+                (v) -> LOGGER.info("Successfully sent {} to {}", url, queueUrl),
+                (e) -> LOGGER.error("Failed to send {} to {}", url, queueUrl, e)
+        ));
+    }
+    
+    private CompletableFuture<Void> deleteMessage(Message message, String originQueueUrl) {
+        DeleteMessageRequest request = new DeleteMessageRequest(originQueueUrl, message.getReceiptHandle());
+        return sqsClient.deleteMessage(request).whenComplete(Consumers.consumer(
+                (v) -> LOGGER.info("Successfully deleted {}", message),
+                (e) -> LOGGER.error("Failed to delete {}", message, e)
+        ));
     }
 }
