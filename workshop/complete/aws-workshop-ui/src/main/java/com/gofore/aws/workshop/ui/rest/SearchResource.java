@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
+import com.gofore.aws.workshop.common.simpledb.DomainLookup;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
 import com.gofore.aws.workshop.ui.search.SearchItemMapper;
 import com.gofore.aws.workshop.ui.search.SearchResult;
@@ -13,13 +14,15 @@ import org.restlet.resource.Get;
 
 public class SearchResource extends RestServerResource {
     
+    private static final String SELECT_TEMPLATE = "select * from `{images.domain}`";
+    
     private final SimpleDBClient simpleDBClient;
     private final String select;
     
     @Inject
-    public SearchResource(ApplicationProperties properties, SimpleDBClient simpleDBClient) {
+    public SearchResource(ApplicationProperties properties, DomainLookup domainLookup, SimpleDBClient simpleDBClient) {
         this.simpleDBClient = simpleDBClient;
-        this.select = properties.lookup("images.select");
+        this.select = SELECT_TEMPLATE.replace("{images.domain}", domainLookup.getImagesDomain());
     }
 
     @Get("json")

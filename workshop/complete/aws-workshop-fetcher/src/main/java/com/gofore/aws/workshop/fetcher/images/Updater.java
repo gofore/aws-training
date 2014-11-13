@@ -25,6 +25,7 @@ import com.gofore.aws.workshop.common.functional.Consumers;
 import com.gofore.aws.workshop.common.net.HttpClient;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.s3.S3Client;
+import com.gofore.aws.workshop.common.simpledb.DomainLookup;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
 import com.gofore.aws.workshop.fetcher.utils.TermsParser;
 import com.google.common.hash.HashFunction;
@@ -49,11 +50,11 @@ public class Updater {
     private final HashFunction hashFunction;
     private final String s3endpoint;
     private final String s3bucket;
-    private final String domain;
     private final String user;
+    private final String domain;
 
     @Inject
-    public Updater(ApplicationProperties properties, S3Client s3Client, SimpleDBClient simpleDBClient, HttpClient httpClient, TermsParser termsParser) {
+    public Updater(ApplicationProperties properties, DomainLookup domainLookup, S3Client s3Client, SimpleDBClient simpleDBClient, HttpClient httpClient, TermsParser termsParser) {
         this.s3Client = s3Client;
         this.simpleDBClient = simpleDBClient;
         this.httpClient = httpClient;
@@ -61,8 +62,8 @@ public class Updater {
         this.hashFunction = Hashing.murmur3_128();
         this.s3endpoint = properties.lookup("aws.s3.endpoint");
         this.s3bucket = properties.lookup("aws.s3.bucket");
-        this.domain = properties.lookup("images.domain");
         this.user = properties.lookup("aws.user");
+        this.domain = domainLookup.getImagesDomain();
     }
 
     public CompletableFuture<Image> update(Image image) {
