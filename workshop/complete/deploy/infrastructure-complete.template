@@ -406,6 +406,10 @@
         "AlarmActions": [{ "Ref": "QueueUrlsAlarmTopic" }],
         "InsufficientDataActions": [{ "Ref": "QueueUrlsAlarmTopic" }]
       }
+    },
+
+    "MetadataSDBDomain": {
+      "Type": "AWS::SDB::Domain"
     }
 
   },
