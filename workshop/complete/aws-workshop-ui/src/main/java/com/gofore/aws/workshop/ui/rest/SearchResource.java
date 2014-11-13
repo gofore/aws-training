@@ -31,7 +31,9 @@ public class SearchResource extends RestServerResource {
         query = query + getQueryValueAsInteger("l")
                 .map(l -> " limit " + l)
                 .orElse("");
-        return simpleDBClient.select(new SelectRequest(query))
+        SelectRequest request = new SelectRequest(query);
+        getQueryValueAsString("n").ifPresent(request::setNextToken);
+        return simpleDBClient.select(request)
                 .thenApply(r -> new SearchResult(
                         r.getItems().stream().map(new SearchItemMapper()).collect(Collectors.toList()),
                         r.getNextToken()

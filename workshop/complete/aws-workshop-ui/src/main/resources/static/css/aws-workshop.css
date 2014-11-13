@@ -5,3 +5,18 @@
 .dl-horizontal dd {
     margin-left: 210px;
 }
+
+.panel-heading h2, .panel-heading h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.panel-heading h4 {
+    min-height: 20px;
+}
+
+.result {
+    padding: 20px;
+    height: 220px;
+    text-align: center;
+}

@@ -1,22 +1,51 @@
 'use strict';
 
-angular.module('aws', ['ui.bootstrap'])
-    .controller('View2Ctrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
-
-        /*
-        var tick = function() {
-            $http.get('http://funchat-api.herokuapp.com/messages')
-                .success(function (data) {
-                    $scope.messages = data;
+angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
+    .controller('QueryCtrl', ['$scope', '$http', function($scope, $http) {
+        $scope.submit = function() {
+            if ($scope.query) {
+                $http({
+                    url: '/api/queries',
+                    method: 'PUT',
+                    data: { q: $scope.query, l: 5 }
+                }).success(function (data) {
+                    $scope.status = { success: true, id: data.messageId };
+                }).error(function () {
+                    $scope.status = { error: true };
                 });
-            $timeout(tick, 100);
+                $scope.query = null;
+            }
         };
-
-        tick();
-        */
     }])
-    
-.directive('sqs', ['$http', '$timeout', function($http, $timeout) {
+.controller('SearchCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.items = [];
+    $scope.loading = false;
+    $scope.search = function(query, limit, next) {
+        $scope.loading = true;
+        $scope.limit = limit;
+        if (!next) {
+            $scope.items = [];
+        }
+        $http({
+            url: '/api/search',
+            method: 'GET',
+            params: { q: query, l: limit, n: next }
+        }).success(function (data) {
+            $scope.items = $scope.items.concat(data.items);
+            $scope.loading = false;
+            $scope.status = { };
+            if (data.nextToken) {
+                $scope.next = data.nextToken;
+            } else {
+                $scope.next = null;
+            }
+        }).error(function () {
+            $scope.loading = false;
+            $scope.status = { error: true };
+        });
+    };
+}])
+.directive('sqs', ['$http', '$timeout', '$compile', function($http, $timeout, $compile) {
     return {
         scope: { },
         templateUrl: 'partials/sqs.html',
@@ -26,9 +55,11 @@ angular.module('aws', ['ui.bootstrap'])
                 QueueProperty: attrs.sqs
             };
             
-            var complete = function(fn) {
+            var complete = function(fn, field) {
                 scope.loading = false;
-                $timeout(fn, 30000);
+                scope.status = { };
+                scope.status[field] = true;
+                $timeout(fn, 5000);
             };
 
             var retrieve = function() {
@@ -39,9 +70,9 @@ angular.module('aws', ['ui.bootstrap'])
                 }).success(function (data) {
                     scope.queue.QueueName = data.attributes.QueueArn.split(':').pop();
                     _.assign(scope.queue, data.attributes);
-                    complete(retrieve)
+                    complete(retrieve, 'success')
                 }).error(function () {
-                    complete(retrieve)
+                    complete(retrieve, 'error')
                 });
             };
             

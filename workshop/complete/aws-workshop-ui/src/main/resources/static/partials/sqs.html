@@ -1,15 +1,19 @@
-<div class="panel-heading"><h4>{{ queue.QueueName }}</h4></div>
-<div class="panel-body">
-    <dl class="dl-horizontal">
+<div class="panel panel-default" ng-messages="status">
+    <div class="panel-heading"><h4>{{ queue.QueueName }}<img class="pull-right" ng-show="loading" src="/img/ajax-loader.gif"></h4></div>
+    <div class="panel-body clearfix">
+        <dl class="dl-horizontal">
         <dt>Messages (approx)</dt>
-        <dd>{{ queue.ApproximateNumberOfMessages }}</dd>
-        <dt>Invisible messages (approx)</dt>
-        <dd>{{ queue.ApproximateNumberOfMessagesNotVisible}}</dd>
-        <dt>Delayed messages (approx)</dt>
-        <dd>{{ queue.ApproximateNumberOfMessagesDelayed }}</dd>
-        <dt>Message delay</dt>
-        <dd>{{ queue.DelaySeconds }} seconds</dd>
-        <dt>Visibility timeout</dt>
-        <dd>{{ queue.VisibilityTimeout }} seconds</dd>
-    </dl>
+            <dd>{{ queue.ApproximateNumberOfMessages }}</dd>
+            <dt>Invisible messages (approx)</dt>
+            <dd>{{ queue.ApproximateNumberOfMessagesNotVisible}}</dd>
+            <dt>Delayed messages (approx)</dt>
+            <dd>{{ queue.ApproximateNumberOfMessagesDelayed }}</dd>
+            <dt>Message delay</dt>
+            <dd>{{ queue.DelaySeconds }} seconds</dd>
+            <dt>Visibility timeout</dt>
+            <dd>{{ queue.VisibilityTimeout }} seconds</dd>
+        </dl>
+    </div>
+    <div ng-message="success" class="panel-footer">Successfully loaded queue status</div>
+    <div ng-message="error" class="panel-footer">Failed to load queue status</div>
 </div>

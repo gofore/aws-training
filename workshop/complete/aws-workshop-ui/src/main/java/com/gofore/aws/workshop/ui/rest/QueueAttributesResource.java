@@ -21,7 +21,7 @@ public class QueueAttributesResource extends RestServerResource {
     }
     
     @Get("json")
-    public GetQueueAttributesResult getAttributes() {
+    public GetQueueAttributesResult getAttributes() throws Exception {
         String url = properties.lookup(getAttribute("name"));
         String attr = getQueryValueAsString("attr").orElse("All");
         GetQueueAttributesRequest request = new GetQueueAttributesRequest()
