@@ -12,6 +12,11 @@ public class ApplicationProperties extends AbstractPropertyLoader {
         return this;
     }
 
+    public ApplicationProperties withAwsCredentialsEnvLoader() {
+        chain.add(new AwsCredentialsEnvLoader());
+        return this;
+    }
+    
     public ApplicationProperties withAwsCredentialsCsvLoader(String csvFile) {
         chain.add(new AwsCredentialsCsvLoader(csvFile));
         return this;
