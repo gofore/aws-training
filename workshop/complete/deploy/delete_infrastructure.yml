@@ -1,7 +1,13 @@
 ---
 
-- hosts: localhost
+# To run this playbook:
+# ansible-playbook -e "user_name=FOO" -i localhost, delete_infrastructure.yml
+
+- hosts: all
   connection: local
+  vars:
+    - template_file: cloudformation-templates/infrastructure-complete.template
+    - region: eu-west-1
   tasks:
   - name: Delete CloudFormation stack
-    action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=absent region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
+    action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=absent region={{ region }} disable_rollback=false template="{{ template_file }}"

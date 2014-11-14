@@ -1,0 +1,59 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description": "Infrastructure for AWS workshop demo application",
+
+  "Parameters": {
+    "UserEmail": {
+      "Description": "Email address to notify if there are any scaling operations",
+      "Type": "String"
+    },
+    "UserName": {
+      "Description": "Username to identify resources created by different users",
+      "Type": "String"
+    },
+    "IPRange": {
+      "Description": "The IP address range that can be used to access the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+   }
+  },
+
+  "Resources": {
+
+    "QueueQueries": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "queries"]]},
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 28800
+      }
+    },
+
+    "QueueUrls": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "urls"]]},
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 28800
+      }
+    },
+
+    "Images": {
+      "Type": "AWS::SDB::Domain"
+    }
+
+  },
+
+
+  "Outputs": {
+    "SimpleDBDomainName": {
+      "Description": "The name of the generated SimpleDB domain",
+      "Value":  { "Ref": "SimpleDBDomainName" }
+    }
+  }
+}
