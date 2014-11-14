@@ -65,7 +65,7 @@ angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
             var retrieve = function() {
                 scope.loading = true;
                 $http({
-                    url: 'http://localhost:9001/api/queues/' + scope.queue.QueueProperty,
+                    url: '/api/queues/' + scope.queue.QueueProperty,
                     method: 'GET'
                 }).success(function (data) {
                     scope.queue.QueueName = data.attributes.QueueArn.split(':').pop();
