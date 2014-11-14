@@ -36,3 +36,7 @@
     height: 220px;
     text-align: center;
 }
+
+.container-fluid {
+    margin-top: 20px;
+}
