@@ -2,7 +2,7 @@
 <html ng-app="aws">
 <head>
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/aws-workshop.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/aws-workshop.css">
     
     <script src="/webjars/jquery/2.1.1/jquery.min.js"></script>
     <script src="/webjars/lodash/2.4.1-6/lodash.min.js"></script>
@@ -12,7 +12,7 @@
     <script src="/webjars/angularjs/1.3.1/angular-messages.min.js"></script>
     <script src="/webjars/ngInfiniteScroll/1.1.2/ng-infinite-scroll.js"></script>
     <script src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap.min.js"></script>
-    <script src="/js/aws-workshop.js"></script>
+    <script src="/assets/js/aws-workshop.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -36,7 +36,7 @@
                 <div ng-message="error" class="panel-footer bg-warning">Failed to sent query</div>
             </div>
             <div ng-controller="SearchCtrl" class="panel panel-default">
-                <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/img/ajax-loader.gif"></h2></div>
+                <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
                 <div class="panel-body">
                     <div class="input-group">
                         <input ng-model="query" type="text" class="form-control">

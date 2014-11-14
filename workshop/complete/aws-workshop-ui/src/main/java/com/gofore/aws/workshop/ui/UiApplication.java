@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import com.gofore.aws.workshop.common.rest.ConfigurationResource;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.RestletServer;
+import com.gofore.aws.workshop.ui.rest.HealthCheckResource;
 import com.gofore.aws.workshop.ui.rest.QueriesResource;
 import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
 import com.gofore.aws.workshop.ui.rest.SearchResource;
@@ -29,12 +30,13 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
         router.attach("/api/queries", target(QueriesResource.class));
         router.attach("/api/search", target(SearchResource.class));
+        router.attach("/healthcheck",target(HealthCheckResource.class));
         router.attach("/webjars", createWebjars());
-        router.attach("/", createStaticResources());
+        router.attach("/", createRoot());
         return router;
     }
-    
-    private Directory createStaticResources() {
+   
+    private Directory createRoot() {
         Directory directory = new Directory(getContext(), "clap://class/static/");
         directory.setDeeplyAccessible(true);
         directory.setIndexName("index.html");
