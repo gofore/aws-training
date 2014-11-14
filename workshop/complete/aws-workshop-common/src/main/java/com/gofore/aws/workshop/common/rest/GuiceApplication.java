@@ -4,6 +4,7 @@ import java.lang.annotation.Annotation;
 
 import org.restlet.Application;
 import org.restlet.Restlet;
+import org.restlet.data.CharacterSet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.ServerResource;
 
@@ -13,6 +14,7 @@ public abstract class GuiceApplication extends Application {
 
     protected GuiceApplication(FinderFactory finderFactory) {
         this.finderFactory = finderFactory;
+        getMetadataService().setDefaultCharacterSet(CharacterSet.UTF_8);
     }
     
     protected Restlet target(Class<? extends ServerResource> type) {
