@@ -30,6 +30,22 @@
       <artifactId>jsoup</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet.ext.guice</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet.ext.jackson</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.restlet.jse</groupId>
+      <artifactId>org.restlet.ext.slf4j</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>

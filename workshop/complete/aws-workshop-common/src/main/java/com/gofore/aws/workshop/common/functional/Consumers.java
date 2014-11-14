@@ -23,5 +23,13 @@ public class Consumers {
             }
         };
     }
+
+    public static <T> BiConsumer<T, Throwable> onSuccess(Consumer<T> success) {
+        return consumer(success::accept, (e) -> { });
+    }
     
+    public static <T> BiConsumer<T, Throwable> onError(Consumer<Throwable> error) {
+        return consumer((s) -> { }, error::accept);
+    }
+     
 }

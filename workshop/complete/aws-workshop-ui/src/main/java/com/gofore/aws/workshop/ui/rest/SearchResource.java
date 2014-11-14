@@ -1,6 +1,7 @@
 package com.gofore.aws.workshop.ui.rest;
 
 import com.amazonaws.services.simpledb.model.SelectRequest;
+import com.amazonaws.services.simpledb.model.SelectResult;
 import com.gofore.aws.workshop.common.functional.Lists;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
 import com.gofore.aws.workshop.common.simpledb.DomainLookup;
@@ -36,11 +37,14 @@ public class SearchResource extends RestServerResource {
         String query = select() + limit();
         SelectRequest request = new SelectRequest(query);
         getQueryValueAsString("n").ifPresent(request::setNextToken);
-        return simpleDBClient.select(request)
-                .thenApply(r -> new SearchResult(
-                        Lists.map(r.getItems(), new SearchItemMapper()),
-                        r.getNextToken()
-                )).join();
+        return simpleDBClient.select(request).thenApply(this::convert).join();
+    }
+    
+    private SearchResult convert(SelectResult result) {
+        return new SearchResult(
+                Lists.map(result.getItems(), new SearchItemMapper()),
+                result.getNextToken()
+        );
     }
     
     private String select() {

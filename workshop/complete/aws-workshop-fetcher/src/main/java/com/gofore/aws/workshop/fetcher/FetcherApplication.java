@@ -2,29 +2,32 @@ package com.gofore.aws.workshop.fetcher;
 
 import javax.inject.Inject;
 
-import com.gofore.aws.workshop.fetcher.images.Receiver;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.rest.GuiceApplication;
+import com.gofore.aws.workshop.common.rest.RestletServer;
+import com.gofore.aws.workshop.common.sqs.SqsClient;
+import com.gofore.aws.workshop.common.sqs.SqsService;
+import com.gofore.aws.workshop.fetcher.images.ImagesMessageHandler;
 import com.google.inject.Singleton;
+import org.restlet.ext.guice.FinderFactory;
 
 @Singleton
-public class FetcherApplication implements Runnable {
-
-    private final Receiver receiver;
+public class FetcherApplication extends GuiceApplication {
 
     @Inject
-    public FetcherApplication(Receiver receiver) {
-        this.receiver = receiver;
+    public FetcherApplication(ApplicationProperties properties, FinderFactory finderFactory,
+                              SqsClient sqsClient, ImagesMessageHandler imagesMessageHandler) {
+        super(finderFactory);
+        SqsService sqsService = new SqsService(sqsClient, properties.lookup("images.queue.url"))
+                .addMessageHandler(imagesMessageHandler);
+        getServices().add(sqsService);
     }
 
-    @Override
-    public void run() {
-        receiver.start();
-    }
-
-    public static void main(String[] args) {
-        Injector injector = Guice.createInjector(new FetcherModule());
-        FetcherApplication application = injector.getInstance(FetcherApplication.class);
-        application.run();
+    public static void main(String[] args) throws Exception {
+        new RestletServer()
+                .port(9003)
+                .modules(new FetcherModule())
+                .application(FetcherApplication.class)
+                .start();
     }
 }

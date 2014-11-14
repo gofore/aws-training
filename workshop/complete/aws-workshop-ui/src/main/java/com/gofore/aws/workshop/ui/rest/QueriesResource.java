@@ -48,7 +48,6 @@ public class QueriesResource extends RestServerResource {
         ObjectNode node = MAPPER.createObjectNode();
         node.put("q", query);
         node.put("l", limit);
-        node.put("origin", queueUrl);
         return MAPPER.writeValueAsString(node);
     }
     

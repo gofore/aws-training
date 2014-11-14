@@ -30,7 +30,7 @@ public class HttpClient {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-        });
+        }, executor);
     }
     
 }

@@ -4,13 +4,18 @@ import java.util.Optional;
 
 import com.amazonaws.services.simpledb.model.ListDomainsRequest;
 import com.amazonaws.services.simpledb.model.ListDomainsResult;
+import com.gofore.aws.workshop.common.functional.Consumers;
 import com.gofore.aws.workshop.common.functional.Lists;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Singleton
 public class DomainLookup {
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomainLookup.class);
     
     private final SimpleDBClient simpleDBClient;
     private final String user;
@@ -27,6 +32,7 @@ public class DomainLookup {
                 .thenApply(ListDomainsResult::getDomainNames)
                 .thenApply(Lists.findFirst(d -> d.startsWith(prefix)))
                 .thenApply(Optional::get)
+                .whenComplete(Consumers.onError(e -> LOGGER.error("Failed to load domain for {}", prefix, e)))
                 .join();
     }
     

@@ -54,7 +54,9 @@
                             </ul>
                         </div>
                     </div>
-                    <div infinite-scroll="search(query, limit, next)" infinite-scroll-disabled="loading || !next" infinite-scroll-distance="1" infinite-scroll-immediate-check="true">
+                    <div infinite-scroll="search(query, limit, next)"
+                         infinite-scroll-disabled="loading || !next"
+                         infinite-scroll-distance="1">
                         <div class="col-md-3 result" ng-repeat="item in items">
                             <a href="{{item.attributes.imageUrl}}">
                                 <img src="{{item.attributes.thumbnailUrl}}">

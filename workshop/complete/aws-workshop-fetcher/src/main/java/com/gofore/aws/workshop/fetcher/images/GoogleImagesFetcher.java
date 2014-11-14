@@ -3,13 +3,15 @@ package com.gofore.aws.workshop.fetcher.images;
 import java.net.URISyntaxException;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
-import javax.inject.Inject;
 
 import com.gofore.aws.workshop.common.net.HtmlClient;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URIBuilder;
 import org.jsoup.nodes.Element;
 
+@Singleton
 public class GoogleImagesFetcher implements ImageFetcher {
 
     private final HtmlClient htmlClient;
