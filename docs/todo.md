@@ -1,11 +1,9 @@
 
-
-PART01
-
+PART 01
 
 - intro EC2 & IAM + mainitaan kiinnostavimmat palvelut
-- luodaan avaimet
-- luo testiks tyhjän koneen
+- luodaan ssh-avain AWS:ään.
+- luo testiks tyhjän koneen ja ssh:ttaa sisään
 
 - esitellään cloudformation
 - luodaan cf:llä simpledb domain ja jonot (luodaan selittämättä)
@@ -23,7 +21,7 @@ PART01
 - koodataan simpledb-tallennus
 
 
-PART02 - (complete)
+PART 02 - Lopullisen järjestelmän kokeilu (aloitetaan complete-koodilla)
 
 - deployataan sovellus-jar:it s3:een
 

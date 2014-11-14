@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# This script creates a cloudformation stack to AWS with the given details.
+# This is a helpful wrapper around Ansible so that you do not need to learn
+# the Ansible parameter passing.
+
 HELP="Usage: $0 YOUR_USER_NAME YOUR_EMAIL_ADDRESS KEY_NAME"
 
 if [ $# -ne 3 ]
