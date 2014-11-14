@@ -2,14 +2,18 @@
 
 - hosts: localhost
   connection: local
+  vars:
+    - ami_id: ami-828334f5
+    - instance_type: t2.micro
+    - region: eu-west-1
   tasks:
   - name: Create CloudFormation stack
-    action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=present region="eu-west-1" disable_rollback=false template="infrastructure-complete.template"
+    action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=present region="{{ region }}" disable_rollback=false template="infrastructure-complete.template"
     args:
       template_parameters:
         KeyName: "{{ key_name }}"
-        AmiId: ami-ba77c3cd
-        InstanceType: t2.micro
+        AmiId: "{{ ami_id }}"
+        InstanceType: "{{ instance_type }}"
         UserName: "{{ user_name }}"
         UserEmail: "{{ user_email }}"
       tags:

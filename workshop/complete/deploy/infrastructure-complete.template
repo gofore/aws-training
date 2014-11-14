@@ -83,7 +83,6 @@
         "ImageId": { "Ref": "AmiId" },
         "UserData": { "Fn::Base64": { "Fn::Join": ["", [
           "#!/bin/bash\n",
-          "pip install awscli\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf\n",
@@ -208,7 +207,6 @@
         "IamInstanceProfile": "aws-workshop-loader-role",
         "UserData": { "Fn::Base64": { "Fn::Join": ["", [
           "#!/bin/bash\n",
-          "pip install awscli\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf\n",
@@ -268,7 +266,6 @@
         "ImageId": { "Ref": "AmiId" },
         "UserData": { "Fn::Base64": { "Fn::Join": ["", [
           "#!/bin/bash\n",
-          "pip install awscli\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf\n",
