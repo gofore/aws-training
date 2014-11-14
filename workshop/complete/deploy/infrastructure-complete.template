@@ -87,7 +87,7 @@
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf\n",
-          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml\n",
+          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml\n"
           ]]}},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
@@ -164,9 +164,9 @@
         } ],
         "HealthCheck": {
           "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "UIPort" }, "/"]]},
-          "HealthyThreshold": "3",
-          "UnhealthyThreshold": "5",
-          "Interval": "30",
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "3",
+          "Interval": "10",
           "Timeout": "5"
         }
       }
