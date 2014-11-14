@@ -155,8 +155,8 @@
     "UIElasticLoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
-        "LoadBalancerName": { "Fn::Join": ["", ["aws-workshop-", { "Ref": "UserName" }]]},
-        "AvailabilityZones": { "Fn::GetAZs" : "" },
+        "LoadBalancerName": { "Ref": "UserName" },
+        "AvailabilityZones": { "Fn::GetAZs": "" },
         "Listeners": [ {
           "LoadBalancerPort": "80",
           "InstancePort": { "Ref": "UIPort" },
