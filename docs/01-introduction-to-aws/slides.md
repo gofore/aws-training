@@ -208,6 +208,8 @@ Elastic Load balancer, Launch configuration, ASG and Scaling policy
 
 Indirectly uses SNS and CloudWatch
 
+http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
+
 ---
 
 # Recap
