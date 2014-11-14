@@ -163,7 +163,7 @@
           "Protocol": "HTTP"
         } ],
         "HealthCheck": {
-          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "UIPort" }, "/"]]},
+          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "UIPort" }, "/healthcheck"]]},
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "3",
           "Interval": "10",
@@ -186,6 +186,12 @@
           "FromPort": { "Ref" : "UIPort" },
           "ToPort": { "Ref" : "UIPort" },
           "SourceSecurityGroupName": {"Fn::GetAtt": ["UIElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "UIPort" },
+          "ToPort": { "Ref" : "UIPort" },
+          "CidrIp": { "Ref": "IPRange"}
         } ]
       }
     },
