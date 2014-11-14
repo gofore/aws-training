@@ -10,7 +10,10 @@ import com.gofore.aws.workshop.ui.rest.QueriesResource;
 import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
 import com.gofore.aws.workshop.ui.rest.SearchResource;
 import com.google.inject.Singleton;
+import org.restlet.Request;
+import org.restlet.Response;
 import org.restlet.Restlet;
+import org.restlet.data.CharacterSet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.Directory;
 import org.restlet.routing.Router;
@@ -37,14 +40,26 @@ public class UiApplication extends GuiceApplication {
     }
    
     private Directory createRoot() {
-        Directory directory = new Directory(getContext(), "clap://class/static/");
+        Directory directory = new Directory(getContext(), "clap://class/static/") {
+            @Override
+            public void handle(Request request, Response response) {
+                super.handle(request, response);
+                response.getEntity().setCharacterSet(CharacterSet.UTF_8);
+            }
+        };
         directory.setDeeplyAccessible(true);
         directory.setIndexName("index.html");
         return directory;
     }
     
     private Directory createWebjars() {
-        return new Directory(getContext(), "clap://class/META-INF/resources/webjars");
+        return new Directory(getContext(), "clap://class/META-INF/resources/webjars") {
+            @Override
+            public void handle(Request request, Response response) {
+                super.handle(request, response);
+                response.getEntity().setCharacterSet(CharacterSet.UTF_8);
+            }
+        };
     }
 
     public static void main(String[] args) throws Exception {
