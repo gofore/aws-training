@@ -2,28 +2,31 @@
 PART 01
 
 - intro EC2 & IAM + mainitaan kiinnostavimmat palvelut
-- luodaan ssh-avain AWS:ään.
-- luo testiks tyhjän koneen ja ssh:ttaa sisään
+- luodaan oma ssh-avain AWS:ään
+- luodaan oma tyhjä kone ja ssh:tetaan sisään, curlataan meta dataa
 
 - esitellään cloudformation
-- luodaan cf:llä simpledb domain ja jonot (luodaan selittämättä)
+- luodaan cloudformationilla simpledb-domain ja sqs-jonot (ilman että näitä on vielä opetettu)
+- esitellään sqs ja tutkitaan sitä webbikälistä
 
-- kokeillaan pelkkää ui:ta omalta koneelta --> ja koodataan jotain vähän, esim. toteutus sqs-pollereille
+- kokeillaan ajaa pelkkää ui:ta omalta koneelta (käyttäen luotuja sdb ja sqs)
+- koodataan vähän jotain, esim. toteutus sqs-pollereille
 - koodataan viestin lähetys ui:hin
 
-- tutkitaan miten viestihomma rullaa --> käynnistetään omalla koneella loader
+- tutkitaan miten viestinvälitys rullaa --> käynnistetään omalla koneella loader
 
 - esitellään S3-palvelu
-- käydään läpi mitä s3:ssa
+- tutkitaan mitä s3:sta löytyy
 - koodataan s3-tallennus
 
-- esitellään simpledb ja mitä simpledb:ssä on
+- esitellään simpledb
+- tutkitaan mitä simpledb:ssä on
 - koodataan simpledb-tallennus
 
 
 PART 02 - Lopullisen järjestelmän kokeilu (aloitetaan complete-koodilla)
 
-- deployataan sovellus-jar:it s3:een
+- deployataan omat sovellus-jar:it s3:een
 
 - esitellään elb ja autoscaling
 - luodaan cloudformationilla koko stäkki

@@ -1,5 +1,7 @@
 ---
 
+# This Ansible playbook creates infrastructure in AWS according to the given CloudFormation template file.
+
 # To run this playbook:
 # ansible-playbook -e "user_name=FOO user_email=BAR key_name=BAZ" -i localhost, create_infrastructure.yml
 
