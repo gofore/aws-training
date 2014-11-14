@@ -1,6 +1,6 @@
 ---
 
-- hosts: localhost
+- hosts: all
   connection: local
   tasks:
   - name: Deploy {{ artifact }} to S3

@@ -70,6 +70,7 @@
         <artifactId>ansible-maven-plugin</artifactId>
         <configuration>
           <playbook>${project.basedir}/deploy-artifact.yml</playbook>
+          <inventory>localhost,</inventory>
           <extraVars>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</extraVars>
         </configuration>
       </plugin>
