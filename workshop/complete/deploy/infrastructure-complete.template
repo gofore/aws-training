@@ -247,8 +247,8 @@
       "Properties": {
         "AvailabilityZones": { "Fn::GetAZs": ""},
         "LaunchConfigurationName": { "Ref": "FetcherLaunchConfig" },
-        "MinSize": "2",
-        "MaxSize": "4",
+        "MinSize": "1",
+        "MaxSize": "3",
         "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"fetcher"]]}, "PropagateAtLaunch": true }],
         "NotificationConfiguration": {
           "TopicARN": { "Ref": "FetcherAutoScalingNotificationTopic" },
@@ -294,46 +294,6 @@
         "ScalingAdjustment" : "-1"
       }
     },
-    "FetcherCPUAlarmHigh": {
-     "Type": "AWS::CloudWatch::Alarm",
-     "Properties": {
-        "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
-        "MetricName": "CPUUtilization",
-        "Namespace": "AWS/EC2",
-        "Statistic": "Average",
-        "Period": "300",
-        "EvaluationPeriods": "2",
-        "Threshold": "90",
-        "AlarmActions": [ { "Ref": "FetcherScaleUpPolicy" } ],
-        "Dimensions": [
-          {
-            "Name": "AutoScalingGroupName",
-            "Value": { "Ref": "FetcherAutoScalingGroup" }
-          }
-        ],
-        "ComparisonOperator": "GreaterThanThreshold"
-      }
-    },
-    "FetcherCPUAlarmLow": {
-     "Type": "AWS::CloudWatch::Alarm",
-     "Properties": {
-        "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
-        "MetricName": "CPUUtilization",
-        "Namespace": "AWS/EC2",
-        "Statistic": "Average",
-        "Period": "300",
-        "EvaluationPeriods": "2",
-        "Threshold": "70",
-        "AlarmActions": [ { "Ref": "FetcherScaleDownPolicy" } ],
-        "Dimensions": [
-          {
-            "Name": "AutoScalingGroupName",
-            "Value": { "Ref": "FetcherAutoScalingGroup" }
-          }
-        ],
-        "ComparisonOperator": "LessThanThreshold"
-      }
-    },
     "FetcherSecurityGroup": {
       "Type": "AWS::EC2::SecurityGroup",
       "Properties": {
@@ -366,19 +326,10 @@
         "MessageRetentionPeriod": 28800
       }
     },
-    "QueueUrlsAlarmTopic": {
-      "Type": "AWS::SNS::Topic",
-      "Properties": {
-        "Subscription": [{
-          "Endpoint": { "Ref": "UserEmail" },
-          "Protocol": "email"
-        }]
-      }
-    },
-    "QueueUrlsDepthAlarm": {
+    "QueueUrlsHighAlarm": {
       "Type": "AWS::CloudWatch::Alarm",
       "Properties": {
-        "AlarmDescription": "Alarm if queue depth grows beyond 10 messages",
+        "AlarmDescription": "Alarm if queue is too long",
         "Namespace": "AWS/SQS",
         "MetricName": "ApproximateNumberOfMessagesVisible",
         "Dimensions": [{
@@ -386,14 +337,32 @@
           "Value": { "Fn::GetAtt": ["QueueUrls", "QueueName"] }
         }],
         "Statistic": "Sum",
-        "Period": "300",
+        "Period": "60",
         "EvaluationPeriods": "1",
         "Threshold": "10",
-        "ComparisonOperator": "GreaterThanThreshold",
-        "AlarmActions": [{ "Ref": "QueueUrlsAlarmTopic" }],
-        "InsufficientDataActions": [{ "Ref": "QueueUrlsAlarmTopic" }]
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "AlarmActions": [{ "Ref": "FetcherScaleUpPolicy" }]
       }
     },
+    "QueueUrlsLowAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Alarm if queue is too short",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [{
+          "Name": "QueueName",
+          "Value": { "Fn::GetAtt": ["QueueUrls", "QueueName"] }
+        }],
+        "Statistic": "Sum",
+        "Period": "240",
+        "EvaluationPeriods": "1",
+        "Threshold": "2",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "AlarmActions": [{ "Ref": "FetcherScaleDownPolicy" }]
+      }
+    },
+
 
     "Images": {
       "Type": "AWS::SDB::Domain"
