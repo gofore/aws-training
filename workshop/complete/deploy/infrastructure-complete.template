@@ -63,8 +63,8 @@
       "Properties": {
         "AvailabilityZones": { "Fn::GetAZs": ""},
         "LaunchConfigurationName": { "Ref": "UILaunchConfig" },
-        "MinSize": "2",
-        "MaxSize": "4",
+        "MinSize": "1",
+        "MaxSize": "3",
         "LoadBalancerNames": [ { "Ref": "UIElasticLoadBalancer" } ],
         "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"ui"]]}, "PropagateAtLaunch": true }],
         "NotificationConfiguration": {
@@ -114,13 +114,13 @@
     "UICPUAlarmHigh": {
      "Type": "AWS::CloudWatch::Alarm",
      "Properties": {
-        "AlarmDescription": "Scale-up if CPU > 90% for 10 minutes",
+        "AlarmDescription": "Scale-up if CPU > 50% for 4 minutes",
         "MetricName": "CPUUtilization",
         "Namespace": "AWS/EC2",
         "Statistic": "Average",
-        "Period": "300",
+        "Period": "240",
         "EvaluationPeriods": "2",
-        "Threshold": "90",
+        "Threshold": "50",
         "AlarmActions": [ { "Ref": "UIScaleUpPolicy" } ],
         "Dimensions": [
           {
@@ -134,13 +134,13 @@
     "UICPUAlarmLow": {
      "Type": "AWS::CloudWatch::Alarm",
      "Properties": {
-        "AlarmDescription": "Scale-down if CPU < 70% for 10 minutes",
+        "AlarmDescription": "Scale-down if CPU < 20% for 4 minutes",
         "MetricName": "CPUUtilization",
         "Namespace": "AWS/EC2",
         "Statistic": "Average",
-        "Period": "300",
+        "Period": "240",
         "EvaluationPeriods": "2",
-        "Threshold": "70",
+        "Threshold": "20",
         "AlarmActions": [ { "Ref": "UIScaleDownPolicy" } ],
         "Dimensions": [
           {
