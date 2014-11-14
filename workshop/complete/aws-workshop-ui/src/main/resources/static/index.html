@@ -27,9 +27,9 @@
                 <div class="panel-heading"><h2>Query</h2></div>
                 <div class="panel-body">
                     <div class="input-group">
-                        <input ng-model="query" type="text" class="form-control">
+                        <input ng-model="query" ng-keypress="($event.which === 13)?submit():0" type="text" class="form-control">
                         <span class="input-group-btn">
-                            <button ng-click="submit()" class="btn btn-default" type="button">Submit</button>
+                            <button ng-click="submit()" class="btn btn-info" type="button">Submit</button>
                         </span>
                     </div>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
                 <div class="panel-body">
                     <div class="input-group">
-                        <input ng-model="query" type="text" class="form-control">
+                        <input ng-model="query" ng-keypress="($event.which === 13)?search(query, 20):0" type="text" class="form-control">
                         <div class="input-group-btn" dropdown>
                             <button type="button" class="btn btn-info" ng-click="search(query, 20)">Go!</button>
                             <button type="button" class="btn btn-info dropdown-toggle">
