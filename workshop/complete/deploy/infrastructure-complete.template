@@ -81,7 +81,14 @@
       "Properties": {
         "KeyName": { "Ref": "KeyName" },
         "ImageId": { "Ref": "AmiId" },
-        "UserData": { "Fn::Base64": { "Ref": "UIPort" }},
+        "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+          "#!/bin/bash\n",
+          "pip install awscli\n",
+          "cd /tmp/\n",
+          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml\n",
+          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf\n",
+          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml\n",
+          ]]}},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
         "IamInstanceProfile": "aws-workshop-ui-role"

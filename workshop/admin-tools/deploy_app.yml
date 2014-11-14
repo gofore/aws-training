@@ -1,0 +1,22 @@
+---
+
+- hosts: all
+  connection: local
+  vars:
+    - bucket_name: aws-workshop-demo
+  tasks:
+  - name: Ensure that user exists
+    user: name={{ user_name }}
+
+  - name: Ensure path exists
+    file: path=/opt/{{ app_name }} state=directory mode=0755 owner={{ user_name }} group={{ user_name }}
+
+  - name: Download application
+    command: aws s3 cp --region eu-west-1 s3://aws-workshop-demo/artifacts/{{ user_name }}/{{ app_name }}.jar /opt/{{ app_name }}/{{ app_name }}.jar
+    #s3: bucket={{ bucket_name }} object=/artifacts/{{ user_name }}/{{ app_name }}.jar dest=/opt/{{ app_name }}/{{ app_name }}.jar mode=get
+
+  - name: Copy upstart script
+    template: src="upstart_service.conf" dest="/etc/init/{{ app_name }}.conf" owner="root"
+
+  - name: Restart application
+    service: name={{ app_name }} state=restarted
