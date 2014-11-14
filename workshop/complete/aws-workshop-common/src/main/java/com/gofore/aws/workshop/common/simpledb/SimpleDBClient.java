@@ -17,7 +17,11 @@ public class SimpleDBClient {
     public SimpleDBClient(AmazonSimpleDBAsync simpleDb) {
         this.simpleDb = simpleDb;
     }
-    
+
+    public AmazonSimpleDBAsync getSimpleDb() {
+        return simpleDb;
+    }
+
     public CompletableFuture<Void> putAttributes(PutAttributesRequest request) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         simpleDb.putAttributesAsync(request, new AsyncHandler<PutAttributesRequest, Void>() {

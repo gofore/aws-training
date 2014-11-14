@@ -10,6 +10,7 @@ import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
 import com.amazonaws.services.sqs.model.ReceiveMessageResult;
 import com.gofore.aws.workshop.common.async.FutureHelper;
+import com.gofore.aws.workshop.common.async.Threads;
 import com.gofore.aws.workshop.common.functional.Consumers;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
@@ -41,10 +42,11 @@ public class Receiver {
         while (running) {
             try {
                 ReceiveMessageRequest request = new ReceiveMessageRequest(queueUrl).withWaitTimeSeconds(20);
-                ReceiveMessageResult result = sqsClient.receiveMessage(request).get();
+                ReceiveMessageResult result = sqsClient.receiveMessage(request).join();
                 result.getMessages().stream().forEach(this::handleMessage);
             } catch (Exception ex) {
                 LOGGER.error("Failed to receive message from {}", queueUrl, ex);
+                Threads.sleep(Threads.ERROR_WAIT_MILLIS);
             }
         }
     }

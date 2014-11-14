@@ -11,6 +11,10 @@ import com.google.inject.Inject;
 import org.restlet.resource.Get;
 
 public class SearchResource extends RestServerResource {
+
+    /**
+     * See https://aws.amazon.com/articles/Amazon-SimpleDB/1231 for SimpleDB query reference
+     */
     
     /** SimpleDB select clause template. {domain} will be replaced with the actual domain name. */
     private static final String SELECT_TEMPLATE = "select * from `{domain}`";
@@ -24,7 +28,7 @@ public class SearchResource extends RestServerResource {
     @Inject
     public SearchResource(DomainLookup domainLookup, SimpleDBClient simpleDBClient) {
         this.simpleDBClient = simpleDBClient;
-        this.select = SELECT_TEMPLATE.replace("{domain}", domainLookup.getImagesDomain());
+        this.select = SELECT_TEMPLATE.replace("{domain}", domainLookup.getDomain("images"));
     }
 
     @Get("json")

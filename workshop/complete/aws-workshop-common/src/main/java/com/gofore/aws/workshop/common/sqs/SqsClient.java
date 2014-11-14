@@ -23,7 +23,11 @@ public class SqsClient {
     public SqsClient(AmazonSQSAsync sqs) {
         this.sqs = sqs;
     }
-    
+
+    public AmazonSQSAsync getSqs() {
+        return sqs;
+    }
+
     public CompletableFuture<SendMessageResult> sendMessage(SendMessageRequest request) {
         CompletableFuture<SendMessageResult> future = new CompletableFuture<>();
         sqs.sendMessageAsync(request, new AsyncHandler<SendMessageRequest, SendMessageResult>() {

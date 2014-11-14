@@ -18,7 +18,11 @@ public class S3Client {
         this.s3 = s3;
         ShutdownHelper.addShutdownHook(() -> this.executor);
     }
-    
+
+    public AmazonS3 getS3() {
+        return s3;
+    }
+
     public CompletableFuture<PutObjectResult> putObject(PutObjectRequest request) {
         return CompletableFuture.supplyAsync(() -> s3.putObject(request), executor);
     }

@@ -13,23 +13,24 @@ import com.google.inject.Singleton;
 public class DomainLookup {
     
     private final SimpleDBClient simpleDBClient;
-    private final String imagesDomainPrefix;
+    private final String user;
 
     @Inject
     public DomainLookup(ApplicationProperties properties, SimpleDBClient simpleDBClient) {
         this.simpleDBClient = simpleDBClient;
-        this.imagesDomainPrefix = getImagesDomainPrefix(properties.lookup("aws.user"));
+        this.user = properties.lookup("aws.user");
     }
 
-    public String getImagesDomain() {
+    public String getDomain(String name) {
+        String prefix = getDomainPrefix(user, name);
         return simpleDBClient.listDomains(new ListDomainsRequest())
                 .thenApply(ListDomainsResult::getDomainNames)
-                .thenApply(Lists.findFirst(d -> d.startsWith(imagesDomainPrefix)))
+                .thenApply(Lists.findFirst(d -> d.startsWith(prefix)))
                 .thenApply(Optional::get)
                 .join();
     }
     
-    private String getImagesDomainPrefix(String user) {
-        return "aws-workshop-" + user + "-Images-";
+    private String getDomainPrefix(String user, String name) {
+        return "aws-workshop-" + user + "-" + Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }
 }

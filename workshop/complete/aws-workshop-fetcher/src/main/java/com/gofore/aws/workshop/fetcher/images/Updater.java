@@ -63,7 +63,7 @@ public class Updater {
         this.s3endpoint = properties.lookup("aws.s3.endpoint");
         this.s3bucket = properties.lookup("aws.s3.bucket");
         this.user = properties.lookup("aws.user");
-        this.domain = domainLookup.getImagesDomain();
+        this.domain = domainLookup.getDomain("images");
     }
 
     public CompletableFuture<Image> update(Image image) {
