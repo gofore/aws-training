@@ -21,13 +21,7 @@ public class LoaderApplication extends GuiceApplication {
     @Inject
     public LoaderApplication(ApplicationProperties properties, FinderFactory finderFactory, SqsClient sqsClient, ExecutorService sqsExecutor) {
         super(finderFactory);
-        getServices().add(
-                new SqsService(
-                        sqsClient,
-                        properties.lookup("queries.queue.url"),
-                        sqsExecutor
-                ).addHandler(new GoogleImagesHandler(properties, sqsClient))
-        );
+        getServices().add(createSqsService(properties, sqsClient, sqsExecutor));
     }
 
     @Override
@@ -37,6 +31,11 @@ public class LoaderApplication extends GuiceApplication {
         return router;
     }
 
+    private SqsService createSqsService(ApplicationProperties properties, SqsClient sqsClient, ExecutorService sqsExecutor) {
+        return new SqsService(sqsClient, properties.lookup("queries.queue.url"), sqsExecutor)
+                .addHandler(new GoogleImagesHandler(properties, sqsClient));
+    }
+    
     public static void main(String[] args) throws Exception {
         new RestletServer()
                 .port(9002)
