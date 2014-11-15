@@ -1,27 +1,28 @@
 
-# Amazon Web Services
-### crash-course to cloud app development
+# AWS for Developers
+### *crash course to cloud app development*
 
 ---
 
 ## Agenda
 
-- **Introduction to AWS:** Launching resources manually
-- **Programmability:** API and SDKs
-- Your first basic Java App
-- **Elasticity:** Load balancer and auto-scaling
-- **Loose coupling:** Connecting services with SQS queues
+1. **Introduction:** Main services and exercise description
+2. **Loose coupling**: Separating services with queues
+3. **Persistence:** Object storage and database
+4. **Elasticity:** Load balancer and auto-scaling
 
 --
 
 ## What you will need
 
-- Laptop with Java 8 SDK, Maven 3+ an IDE and JDK
+- Laptop with Internet connectivity
+- [Vagrant](https://www.vagrantup.com/) (and [Virtualbox](https://www.virtualbox.org/)) is recommended
+- Optionally Java 8 SDK, Maven 3+ and an IDE
 - Material is available at [github.com/gofore/aws-training](https://github.com/gofore/aws-training)
 
 ---
 
-# Amazon Web Services
+# Introduction to AWS
 
 --
 
@@ -29,17 +30,21 @@
 
 Extensive set of cloud services available in the web.
 
-Began as Amazon.com's internal infrastructure.
-
 Mainly IaaS, but in some parts also PaaS.
 
-On-demand, self-service, pay-per-use.
+On-demand, pay-per-use.
+
+Self-serviced and programmable.
+
+Usage is billed per *instance-hour* for running instances.
+Prices vary based on region, instance type, and operating system.
+Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
 
 --
 
 ![List of AWS Services](/images/aws_list_of_services.png)
 
-AWS Services
+[AWS Services](http://aws.amazon.com/products/)
 
 ---
 
@@ -59,48 +64,55 @@ AWS Services
 
 ![AWS Region map](/images/aws_map_regions.png)
 
-Regions
+Regions, Availability Zones (AZ) and CDN Edge Locations
 
 Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney. Special regions are **GovCloud** and **Beijing**.
 
 --
 
-## Regions
+## Networking in AWS
 
-Each geographical *Region* is split into several *Availability Zones (AZ)*. CDN content is distributed from *Edge Locations*.
+- Security groups
+- More detailed IP subnetting with Virtual Private Cloud (VPC)
 
-European regions include Ireland (eu-west-1) and Frankfurt (eu-central-1).
-
---
-
-## Security groups
-
-Each instance must belong to a *security group*. TODO must?
 
 --
 
-## Demo: Launching an instance
+## Exercise: Launch an instance
 
-![AWS Management console](/images/aws_management_console.png)
+Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console) and launch an instance
 
---
+1. **Choose AMI:** operating system and base packages
+2. **Choose Instance Type:** performance vs. cost
+3. **Configure Instance:** network, IAM role and user data
+4. **Add Storage:** disk space from EBS or instance store
+5. **Tag Instance:** meta data for resource management
+6. **Configure Security Group:** firewall rules
+7. **Review:** generate ssh key
 
-## Pricing
-
-Usage is billed per *instance-hour* for running instances.
-
-Prices vary based on region, instance type, and operating system.
-
-Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
+SSH in and: `curl http://169.254.169.254/latest/meta-data/`
 
 ---
 
-# Simple Storage Service
+# Objective of today
 
 --
 
-## Simple Storage Service (S3)
+![Workshop application architecture](/images/aws_workshop_arch.png)
 
+--
+
+![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
+
+[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
+
+--
+
+## Best practices
+
+- Split the application into small, stateless, horizontally-scalable services
+- Loosely couple services with queues and load balancers
+- Automate infrastructure setup and application deployment
 
 ---
 
@@ -108,51 +120,21 @@ Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot In
 
 --
 
-## SDKs and tools
+## Programmability
 
-SDKs for Java, Python, Node.js, JavaScript etc.
+SDKs and command-line tools [aws.amazon.com/tools](http://aws.amazon.com/tools/)
 
-Command-line tools
+Java SDK [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
 
-[aws.amazon.com/tools](http://aws.amazon.com/tools/)
+Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
 
---
+Boto for Python: [github.com/boto/boto](https://github.com/boto/boto) & [docs.pythonboto.org](http://docs.pythonboto.org/)
 
-### Let's code the first version of our app
 
---
-
-## Boto for Python
-
-<pre><code data-trim="" class="shell">
-sudo apt-get install python-pip
-sudo pip install boto
-</code></pre>
-
-<pre><code data-trim="" class="python">
-#!/usr/bin/env python
-
-import boto.ec2
-conn = boto.ec2.connect_to_region('eu-west-1',
-                                  aws_access_key_id='FOO',
-                                  aws_secret_access_key='BAR')
-conn.run_instances('ami-f0b11187',
-                   key_name='my-ssh-key',
-                   instance_type='t2.micro',
-                   security_groups=['my-security-group'])
-</code></pre>
-
-[github.com/boto/boto](https://github.com/boto/boto) | [docs.pythonboto.org](http://docs.pythonboto.org/)
 
 --
 
-## Java SDK
-
-[aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
-
---
-
-## Cloudformation
+## CloudFormation
 
 Create resources from a template. The collection of created resources is called a *stack*.
 
@@ -160,47 +142,71 @@ Enables versioning of infrastructure.
 
 --
 
+## Structure of a template
+
 <pre><code data-trim="" class="json">
 {
   "AWSTemplateFormatVersion": "2010-09-09",
   "Description": "Structure of a cloudformation template",
 
-  "Mappings": { ...Set of helper mappings... },
-  "Conditions": { ...Set of conditions... },
+  "Resources": { ...Set of resources to be created... },
 
   "Parameters": { ...Set of parameters given when creating the stack... },
-  "Resources": { ...Set of resources to be created... },
-  "Outputs": { ...Set of outputs variables... }
+  "Outputs": { ...Set of outputs variables... },
+
+  "Mappings": { ...Set of helper mappings... },
+  "Conditions": { ...Set of conditions... }
 }
 </code></pre>
 
 --
 
-<pre><code data-trim="" class="python">
-#!/usr/bin/env python
+## Creating a stack with Ansible
 
-import boto.cloudformation
-cf = boto.cloudformation.connect_to_region("eu-west-1",
-                                           aws_access_key_id="FOO",
-                                           aws_secret_access_key="BAR")
-cf.create_stack("Stack Name",
-                template_url="https://s3-eu-west-1.amazonaws.com/../Sample.template",
-                parameters=[("KeyName", "my-ssh-key"), ("InstanceType", "t2.micro")],
-                tags={"project":"FooBar Project"},
-                timeout_in_minutes=5)
+<pre><code data-trim="" class="ruby">
+- hosts: localhost
+  tasks:
+  - name: "Create CloudFormation stack"
+    cloudformation:
+      stack_name="my-precious-stack"
+      template="my-cloudformation-template.json"
+      region="eu-west-1"
+      state=present
+    args:
+      template_parameters:
+        KeyName: "my-key-in-ec2"
+        AmiId: "ami-828334f5"
+        InstanceType: "t2.micro"
+      tags:
+        Name: "name-for-all-the-resources"
+        Project: "aws-workshop-project"
 </code></pre>
+
 
 ---
 
-# AWS-centric Application
+# Loose coupling with Queues
 
 --
 
-![Workshop application architecture](/images/aws_workshop_arch.png)
+## Exercise: Create a stack
 
 ---
 
-# Elasticity & Auto-scaling
+# Object storage and database
+
+--
+
+## Simple Storage Service (S3)
+
+--
+
+## SimpleDB
+
+
+---
+
+# Auto Scaling
 
 --
 
@@ -212,11 +218,35 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 ---
 
-# Recap
+# Summary
 
 --
 
 ![Workshop application architecture](/images/aws_workshop_arch.png)
+
+--
+
+## Things that we did right
+
+- Using IAM roles on the instances
+- Load-balancing, auto-scaling and elasticity
+- Loose coupling with SQS and ELB
+- CloudFormation and bootstrapping with userdata and ansible
+
+--
+
+## Things that we *should* have done
+
+- Set up a VPC and subnetting
+- Distribute credentials by a secure path
+
+--
+
+## Things that we *could* have done
+
+- Distribute content from CloudFront CDN
+- Use a more supported(?) database than SimpleDB
+- [AWS::CloudFormation::Init](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
 
 --
 
@@ -226,9 +256,3 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 - Whitepapers [http://aws.amazon.com/whitepapers/](aws.amazon.com/whitepapers)
 
 - Register to Amazon Partner Network Portal and take the AWS Technical Professional or AWS Business Professional course
-
---
-
-![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
-
-[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
