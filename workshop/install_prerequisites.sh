@@ -17,7 +17,7 @@ sudo dpkg -i maven3_3.2.1-0~ppa1_all.deb
 sudo ln -s /usr/bin/mvn3 /usr/bin/mvn
 
 
-# Export AWS credentials from CSV file
+# Export AWS credentials from CSV file automatically if in a Vagrant machine
 VAGRANT_WORKSHOP_DIRECTORY="/vagrant/workshop"
 if [ -d "$VAGRANT_WORKSHOP_DIRECTORY" ]
   then
