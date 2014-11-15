@@ -14,11 +14,15 @@ import com.google.inject.Singleton;
 import org.restlet.Restlet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.Directory;
+import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
+import org.restlet.routing.Template;
 
 @Singleton
 public class UiApplication extends GuiceApplication {
 
+    private static final String INDEX = "index.html";
+    
     @Inject
     public UiApplication(FinderFactory finderFactory) {
         super(finderFactory);
@@ -26,6 +30,9 @@ public class UiApplication extends GuiceApplication {
 
     @Override
     public Restlet createInboundRoot() {
+        // this is a workaround for restlet not able to handle static index for classpath resources
+        Redirector redirector = new Redirector(getContext(), INDEX, Redirector.MODE_CLIENT_PERMANENT);
+        
         Router router = new Router(getContext());
         router.attach("/api/properties/{name}", target(ConfigurationResource.class));
         router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
@@ -33,6 +40,7 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/search", target(SearchResource.class));
         router.attach("/healthcheck",target(HealthCheckResource.class));
         router.attach("/webjars", createWebjars());
+        router.attach("/", redirector).setMatchingMode(Template.MODE_EQUALS);
         router.attach("/", createRoot());
         return router;
     }
@@ -40,7 +48,7 @@ public class UiApplication extends GuiceApplication {
     private Directory createRoot() {
         Directory directory = new UtfDirectory(getContext(), "clap://class/static/");
         directory.setDeeplyAccessible(true);
-        directory.setIndexName("index.html");
+        directory.setIndexName(INDEX);
         return directory;
     }
     
