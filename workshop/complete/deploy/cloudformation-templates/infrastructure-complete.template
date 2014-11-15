@@ -85,8 +85,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf >> bootstrap.log\n",
-          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml >> bootstrap.log\n"
           ]]}},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
@@ -209,8 +208,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf >> bootstrap.log\n",
-          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-loader\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-loader\" deploy_app.yml >> bootstrap.log\n"
           ]]}}
       }
     },
@@ -268,8 +266,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/upstart_service.conf upstart_service.conf >> bootstrap.log\n",
-          "ansible-playbook -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-fetcher\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-fetcher\" deploy_app.yml >> bootstrap.log\n"
           ]]}},
         "SecurityGroups": [ { "Ref": "FetcherSecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
