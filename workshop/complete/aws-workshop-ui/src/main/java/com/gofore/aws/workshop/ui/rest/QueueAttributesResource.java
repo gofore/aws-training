@@ -24,6 +24,7 @@ public class QueueAttributesResource extends RestServerResource {
     public GetQueueAttributesResult getAttributes() throws Exception {
         String url = properties.lookup(getAttribute("name"));
         String attributes = getQueryValueAsString("attr").orElse("All");
+        // TODO: Task 1: SQS request
         GetQueueAttributesRequest request = new GetQueueAttributesRequest()
                 .withQueueUrl(url)
                 .withAttributeNames(attributes);

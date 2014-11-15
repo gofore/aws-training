@@ -36,6 +36,7 @@ public class QueriesResource extends RestServerResource {
         String query = Optional.of(request.query).get();
         long limit = Optional.ofNullable(request.limit).orElse(1L);
         String message = createJson(query, limit);
+        // TODO: Task 2: SQS message send
         return sqsClient
                 .sendMessage(new SendMessageRequest(queueUrl, message))
                 .whenComplete(Consumers.consumer(

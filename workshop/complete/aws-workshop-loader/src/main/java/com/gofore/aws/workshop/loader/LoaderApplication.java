@@ -4,6 +4,7 @@ import javax.inject.Inject;
 
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
+import com.gofore.aws.workshop.common.rest.HealthCheckResource;
 import com.gofore.aws.workshop.common.rest.RestletServer;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
 import com.gofore.aws.workshop.common.sqs.SqsService;
@@ -30,6 +31,7 @@ public class LoaderApplication extends GuiceApplication {
     public Restlet createInboundRoot() {
         Router router = new Router(getContext());
         router.attach("/google/images", target(GoogleImagesUpsertResource.class));
+        router.attach("/healthcheck", target(HealthCheckResource.class));
         return router;
     }
     

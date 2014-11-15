@@ -13,6 +13,8 @@ import org.restlet.resource.Get;
 
 public class SearchResource extends RestServerResource {
 
+    // TODO: Task 5: SimpleDB query
+    
     /**
      * See https://aws.amazon.com/articles/Amazon-SimpleDB/1231 for SimpleDB query reference
      */
@@ -49,7 +51,7 @@ public class SearchResource extends RestServerResource {
     
     private String select() {
         return getQueryValueAsString("q")
-                .map(q -> q.replaceAll("['\"`%]+", "").toLowerCase())
+                .map(q -> q.replaceAll("['\"`%]+", "").toLowerCase()) // some bad char removal
                 .map(q -> select + " " + TERM_WHERE_TEMPLATE.replace("{term}", q))
                 .orElse(select);
     }

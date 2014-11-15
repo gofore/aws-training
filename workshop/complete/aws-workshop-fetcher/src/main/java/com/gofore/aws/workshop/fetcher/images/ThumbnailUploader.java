@@ -2,6 +2,7 @@ package com.gofore.aws.workshop.fetcher.images;
 
 import static com.gofore.aws.workshop.common.functional.Objects.setPresent;
 
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
@@ -55,9 +56,11 @@ public class ThumbnailUploader {
 
     private Function<HttpEntity, CompletableFuture<PutObjectResult>> upload(String id) {
         return (entity) -> {
-            ObjectMetadata meta = createContentMetaData(entity);
             String key = getThumbnailKey(id);
-            PutObjectRequest request = new PutObjectRequest(s3bucket, key, HttpClient.getContent(entity), meta)
+            ObjectMetadata metadata = createContentMetaData(entity);
+            InputStream content = HttpClient.getContent(entity);
+            // TODO: Task 3: Put object to S3
+            PutObjectRequest request = new PutObjectRequest(s3bucket, key, content, metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead);
             return s3Client.putObject(request).whenComplete(Consumers.consumer(
                     (v) -> LOGGER.info("Successfully uploaded thumbnail {} for image {}", key, id),
@@ -68,6 +71,7 @@ public class ThumbnailUploader {
 
     private ObjectMetadata createContentMetaData(HttpEntity entity) {
         ObjectMetadata meta = new ObjectMetadata();
+        // TODO: Task 3: Put object to S3
         setPresent(meta::setContentLength, Optional.of(entity.getContentLength()));
         setPresent(meta::setContentEncoding, Optional.ofNullable(entity.getContentEncoding()).map(Header::getValue));
         setPresent(meta::setContentType, Optional.ofNullable(entity.getContentType()).map(Header::getValue));

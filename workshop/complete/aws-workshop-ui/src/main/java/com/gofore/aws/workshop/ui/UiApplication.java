@@ -4,9 +4,9 @@ import javax.inject.Inject;
 
 import com.gofore.aws.workshop.common.rest.ConfigurationResource;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
+import com.gofore.aws.workshop.common.rest.HealthCheckResource;
 import com.gofore.aws.workshop.common.rest.RestletServer;
 import com.gofore.aws.workshop.common.rest.UtfDirectory;
-import com.gofore.aws.workshop.ui.rest.HealthCheckResource;
 import com.gofore.aws.workshop.ui.rest.QueriesResource;
 import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
 import com.gofore.aws.workshop.ui.rest.SearchResource;

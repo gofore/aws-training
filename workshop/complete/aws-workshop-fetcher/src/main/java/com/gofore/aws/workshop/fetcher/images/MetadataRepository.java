@@ -33,16 +33,18 @@ public class MetadataRepository {
         this.domain = domainLookup.getDomain("images");
     }
 
-    public CompletableFuture<Image> save(String id, Image image) {
+    public CompletableFuture<Void> save(String id, Image image) {
         List<ReplaceableAttribute> attributes = createAttributes(image);
+        // TODO: Task 4: Put attributes to SimpleDB
         PutAttributesRequest request = new PutAttributesRequest(domain, id, attributes);
         return simpleDBClient.putAttributes(request).whenComplete(Consumers.consumer(
                 (v) -> LOGGER.info("Successfully saved image {} metadata to {}", id, domain),
                 (e) -> LOGGER.error("Failed to save image {} metadata to {}", id, domain, e)
-        )).thenApply(v -> image);
+        ));
     }
     
     private List<ReplaceableAttribute> createAttributes(Image image) {
+        // TODO: Task 4: Put attributes to SimpleDB
         Stream<ReplaceableAttribute> meta = Arrays.asList(
                 new ReplaceableAttribute("thumbnailUrl", image.getThumbnailUrl(), true),
                 new ReplaceableAttribute("imageUrl", image.getImageUrl(), true),

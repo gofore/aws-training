@@ -30,7 +30,7 @@ public class Updater {
         return thumbnailUploader.upload(id, image);
     }
     
-    private CompletableFuture<Image> save(String id, Image image) {
+    private CompletableFuture<Void> save(String id, Image image) {
         Image result = new Image(
                 thumbnailUploader.getThumbnailUrl(id),
                 image.getImageUrl(),
