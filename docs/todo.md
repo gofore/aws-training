@@ -13,10 +13,11 @@ PART 02: Loose coupling with Queues
 - esitellään sqs ja tutkitaan sitä webbikälistä
 
 - kokeillaan ajaa pelkkää ui:ta omalta koneelta (käyttäen luotuja sdb ja sqs)
-- koodataan vähän jotain, esim. toteutus sqs-pollereille
+- koodataan vähän jotain, ensimmäinen sqs request (get attributes)
 - koodataan viestin lähetys ui:hin
 
 - tutkitaan miten viestinvälitys rullaa --> käynnistetään omalla koneella loader
+- käydään läpi SqsService, joka toteuttaa SQS pollauksen ja viestin tuhoamisen
 
 PART 03: Persistence
 
