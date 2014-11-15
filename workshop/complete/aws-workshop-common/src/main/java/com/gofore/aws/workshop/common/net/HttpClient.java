@@ -1,12 +1,14 @@
 package com.gofore.aws.workshop.common.net;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 
 import com.gofore.aws.workshop.common.async.ShutdownHelper;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
 
@@ -33,4 +35,19 @@ public class HttpClient {
         }, executor);
     }
     
+    public static HttpEntity getEntity(Response response) {
+        try {
+            return response.returnResponse().getEntity();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    public static InputStream getContent(HttpEntity entity) {
+        try {
+            return entity.getContent();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 }

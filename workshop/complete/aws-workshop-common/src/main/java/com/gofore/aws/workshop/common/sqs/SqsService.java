@@ -63,7 +63,7 @@ public class SqsService extends Service {
                         ReceiveMessageResult result = sqsClient.getSqs().receiveMessage(request);
                         
                         // apply the message handle chain and finally delete message if
-                        // everything else succeeded
+                        // everything else succeeds
                         result.getMessages().stream()
                                 .map(this::handleMessage)
                                 .map(this::completeMessage)
@@ -98,10 +98,10 @@ public class SqsService extends Service {
      */
     protected CompletableFuture<Message> handleMessage(Message message) {
         return sequence(messageHandlers.stream().map(h -> h.apply(message)))
-                .thenApply(s -> message).whenComplete(Consumers.consumer(
+                .whenComplete(Consumers.consumer(
                         (v) -> LOGGER.info("Successfully handled {} with {} handler(s)", message, messageHandlers.size()),
                         (e) -> LOGGER.error("Failed to handle {}", message, e)
-                ));
+                )).thenApply(s -> message);
     }
 
     /**
@@ -123,10 +123,10 @@ public class SqsService extends Service {
     protected CompletableFuture<Message> deleteMessage(CompletableFuture<Message> message) {
         return message.thenCompose(m -> {
             DeleteMessageRequest request = new DeleteMessageRequest(queueUrl, m.getReceiptHandle());
-            return sqsClient.deleteMessage(request).thenApply(v -> m).whenComplete(Consumers.consumer(
+            return sqsClient.deleteMessage(request).whenComplete(Consumers.consumer(
                     (v) -> LOGGER.info("Successfully deleted {}", m),
                     (e) -> LOGGER.error("Failed to delete {}", m, e)
-            ));
+            )).thenApply(v -> m);
         });
     }
 }
