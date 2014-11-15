@@ -1,17 +1,21 @@
 ---
 
+# This playbook is executed as a AWS User Data script during instance boot-up.
+# This playbook has been copied to S3 by the workshop admins, and you do not
+# need to run this by yourself at any point.
+
 - hosts: all
   connection: local
   vars:
     - bucket_name: aws-workshop-demo
   tasks:
-  - name: Ensure that user exists
+  - name: Ensure that application user exists
     user: name={{ user_name }}
 
-  - name: Ensure path exists
+  - name: Ensure application path exists
     file: path=/opt/{{ app_name }} state=directory mode=0755 owner={{ user_name }} group={{ user_name }}
 
-  - name: Download application
+  - name: Download latest application from S3
     command: aws s3 cp --region eu-west-1 s3://aws-workshop-demo/artifacts/{{ user_name }}/{{ app_name }}.jar /opt/{{ app_name }}/{{ app_name }}.jar
 
   - name: Copy upstart script
