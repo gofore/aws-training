@@ -1,0 +1,74 @@
+<!doctype html>
+<html ng-app="aws">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/aws-workshop.css">
+    
+    <script src="/webjars/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/webjars/lodash/2.4.1-6/lodash.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular-resource.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular-route.min.js"></script>
+    <script src="/webjars/angularjs/1.3.1/angular-messages.min.js"></script>
+    <script src="/webjars/ngInfiniteScroll/1.1.2/ng-infinite-scroll.js"></script>
+    <script src="/webjars/angular-ui-bootstrap/0.11.2/ui-bootstrap.min.js"></script>
+    <script src="/assets/js/aws-workshop.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4">
+            <div sqs="queries.queue.url"></div>
+            <div sqs="images.queue.url"></div>
+        </div>
+        <div class="col-md-8">
+            <div ng-controller="QueryCtrl" ng-messages="status" class="panel panel-default">
+                <div class="panel-heading"><h2>Query</h2></div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input ng-model="query" ng-keypress="($event.which === 13)?submit():0" type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button ng-click="submit()" class="btn btn-info" type="button">Submit</button>
+                        </span>
+                    </div>
+                </div>
+                <div ng-message="success" class="panel-footer bg-success">Successfully sent query with message id {{ status.id }}</div>
+                <div ng-message="error" class="panel-footer bg-warning">Failed to sent query</div>
+            </div>
+            <div ng-controller="SearchCtrl" class="panel panel-default">
+                <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
+                <div class="panel-body">
+                    <div class="input-group">
+                        <input ng-model="query" ng-keypress="($event.which === 13)?search(query, 20):0" type="text" class="form-control">
+                        <div class="input-group-btn" dropdown>
+                            <button type="button" class="btn btn-info" ng-click="search(query, 20)">Go!</button>
+                            <button type="button" class="btn btn-info dropdown-toggle">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#" ng-click="search(query, 10)">10 results</a></li>
+                                <li><a href="#" ng-click="search(query, 20)">20 results</a></li>
+                                <li><a href="#" ng-click="search(query, 30)">30 results</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div infinite-scroll="search(query, limit, next)"
+                         infinite-scroll-disabled="loading || !next"
+                         infinite-scroll-distance="1">
+                        <div class="col-md-3 result" ng-repeat="item in items">
+                            <a href="{{item.attributes.imageUrl}}">
+                                <img src="{{item.attributes.thumbnailUrl}}">
+                                <p>{{item.attributes.description}}</p>
+                            </a>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

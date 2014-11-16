@@ -1,0 +1,381 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+
+  "Description": "Complete infrastructure for AWS workshop demo application",
+
+  "Parameters": {
+    "InstanceType": {
+      "Description": "WebServer EC2 instance type",
+      "Type": "String",
+      "Default": "t2.micro",
+      "AllowedValues": ["t2.micro", "t2.small", "t2.medium"],
+      "ConstraintDescription": "must be a valid EC2 instance type."
+    },
+    "UIPort": {
+      "Description": "The TCP port for the UI Server",
+      "Type": "Number",
+      "Default": "9001"
+    },
+    "LoaderPort": {
+      "Description": "The TCP port for the Loader Server",
+      "Type": "Number",
+      "Default": "9002"
+    },
+    "AmiId": {
+      "Description": "AMI ID to be used with all the instances",
+      "Type": "String"
+    },
+    "UserEmail": {
+      "Description": "Email address to notify if there are any scaling operations",
+      "Type": "String"
+    },
+    "UserName": {
+      "Description": "Username to identify resources created by different users",
+      "Type": "String"
+    },
+    "KeyName": {
+      "Description": "The EC2 Key Pair to allow SSH access to the instances",
+      "Type": "String"
+    },
+    "IPRange": {
+      "Description": "The IP address range that can be used to access the EC2 instances",
+      "Type": "String",
+      "MinLength": "9",
+      "MaxLength": "18",
+      "Default": "0.0.0.0/0",
+      "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+      "ConstraintDescription": "must be a valid IP CIDR range of the form x.x.x.x/x."
+   }
+  },
+
+  "Resources": {
+
+    "UIAutoScalingNotificationTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [{
+            "Endpoint": { "Ref": "UserEmail" },
+            "Protocol": "email" }]
+      }
+    },
+    "UIAutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": ""},
+        "LaunchConfigurationName": { "Ref": "UILaunchConfig" },
+        "MinSize": "1",
+        "MaxSize": "3",
+        "LoadBalancerNames": [ { "Ref": "UIElasticLoadBalancer" } ],
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"ui"]]}, "PropagateAtLaunch": true }],
+        "NotificationConfiguration": {
+          "TopicARN": { "Ref": "UIAutoScalingNotificationTopic" },
+          "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
+                                 "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"]
+        }
+      }
+    },
+    "UILaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "KeyName": { "Ref": "KeyName" },
+        "ImageId": { "Ref": "AmiId" },
+        "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+          "#!/bin/bash\n",
+          "cd /tmp/\n",
+          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml >> bootstrap.log\n"
+          ]]}},
+        "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-ui-role"
+      }
+    },
+    "UIScaleUpPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "UIAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment": "1"
+      }
+    },
+    "UIScaleDownPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "UIAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment" : "-1"
+      }
+    },
+    "UICPUAlarmHigh": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-up if CPU > 50% for 4 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "240",
+        "EvaluationPeriods": "2",
+        "Threshold": "50",
+        "AlarmActions": [ { "Ref": "UIScaleUpPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "UIAutoScalingGroup" }
+          }
+        ],
+        "ComparisonOperator": "GreaterThanThreshold"
+      }
+    },
+    "UICPUAlarmLow": {
+     "Type": "AWS::CloudWatch::Alarm",
+     "Properties": {
+        "AlarmDescription": "Scale-down if CPU < 20% for 4 minutes",
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/EC2",
+        "Statistic": "Average",
+        "Period": "240",
+        "EvaluationPeriods": "2",
+        "Threshold": "20",
+        "AlarmActions": [ { "Ref": "UIScaleDownPolicy" } ],
+        "Dimensions": [
+          {
+            "Name": "AutoScalingGroupName",
+            "Value": { "Ref": "UIAutoScalingGroup" }
+          }
+        ],
+        "ComparisonOperator": "LessThanThreshold"
+      }
+    },
+    "UIElasticLoadBalancer": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": { "Ref": "UserName" },
+        "AvailabilityZones": { "Fn::GetAZs": "" },
+        "Listeners": [ {
+          "LoadBalancerPort": "80",
+          "InstancePort": { "Ref": "UIPort" },
+          "Protocol": "HTTP"
+        } ],
+        "HealthCheck": {
+          "Target": { "Fn::Join": [ "", ["HTTP:", { "Ref": "UIPort" }, "/healthcheck"]]},
+          "HealthyThreshold": "2",
+          "UnhealthyThreshold": "3",
+          "Interval": "10",
+          "Timeout": "5"
+        }
+      }
+    },
+    "UISecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH access and HTTP from specified address range",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "IPRange"}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "UIPort" },
+          "ToPort": { "Ref" : "UIPort" },
+          "SourceSecurityGroupName": {"Fn::GetAtt": ["UIElasticLoadBalancer", "SourceSecurityGroup.GroupName"]}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "UIPort" },
+          "ToPort": { "Ref" : "UIPort" },
+          "CidrIp": { "Ref": "IPRange"}
+        } ]
+      }
+    },
+
+
+    "LoaderInstance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": { "Ref": "AmiId" },
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "loader"]]}}],
+        "KeyName": { "Ref": "KeyName" },
+        "SecurityGroups": [ { "Ref": "LoaderSecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-loader-role",
+        "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+          "#!/bin/bash\n",
+          "cd /tmp/\n",
+          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-loader\" deploy_app.yml >> bootstrap.log\n"
+          ]]}}
+      }
+    },
+    "LoaderSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH access and HTTP from specified address range",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "IPRange"}
+        },
+        {
+          "IpProtocol": "tcp",
+          "FromPort": { "Ref" : "LoaderPort" },
+          "ToPort": { "Ref" : "LoaderPort" },
+          "CidrIp": { "Ref": "IPRange"}
+        } ]
+      }
+    },
+
+
+    "FetcherAutoScalingNotificationTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [{
+            "Endpoint": { "Ref": "UserEmail" },
+            "Protocol": "email" }]
+      }
+    },
+    "FetcherAutoScalingGroup": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": { "Fn::GetAZs": ""},
+        "LaunchConfigurationName": { "Ref": "FetcherLaunchConfig" },
+        "MinSize": "1",
+        "MaxSize": "3",
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"fetcher"]]}, "PropagateAtLaunch": true }],
+        "NotificationConfiguration": {
+          "TopicARN": { "Ref": "FetcherAutoScalingNotificationTopic" },
+          "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
+                                 "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE",
+                                 "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"]
+        }
+      }
+    },
+    "FetcherLaunchConfig": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Properties": {
+        "KeyName": { "Ref": "KeyName" },
+        "ImageId": { "Ref": "AmiId" },
+        "UserData": { "Fn::Base64": { "Fn::Join": ["", [
+          "#!/bin/bash\n",
+          "cd /tmp/\n",
+          "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
+          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-fetcher\" deploy_app.yml >> bootstrap.log\n"
+          ]]}},
+        "SecurityGroups": [ { "Ref": "FetcherSecurityGroup" } ],
+        "InstanceType": { "Ref": "InstanceType" },
+        "IamInstanceProfile": "aws-workshop-fetcher-role"
+      }
+    },
+    "FetcherScaleUpPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "FetcherAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment": "1"
+      }
+    },
+    "FetcherScaleDownPolicy": {
+      "Type": "AWS::AutoScaling::ScalingPolicy",
+      "Properties": {
+        "AdjustmentType": "ChangeInCapacity",
+        "AutoScalingGroupName": { "Ref": "FetcherAutoScalingGroup" },
+        "Cooldown": "60",
+        "ScalingAdjustment" : "-1"
+      }
+    },
+    "FetcherSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Enable SSH access from specified address range",
+        "SecurityGroupIngress": [ {
+          "IpProtocol": "tcp",
+          "FromPort": "22",
+          "ToPort": "22",
+          "CidrIp": { "Ref": "IPRange"}
+        } ]
+      }
+    },
+
+
+    "QueueQueries": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "queries"]]},
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 28800
+      }
+    },
+
+
+    "QueueUrls": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "urls"]]},
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 28800
+      }
+    },
+    "QueueUrlsHighAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Alarm if queue is too long",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [{
+          "Name": "QueueName",
+          "Value": { "Fn::GetAtt": ["QueueUrls", "QueueName"] }
+        }],
+        "Statistic": "Sum",
+        "Period": "60",
+        "EvaluationPeriods": "1",
+        "Threshold": "10",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "AlarmActions": [{ "Ref": "FetcherScaleUpPolicy" }]
+      }
+    },
+    "QueueUrlsLowAlarm": {
+      "Type": "AWS::CloudWatch::Alarm",
+      "Properties": {
+        "AlarmDescription": "Alarm if queue is too short",
+        "Namespace": "AWS/SQS",
+        "MetricName": "ApproximateNumberOfMessagesVisible",
+        "Dimensions": [{
+          "Name": "QueueName",
+          "Value": { "Fn::GetAtt": ["QueueUrls", "QueueName"] }
+        }],
+        "Statistic": "Sum",
+        "Period": "240",
+        "EvaluationPeriods": "1",
+        "Threshold": "2",
+        "ComparisonOperator": "LessThanOrEqualToThreshold",
+        "AlarmActions": [{ "Ref": "FetcherScaleDownPolicy" }]
+      }
+    },
+
+
+    "ImagesDomain": {
+      "Type": "AWS::SDB::Domain"
+    }
+
+  },
+
+
+  "Outputs": {
+    "URL": {
+      "Description": "The URL of the website",
+      "Value":  { "Fn::Join": [ "", [ "http://", { "Fn::GetAtt": [ "UIElasticLoadBalancer", "DNSName" ]}]]}
+    },
+    "SimpleDBDomainName": {
+      "Description": "The name of the generated SimpleDB domain",
+      "Value":  { "Ref": "ImagesDomain" }
+    }
+  }
+}

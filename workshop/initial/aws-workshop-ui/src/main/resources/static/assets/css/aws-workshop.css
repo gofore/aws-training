@@ -1,0 +1,42 @@
+.dl-horizontal dt {
+    width: 200px;
+}
+
+.dl-horizontal dd {
+    margin-left: 210px;
+}
+
+.panel-heading h2, .panel-heading h4 {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.panel-heading h4 {
+    min-height: 20px;
+}
+
+.panel .bg-success {
+    background-color: #dff0d8;
+}
+
+.panel .bg-info {
+    background-color: #d9edf7;
+}
+
+.panel .bg-warning {
+    background-color: #fcf8e3;
+}
+
+.panel .bg-danger {
+    background-color: #f2dede;
+}
+
+.result {
+    padding: 20px;
+    height: 220px;
+    text-align: center;
+}
+
+.container-fluid {
+    margin-top: 20px;
+}
