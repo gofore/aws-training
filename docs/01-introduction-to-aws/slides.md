@@ -136,9 +136,9 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## Programmability
 
-SDKs and command-line tools [aws.amazon.com/tools](http://aws.amazon.com/tools/)
+SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
 
-Java SDK [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
+Java SDK: [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
 
 Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
 
