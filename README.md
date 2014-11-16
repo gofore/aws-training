@@ -17,4 +17,4 @@ See [initial setup](workshop/README.md) documentation for more information.
 
 ## Presentation slides
 
-You can follow the presentation as an [online document](docs/01-introduction-to-aws/slides.md), or you can run the reveal.js slides on your local computer by running `./start_presentation.sh`.
+Follow the [presentation](docs/01-introduction-to-aws/slides.md) online (or run the reveal.js on your local computer with `./start_presentation.sh`).

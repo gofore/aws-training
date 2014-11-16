@@ -63,7 +63,7 @@ Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot In
 
 --
 
-## Elastic Compute Cloud (EC2)
+## [Elastic Compute Cloud (EC2)](http://aws.amazon.com/ec2/)
 
 - One of the core services of AWS
 - Virtual machines (or *instances*) as a service
@@ -83,7 +83,7 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 ## Networking in AWS
 
 - Security groups
-- More detailed IP subnetting with Virtual Private Cloud (VPC)
+- More detailed IP subnetting with [Virtual Private Cloud (VPC)](http://aws.amazon.com/vpc/)
 
 
 --
@@ -136,7 +136,7 @@ Boto for Python: [github.com/boto/boto](https://github.com/boto/boto) & [docs.py
 
 --
 
-## IAM
+## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 
 For programming, we need IAM credentials. You can state fine-grained access policies.
 
@@ -144,7 +144,7 @@ You should not pass credentials into instances. Use IAM role instead.
 
 --
 
-## CloudFormation
+## [CloudFormation](http://aws.amazon.com/cloudformation/)
 
 Create resources from a template. The collection of created resources is called a *stack*.
 
@@ -255,7 +255,13 @@ public class SqsService extends Service {
 
 ---
 
-# Simple Storage Service (S3)
+# [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
+
+--
+
+Store blob objects into *buckets* over an RESTful interface.
+
+Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/).
 
 --
 
