@@ -37,6 +37,9 @@ public class QueriesResource extends RestServerResource {
         long limit = Optional.ofNullable(request.limit).orElse(1L);
         String message = createJson(query, limit);
         // TODO: Task 2: SQS message send
+        /**
+         * @see com.amazonaws.services.sqs.AmazonSQS#sendMessage(com.amazonaws.services.sqs.model.SendMessageRequest)
+         */
         return sqsClient
                 .sendMessage(new SendMessageRequest(queueUrl, message))
                 .whenComplete(Consumers.consumer(

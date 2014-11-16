@@ -60,6 +60,9 @@ public class ThumbnailUploader {
             ObjectMetadata metadata = createContentMetaData(entity);
             InputStream content = HttpClient.getContent(entity);
             // TODO: Task 3: Put object to S3
+            /**
+             * @see com.amazonaws.services.s3.AmazonS3#putObject(com.amazonaws.services.s3.model.PutObjectRequest)
+             */
             PutObjectRequest request = new PutObjectRequest(s3bucket, key, content, metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead);
             return s3Client.putObject(request).whenComplete(Consumers.consumer(
@@ -70,8 +73,12 @@ public class ThumbnailUploader {
     }
 
     private ObjectMetadata createContentMetaData(HttpEntity entity) {
-        ObjectMetadata meta = new ObjectMetadata();
         // TODO: Task 3: Put object to S3
+        /**
+         * Get content length, optional content encoding and optional content
+         * type from the http entity and create the object metadata.
+         */
+        ObjectMetadata meta = new ObjectMetadata();
         setPresent(meta::setContentLength, Optional.of(entity.getContentLength()));
         setPresent(meta::setContentEncoding, Optional.ofNullable(entity.getContentEncoding()).map(Header::getValue));
         setPresent(meta::setContentType, Optional.ofNullable(entity.getContentType()).map(Header::getValue));

@@ -22,12 +22,15 @@ public class QueueAttributesResource extends RestServerResource {
     
     @Get("json")
     public GetQueueAttributesResult getAttributes() throws Exception {
-        String url = properties.lookup(getAttribute("name"));
-        String attributes = getQueryValueAsString("attr").orElse("All");
+        String queueUrl = properties.lookup(getAttribute("name"));
+        String attributeNames = getQueryValueAsString("attr").orElse("All");
         // TODO: Task 1: SQS request
+        /**
+         * @see com.amazonaws.services.sqs.AmazonSQS#getQueueAttributes(com.amazonaws.services.sqs.model.GetQueueAttributesRequest)
+         */
         GetQueueAttributesRequest request = new GetQueueAttributesRequest()
-                .withQueueUrl(url)
-                .withAttributeNames(attributes);
+                .withQueueUrl(queueUrl)
+                .withAttributeNames(attributeNames);
         return sqsClient.getQueueAttributes(request).join();
     }
 }

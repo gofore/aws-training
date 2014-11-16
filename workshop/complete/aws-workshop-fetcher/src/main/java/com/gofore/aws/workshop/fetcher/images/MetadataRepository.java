@@ -1,10 +1,9 @@
 package com.gofore.aws.workshop.fetcher.images;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.amazonaws.services.simpledb.model.PutAttributesRequest;
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
@@ -36,6 +35,9 @@ public class MetadataRepository {
     public CompletableFuture<Void> save(String id, Image image) {
         List<ReplaceableAttribute> attributes = createAttributes(image);
         // TODO: Task 4: Put attributes to SimpleDB
+        /**
+         * @see com.amazonaws.services.simpledb.AmazonSimpleDB#putAttributes(com.amazonaws.services.simpledb.model.PutAttributesRequest)
+         */
         PutAttributesRequest request = new PutAttributesRequest(domain, id, attributes);
         return simpleDBClient.putAttributes(request).whenComplete(Consumers.consumer(
                 (v) -> LOGGER.info("Successfully saved image {} metadata to {}", id, domain),
@@ -45,14 +47,18 @@ public class MetadataRepository {
     
     private List<ReplaceableAttribute> createAttributes(Image image) {
         // TODO: Task 4: Put attributes to SimpleDB
-        Stream<ReplaceableAttribute> meta = Arrays.asList(
-                new ReplaceableAttribute("thumbnailUrl", image.getThumbnailUrl(), true),
-                new ReplaceableAttribute("imageUrl", image.getImageUrl(), true),
-                new ReplaceableAttribute("description", image.getDescription(), true)
-        ).stream();
-        Stream<ReplaceableAttribute> terms = termsParser
-                .parse(image.getDescription())
-                .map(v -> new ReplaceableAttribute("term", v, true));
-        return Stream.concat(meta, terms).collect(Collectors.toList());
+        /**
+         * Create attributes for 'thumbnailUrl', 'imageUrl' and 'description'.
+         * Add multiple 'term' attributes for an array of words parsed with
+         * TermsParser.
+         */
+        List<ReplaceableAttribute> attributes = new ArrayList<>();
+        attributes.add(new ReplaceableAttribute("thumbnailUrl", image.getThumbnailUrl(), true));
+        attributes.add(new ReplaceableAttribute("imageUrl", image.getImageUrl(), true));
+        attributes.add(new ReplaceableAttribute("description", image.getDescription(), true));
+        attributes.addAll(termsParser.parse(image.getDescription())
+                .map(term -> new ReplaceableAttribute("term", term, true))
+                .collect(Collectors.toList()));
+        return attributes;
     }
 }
