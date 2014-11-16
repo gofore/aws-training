@@ -1,13 +1,9 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
 
-  "Description": "Infrastructure for AWS workshop demo application",
+  "Description": "SQS queues and SimpleDB domain for AWS workshop demo application",
 
   "Parameters": {
-    "UserEmail": {
-      "Description": "Email address to notify if there are any scaling operations",
-      "Type": "String"
-    },
     "UserName": {
       "Description": "Username to identify resources created by different users",
       "Type": "String"

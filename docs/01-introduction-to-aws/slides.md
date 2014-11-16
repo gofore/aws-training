@@ -206,7 +206,7 @@ Enables versioning of infrastructure.
 ## Exercise: Create a stack
 
 <pre><code data-trim="" class="ruby">
-# ansible-playbook -e "user_name=FOO user_email=BAR" -i localhost, create_queues_and_database.yml
+# ansible-playbook -e "user_name=FOO" -i localhost, create_queues_and_database.yml
 
 - hosts: all
   connection: local
@@ -220,7 +220,6 @@ Enables versioning of infrastructure.
     args:
       template_parameters:
         UserName: "{{ user_name }}"
-        UserEmail: "{{ user_email }}"
       tags:
         Name: "aws-workshop-{{ user_name }}"
 </code></pre>
@@ -305,7 +304,16 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 --
 
+![Auto Scaling Group Lifecycle](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/images/as-lifecycle-basic-diagram.png)
+
+[Auto Scaling Group Lifecycle](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/AutoScalingGroupLifecycle.html)
+
+--
+
 ## Exercise: Deploy your .jar files to S3
+
+1. `mvn deploy`
+2. Verify that you can find your files from the management console
 
 --
 
@@ -319,10 +327,11 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 1. Create a stack with `create_complete_infrastructure.yml`
 2. Look at CloudFormation -> Stack -> Events until complete
-3. Look at EC2 -> Load Balancers
-4. Try out the application
-5. Try to make the aws-workshop-fetchers scale out
-6. Terminate instances from an auto scaling group and see what happens
+3. Look at EC2 -> Load Balancers -> Instances until InService
+4. Check your e-mail and subscribe to the notifications
+5. Try out the application
+6. Try to make the aws-workshop-fetchers scale out
+7. Terminate instances from an auto scaling group and see what happens
 
 ---
 
@@ -362,6 +371,6 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 ## What next?
 
 - Reference architectures [aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
-- Whitepapers [http://aws.amazon.com/whitepapers/](aws.amazon.com/whitepapers)
+- Whitepapers [aws.amazon.com/whitepapers](aws.amazon.com/whitepapers)
 
-- Register to Amazon Partner Network Portal and take the AWS Technical Professional or AWS Business Professional course
+- Register to [Amazon Partner Network Portal](https://www.apn-portal.com/home/home.jsp) and take the AWS Technical Professional or AWS Business Professional course

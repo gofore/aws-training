@@ -1,7 +1,7 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
 
-  "Description": "Infrastructure for AWS workshop demo application",
+  "Description": "Complete infrastructure for AWS workshop demo application",
 
   "Parameters": {
     "InstanceType": {

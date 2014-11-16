@@ -3,7 +3,7 @@
 # This Ansible playbook creates infrastructure in AWS according to the given CloudFormation template file.
 
 # To run this playbook:
-# ansible-playbook -e "user_name=FOO user_email=BAR" -i localhost, create_queues_and_database.yml
+# ansible-playbook -e "user_name=FOO" -i localhost, create_queues_and_database.yml
 
 - hosts: all
   connection: local
@@ -16,6 +16,5 @@
     args:
       template_parameters:
         UserName: "{{ user_name }}"
-        UserEmail: "{{ user_email }}"
       tags:
         Name: "aws-workshop-{{ user_name }}"
