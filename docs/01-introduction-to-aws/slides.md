@@ -134,7 +134,13 @@ Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/l
 
 Boto for Python: [github.com/boto/boto](https://github.com/boto/boto) & [docs.pythonboto.org](http://docs.pythonboto.org/)
 
+--
 
+## IAM
+
+For programming, we need IAM credentials. You can state fine-grained access policies.
+
+You should not pass credentials into instances. Use IAM role instead.
 
 --
 
@@ -254,6 +260,10 @@ public class SqsService extends Service {
 
 --
 
+### Let's take a look at S3 from the management console
+
+--
+
 ## Exercise: Put objects to S3
 
 Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/complete)
@@ -261,6 +271,13 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 ---
 
 # SimpleDB
+
+--
+
+### Let's take a look at SimpleDB
+
+- sdbtool (Firefox plugin) [code.google.com/p/sdbtool/](https://code.google.com/p/sdbtool/)
+- SdbNavigator (Chrome plugin) [www.kingsquare.nl/sdbnavigator](http://www.kingsquare.nl/sdbnavigator)
 
 --
 
@@ -285,6 +302,27 @@ Elastic Load balancer, Launch configuration, ASG and Scaling policy
 Indirectly uses SNS and CloudWatch
 
 http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
+
+--
+
+## Exercise: Deploy your .jar files to S3
+
+--
+
+## Complete CloudFormation template
+
+[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/complete/deploy/cloudformation-templates/infrastructure-complete.template)
+
+--
+
+## Exercise: Deploy complete stack
+
+1. Create a stack with `create_complete_infrastructure.yml`
+2. Look at CloudFormation -> Stack -> Events until complete
+3. Look at EC2 -> Load Balancers
+4. Try out the application
+5. Try to make the aws-workshop-fetchers scale out
+6. Terminate instances from an auto scaling group and see what happens
 
 ---
 
