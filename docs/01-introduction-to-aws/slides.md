@@ -193,20 +193,86 @@ Enables versioning of infrastructure.
 
 --
 
+## Simple Queue Service (SQS)
+
+--
+
 ## Exercise: Create a stack
+
+<pre><code data-trim="" class="ruby">
+# ansible-playbook -e "user_name=FOO user_email=BAR" -i localhost, create_queues_and_database.yml
+
+- hosts: all
+  connection: local
+  tasks:
+  - name: "Create a stack of SQS queues and SimpleDB domain"
+    cloudformation:
+      stack_name="aws-workshop-{{ user_name }}"
+      template="cloudformation-templates/infrastructure-queues-and-sdb.template"
+      region="eu-west-1"
+      state=present
+    args:
+      template_parameters:
+        UserName: "{{ user_name }}"
+        UserEmail: "{{ user_email }}"
+      tags:
+        Name: "aws-workshop-{{ user_name }}"
+</code></pre>
+
+Verify that you can find your queues from the management console
+
+--
+
+## Exercise: Programming with SQS
+
+1. Compile and run the `aws-workshop-ui` locally
+2. Complete programming [tasks #1 and #2](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+3. Run the `aws-workshop-loader` locally
+
+--
+
+## Handling SQS messages
+
+[com.gofore.aws.workshop.common.sqs.SqsService.java](https://github.com/gofore/aws-training/blob/master/workshop/complete/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/sqs/SqsService.java)
+
+<pre><code data-trim="" class="java">
+public class SqsService extends Service {
+    public SqsService(SqsClient sqsClient, String queueUrl) {}
+    public SqsService addMessageHandler(Function&lt;Message, CompletableFuture&lt;Message&gt;&gt; messageHandler) {}
+    public SqsService setCompleteHandler(BiConsumer&lt;? super Message, ? super Throwable&gt; completeHandler) {}
+    public synchronized void start() throws Exception {}
+    public synchronized void stop() throws Exception {}
+    protected CompletableFuture&lt;Message&gt; handleMessage(Message message) {}
+    protected CompletableFuture&lt;Message&gt; completeMessage(CompletableFuture&lt;Message&gt; message) {}
+    protected CompletableFuture&lt;Message&gt; deleteMessage(CompletableFuture&lt;Message&gt; message) {}
+}
+</code></pre>
 
 ---
 
-# Object storage and database
+# Simple Storage Service (S3)
 
 --
 
-## Simple Storage Service (S3)
+## Exercise: Put objects to S3
+
+Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+
+---
+
+# SimpleDB
 
 --
 
-## SimpleDB
+## Exercise: Put attributes to SimpleDB
 
+Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+
+--
+
+## Exercise: SimpleDB query
+
+Complete programming [task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete)
 
 ---
 
