@@ -40,6 +40,13 @@ public class AwsModule implements Module {
         return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
+    /**
+     * Create a credentials provider chain. Providers in the chain are asked
+     * for credentials in the same order they are defined.
+     * 
+     * @param properties application properties
+     * @return credentials provider that is backed by multiple providers
+     */
     @Provides
     @Singleton
     public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
@@ -108,7 +115,10 @@ public class AwsModule implements Module {
         ShutdownHelper.addShutdownHook(iam::getExecutorService, iam::shutdown);
         return iam;
     }
-    
+
+    /**
+     * Credentials that are bound to a PropertyLoader.
+     */
     private static class PropertyLoaderCredentials implements AWSCredentials {
         
         private final PropertyLoader loader;
@@ -119,12 +129,12 @@ public class AwsModule implements Module {
 
         @Override
         public String getAWSAccessKeyId() {
-            return loader.lookupOptional("aws.access.key").orElseGet(() -> null);
+            return loader.lookupOptional("aws.access.key").orElse(null);
         }
 
         @Override
         public String getAWSSecretKey() {
-            return loader.lookupOptional("aws.secret.key").orElseGet(() -> null);
+            return loader.lookupOptional("aws.secret.key").orElse(null);
         }
     }
 }

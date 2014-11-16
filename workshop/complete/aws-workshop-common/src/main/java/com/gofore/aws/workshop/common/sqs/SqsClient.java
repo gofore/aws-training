@@ -24,6 +24,11 @@ public class SqsClient {
         this.sqs = sqs;
     }
 
+    /**
+     * Gets the AWS interface.
+     * 
+     * @return the original interface
+     */
     public AmazonSQSAsync getSqs() {
         return sqs;
     }

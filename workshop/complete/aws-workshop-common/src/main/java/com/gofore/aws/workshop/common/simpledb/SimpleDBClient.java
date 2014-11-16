@@ -18,10 +18,22 @@ public class SimpleDBClient {
         this.simpleDb = simpleDb;
     }
 
+    /**
+     * Gets the AWS interface.
+     * 
+     * @return the original interface
+     */
     public AmazonSimpleDBAsync getSimpleDb() {
         return simpleDb;
     }
 
+    /**
+     * Completable future wrapper for AmazonSimpleDBAsync#putAttributesAsync.
+     * 
+     * @param request the attributes request
+     * @return future
+     * @see com.amazonaws.services.simpledb.AmazonSimpleDBAsync#putAttributesAsync(com.amazonaws.services.simpledb.model.PutAttributesRequest)
+     */
     public CompletableFuture<Void> putAttributes(PutAttributesRequest request) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         simpleDb.putAttributesAsync(request, new AsyncHandler<PutAttributesRequest, Void>() {
@@ -37,7 +49,14 @@ public class SimpleDBClient {
         });
         return future;
     }
-    
+
+    /**
+     * Completable future wrapper for AmazonSimpleDBAsync#selectAsync.
+     * 
+     * @param request the select request
+     * @return future of select result
+     * @see com.amazonaws.services.simpledb.AmazonSimpleDBAsync#selectAsync(com.amazonaws.services.simpledb.model.SelectRequest)
+     */
     public CompletableFuture<SelectResult> select(SelectRequest request) {
         CompletableFuture<SelectResult> future = new CompletableFuture<>();
         simpleDb.selectAsync(request, new AsyncHandler<SelectRequest, SelectResult>() {
@@ -53,7 +72,14 @@ public class SimpleDBClient {
         });
         return future;
     }
-    
+
+    /**
+     * Completable future wrapper for AmazonSimpleDBAsync#listDomainsAsync.
+     * 
+     * @param request the list domains request
+     * @return future of list domains result
+     * @see com.amazonaws.services.simpledb.AmazonSimpleDBAsync#listDomainsAsync(com.amazonaws.services.simpledb.model.ListDomainsRequest)
+     */
     public CompletableFuture<ListDomainsResult> listDomains(ListDomainsRequest request) {
         CompletableFuture<ListDomainsResult> future = new CompletableFuture<>();
         simpleDb.listDomainsAsync(request, new AsyncHandler<ListDomainsRequest, ListDomainsResult>() {
