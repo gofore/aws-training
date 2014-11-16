@@ -102,6 +102,16 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 --
 
+## Super crappy image search
+
+- Application that mimics Google image search
+- Micro service architecture:
+  - user interface (web application)
+  - page loader (does the initial image search)
+  - image fetcher (loads all the image data to AWS hosted storages)
+
+--
+
 ![Workshop application architecture](/images/aws_workshop_arch.png)
 
 --
@@ -201,6 +211,23 @@ Enables versioning of infrastructure.
 
 ## Simple Queue Service (SQS)
 
+- Message queue with simple REST API
+- Scalable, reliable and persitent
+- Does not rely on any existing standard (JMS, AMQP)
+- Lots of gotchas and need to knows
+
+--
+
+## SQS usage
+
+- Messages must be polled from the REST API
+  - supports long polling but by default releases immediately if there are no messages
+- Successfull message receive triggers invisibility period of a message
+  - no transactions, automatic "rollback" if the message is not deleted within the invisibility period
+- Messages are sent to the REST API
+  - 256kB payload limit, should use handle to S3 stored data for bigger payloads
+  - maximum message retention period is 14 days
+
 --
 
 ## Exercise: Create a stack
@@ -270,6 +297,20 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 ---
 
 # SimpleDB
+
+--
+
+## Yes, it is **Simple**
+
+- Performant NoSQL database to store flat attributes within an item
+  - all attributes are indexed automatically
+- Supports only string dataformat!
+  - sorting, numbers, dates, etc. are not trivial
+- Hard limits for storage
+  - 256 total attribute name-value pairs per item
+  - one billion attributes per domain
+  - 10 GB of total user data storage per domain
+- Very limited SQL-like query syntax
 
 --
 
@@ -362,9 +403,11 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 ## Things that we *could* have done
 
+- User proper microservice architecture, no mixed usage of resources
 - Distribute content from CloudFront CDN
 - Use a more supported(?) database than SimpleDB
 - [AWS::CloudFormation::Init](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
+- Build golden image / docker container to provide fully immutable instances
 
 --
 
