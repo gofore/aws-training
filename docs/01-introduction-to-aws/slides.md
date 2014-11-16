@@ -28,17 +28,10 @@
 
 ## Amazon Web Services (AWS)
 
-Extensive set of cloud services available in the web.
-
-Mainly IaaS, but in some parts also PaaS.
-
-On-demand, pay-per-use.
-
-Self-serviced and programmable.
-
-Usage is billed per *instance-hour* for running instances.
-Prices vary based on region, instance type, and operating system.
-Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
+- Extensive set of cloud services available in the web.
+- On-demand, elastic resources
+- Pay-per-use with no up-front costs (with optional commitment).
+- Self-serviced and programmable.
 
 --
 
@@ -67,8 +60,10 @@ Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot In
 
 - One of the core services of AWS
 - Virtual machines (or *instances*) as a service
-- ~20 different *instance types* that vary in computing power and memory
+- ~20 different *instance types* that vary in performance and cost
 - Instance is created from an *Amazon Machine Image (AMI)*
+
+Notes: Usage is billed per *instance-hour* for running instances. Prices vary based on region, instance type, and operating system. Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
 
 --
 
@@ -134,7 +129,7 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 --
 
-## Programmability
+## SDKs and tools for everyone
 
 SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
 
@@ -142,13 +137,13 @@ Java SDK: [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
 
 Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
 
-Boto for Python: [github.com/boto/boto](https://github.com/boto/boto) & [docs.pythonboto.org](http://docs.pythonboto.org/)
+Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 
 --
 
 ## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 
-For programming, we need IAM credentials. You can state fine-grained access policies.
+For API access, we need IAM credentials. You can state fine-grained access policies.
 
 You should not pass credentials into instances. Use IAM role instead.
 
@@ -156,7 +151,7 @@ You should not pass credentials into instances. Use IAM role instead.
 
 ## [CloudFormation](http://aws.amazon.com/cloudformation/)
 
-Create resources from a template. The collection of created resources is called a *stack*.
+Create a *stack* of resources from a *template*.
 
 Enables versioning of infrastructure.
 
@@ -171,13 +166,15 @@ Enables versioning of infrastructure.
 
   "Resources": { ...Set of resources to be created... },
 
-  "Parameters": { ...Set of parameters given when creating the stack... },
-  "Outputs": { ...Set of outputs variables... },
+  "Parameters": { ...Optional set of parameters given when creating the stack... },
+  "Outputs": { ...Optional set of outputs variables... },
 
-  "Mappings": { ...Set of helper mappings... },
-  "Conditions": { ...Set of conditions... }
+  "Mappings": { ...Optional set of helper mappings... },
+  "Conditions": { ...Optional set of conditions... }
 }
 </code></pre>
+
+[Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
 
 --
 
@@ -209,7 +206,7 @@ Enables versioning of infrastructure.
 
 --
 
-## Simple Queue Service (SQS)
+## [Simple Queue Service (SQS)](http://aws.amazon.com/sqs/)
 
 - Message queue with simple REST API
 - Scalable, reliable and persitent
@@ -222,7 +219,7 @@ Enables versioning of infrastructure.
 
 - Messages must be polled from the REST API
   - supports long polling but by default releases immediately if there are no messages
-- Successfull message receive triggers invisibility period of a message
+- Successful message receive triggers invisibility period of a message
   - no transactions, automatic "rollback" if the message is not deleted within the invisibility period
 - Messages are sent to the REST API
   - 256kB payload limit, should use handle to S3 stored data for bigger payloads
@@ -302,7 +299,7 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 
 ---
 
-# SimpleDB
+# [SimpleDB](http://aws.amazon.com/simpledb/)
 
 --
 
@@ -410,10 +407,10 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 ## Things that we *could* have done
 
 - User proper microservice architecture, no mixed usage of resources
-- Distribute content from CloudFront CDN
+- Distribute static content from [CloudFront CDN](http://aws.amazon.com/cloudfront/)
 - Use a more supported(?) database than SimpleDB
 - [AWS::CloudFormation::Init](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
-- Build golden image / docker container to provide fully immutable instances
+- Build golden image / [Docker](https://www.docker.com/) container to provide fully immutable instances
 
 --
 
