@@ -108,12 +108,29 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>co.escapeideas.maven</groupId>
-        <artifactId>ansible-maven-plugin</artifactId>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>ansible-deploy</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
-          <playbook>${project.basedir}/deploy-artifact.yml</playbook>
-          <inventory>localhost,</inventory>
-          <extraVars>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</extraVars>
+          <executable>ansible-playbook</executable>
+          <workingDirectory>${project.basedir}</workingDirectory>
+          <arguments>
+            <argument>-i</argument>
+            <argument>localhost,</argument>
+            
+            <argument>-e</argument>
+            <argument>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</argument>
+
+            <argument>${project.basedir}/deploy-artifact.yml</argument>
+          </arguments>
         </configuration>
       </plugin>
     </plugins>

@@ -261,18 +261,9 @@
           </configuration>
         </plugin>
         <plugin>
-          <groupId>co.escapeideas.maven</groupId>
-          <artifactId>ansible-maven-plugin</artifactId>
-          <version>1.0.1</version>
-          <executions>
-            <execution>
-              <id>ansible</id>
-              <phase>deploy</phase>
-              <goals>
-                <goal>playbook</goal>
-              </goals>
-            </execution>
-          </executions>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.3.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
