@@ -3,23 +3,18 @@
 # This Ansible playbook creates infrastructure in AWS according to the given CloudFormation template file.
 
 # To run this playbook:
-# ansible-playbook -e "user_name=FOO user_email=BAR key_name=BAZ" -i localhost, create_infrastructure.yml
+# ansible-playbook -e "user_name=FOO user_email=BAR" -i localhost, create_queues_and_database.yml
 
 - hosts: all
   connection: local
   vars:
-    - template_file: cloudformation-templates/infrastructure-complete.template
-    - ami_id: ami-828334f5
-    - instance_type: t2.micro
+    - template_file: cloudformation-templates/infrastructure-queues-and-sdb.template
     - region: eu-west-1
   tasks:
   - name: Create CloudFormation stack
     action: cloudformation stack_name="aws-workshop-{{ user_name }}" state=present region={{ region }} disable_rollback=false template="{{ template_file }}"
     args:
       template_parameters:
-        KeyName: "{{ key_name }}"
-        AmiId: "{{ ami_id }}"
-        InstanceType: "{{ instance_type }}"
         UserName: "{{ user_name }}"
         UserEmail: "{{ user_email }}"
       tags:

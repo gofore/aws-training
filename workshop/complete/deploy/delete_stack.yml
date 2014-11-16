@@ -3,7 +3,7 @@
 # This Ansible playbook destroys infrastructure in AWS that is part of a stack created with the given user name.
 
 # To run this playbook:
-# ansible-playbook -e "user_name=FOO" -i localhost, delete_infrastructure.yml
+# ansible-playbook -e "user_name=FOO" -i localhost, delete_stack.yml
 
 - hosts: all
   connection: local
