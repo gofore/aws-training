@@ -1,0 +1,20 @@
+---
+
+# Downloads the latest jar from S3 over the old one and restarts the service.
+# Run this with the accompanying shell script, as the parameters are a bit complex.
+
+- hosts: all
+  vars:
+    - region: eu-west-1
+    - bucket_name: aws-workshop-demo
+  tasks:
+  - name: Test connection
+    debug: msg="Going to update {{ inventory_hostname }}"
+
+  - name: Download latest application from S3
+    command: aws s3 cp --region {{ region }} s3://{{ bucket_name }}/artifacts/{{ user_name }}/{{ app_name }}.jar /opt/{{ app_name }}/{{ app_name }}.jar
+    sudo: yes
+
+  - name: Restart application
+    service: name={{ app_name }} state=restarted
+    sudo: yes
