@@ -9,7 +9,7 @@
 1. **Introduction:** Main services and exercise description
 2. **Loose coupling**: Separating services with queues
 3. **Persistence:** Object storage and database
-4. **Elasticity:** Load balancer and auto-scaling
+4. **Elasticity:** Scaling resources based on demand
 
 --
 
@@ -46,10 +46,20 @@ Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot In
 
 [AWS Services](http://aws.amazon.com/products/)
 
+--
+
+### We will focus on the following
+
+- [Elastic Compute Cloud (EC2)](http://aws.amazon.com/ec2/) and its subservices [Elastic Block Store (EBS)](http://aws.amazon.com/ebs/), [Elastic Load Balancing (ELB)](http://aws.amazon.com/elasticloadbalancing/) and [Auto Scaling](http://aws.amazon.com/autoscaling/)
+- [CloudWatch](http://aws.amazon.com/cloudwatch/) monitoring service and [Simple Notification Service (SNS)](http://aws.amazon.com/sns/)
+- [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
+- [Simple Queue Service (SQS)](http://aws.amazon.com/sqs/)
+- [Simple Storage Service (S3)](http://aws.amazon.com/s3/) and [SimpleDB](http://aws.amazon.com/simpledb/)
+- [CloudFormation](http://aws.amazon.com/cloudformation/) infrastructure as code
+
 ---
 
 # Elastic Compute Cloud
-## ![EC2 icon](/images/aws_icon_ec2.svg)
 
 --
 
@@ -80,17 +90,11 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## Exercise: Launch an instance
 
-Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console) and launch an instance
-
-1. **Choose AMI:** operating system and base packages
-2. **Choose Instance Type:** performance vs. cost
-3. **Configure Instance:** network, IAM role and user data
-4. **Add Storage:** disk space from EBS or instance store
-5. **Tag Instance:** meta data for resource management
-6. **Configure Security Group:** firewall rules
-7. **Review:** generate ssh key
-
-SSH in and: `curl http://169.254.169.254/latest/meta-data/`
+1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console) and go to EC2 to launch an instance
+2. Pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) (configure instance -> advanced)
+3. `ssh -i your_key.pem ubuntu@instance_hostname`
+4. `curl http://169.254.169.254/latest/user-data/`
+5. `curl http://169.254.169.254/latest/meta-data/`
 
 ---
 
@@ -228,6 +232,7 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 ## Things that we did right
 
+- Using IAM user accounts instead of sharing the root account
 - Using IAM roles on the instances
 - Load-balancing, auto-scaling and elasticity
 - Loose coupling with SQS and ELB
@@ -237,7 +242,7 @@ http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
 
 ## Things that we *should* have done
 
-- Set up a VPC and subnetting
+- Set up a VPC and subnetting, proper security groups
 - Distribute credentials by a secure path
 
 --
