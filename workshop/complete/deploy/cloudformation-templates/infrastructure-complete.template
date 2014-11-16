@@ -361,7 +361,7 @@
     },
 
 
-    "Images": {
+    "ImagesDomain": {
       "Type": "AWS::SDB::Domain"
     }
 
@@ -372,6 +372,10 @@
     "URL": {
       "Description": "The URL of the website",
       "Value":  { "Fn::Join": [ "", [ "http://", { "Fn::GetAtt": [ "UIElasticLoadBalancer", "DNSName" ]}]]}
+    },
+    "SimpleDBDomainName": {
+      "Description": "The name of the generated SimpleDB domain",
+      "Value":  { "Ref": "ImagesDomain" }
     }
   }
 }
