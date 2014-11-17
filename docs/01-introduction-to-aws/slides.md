@@ -61,7 +61,7 @@
 - One of the core services of AWS
 - Virtual machines (or *instances*) as a service
 - ~20 different *instance types* that vary in performance and cost
-- Instance is created from an *Amazon Machine Image (AMI)*
+- Instance is created from an *Amazon Machine Image (AMI)*, which in turn can be created again from instances
 
 Notes: Usage is billed per *instance-hour* for running instances. Prices vary based on region, instance type, and operating system. Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
 
@@ -69,7 +69,7 @@ Notes: Usage is billed per *instance-hour* for running instances. Prices vary ba
 
 ![AWS Region map](/images/aws_map_regions.png)
 
-Regions, Availability Zones (AZ) and CDN Edge Locations
+[Regions, Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
 
 Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney. Special regions are **GovCloud** and **Beijing**.
 
@@ -77,9 +77,9 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## Networking in AWS
 
-- Security groups
+- Regions and availability zones
+- *Security groups* provide firewalling
 - More detailed IP subnetting with [Virtual Private Cloud (VPC)](http://aws.amazon.com/vpc/)
-
 
 --
 
@@ -155,9 +155,9 @@ Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 
 ## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 
-For API access, we need IAM credentials. You can state fine-grained access policies.
-
-You should not pass credentials into instances. Use IAM role instead.
+- User-specific *access keys* for API access
+- Fine-grained access policies to services and resources
+- IAM *roles* to automatically allow API access within AWS.
 
 SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
 
@@ -298,9 +298,9 @@ public class SqsService extends Service {
 
 --
 
-Store blob objects into *buckets* over an RESTful interface.
-
-Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/).
+- Store blob objects into *buckets* over an RESTful interface.
+- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/).
+- Fine-grained access control to objects.
 
 --
 
