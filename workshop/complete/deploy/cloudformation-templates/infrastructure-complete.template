@@ -361,7 +361,7 @@
     },
 
 
-    "ImagesDomain": {
+    "Images": {
       "Type": "AWS::SDB::Domain"
     }
 
@@ -375,7 +375,7 @@
     },
     "SimpleDBDomainName": {
       "Description": "The name of the generated SimpleDB domain",
-      "Value":  { "Ref": "ImagesDomain" }
+      "Value":  { "Ref": "Images" }
     }
   }
 }
