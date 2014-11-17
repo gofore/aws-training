@@ -151,9 +151,9 @@ You should not pass credentials into instances. Use IAM role instead.
 
 ## [CloudFormation](http://aws.amazon.com/cloudformation/)
 
-Create a *stack* of resources from a *template*.
+Create a *stack* of resources from a JSON *template*.
 
-Enables versioning of infrastructure.
+Reusable, versionable infrastructure description that can be commited to source control.
 
 --
 
@@ -304,7 +304,7 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 
 --
 
-There are plenty of different database services:
+ There are plenty of different database services:
 
 - [Relational Database Service (RDS)](http://aws.amazon.com/rds/)
 - Non-relational [DynamoDB](http://aws.amazon.com/dynamodb/)
@@ -419,7 +419,7 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 - Using IAM roles on the instances
 - Load-balancing, auto-scaling and elasticity
 - Loose coupling with SQS and ELB
-- CloudFormation and bootstrapping with userdata and ansible
+- CloudFormation and bootstrapping with User Data and Ansible
 
 --
 
