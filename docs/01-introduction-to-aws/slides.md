@@ -28,10 +28,10 @@
 
 ## Amazon Web Services (AWS)
 
-- Extensive set of cloud services available in the web.
+- Extensive set of cloud services available in the web
 - On-demand, elastic resources
-- Pay-per-use with no up-front costs (with optional commitment).
-- Self-serviced and programmable.
+- Pay-per-use with no up-front costs (with optional commitment)
+- Self-serviced and programmable
 
 --
 
@@ -300,6 +300,16 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 ---
 
 # [SimpleDB](http://aws.amazon.com/simpledb/)
+
+--
+
+There are plenty of different database services:
+
+- [Relational Database Service (RDS)](http://aws.amazon.com/rds/)
+- Non-relational [DynamoDB](http://aws.amazon.com/dynamodb/)
+- [Redshift](http://aws.amazon.com/redshift/) petabyte-scale data warehouse
+- [ElastiCache](http://aws.amazon.com/elasticache/) in-memory caching
+- ...Oh, and [SimpleDB](http://aws.amazon.com/simpledb/)
 
 --
 
