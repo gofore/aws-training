@@ -85,11 +85,12 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## Exercise: Launch an instance
 
-1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console) and go to EC2 to launch an instance
-2. Pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) (configure instance -> advanced)
-3. `ssh -i your_key.pem ubuntu@instance_hostname`
-4. `curl http://169.254.169.254/latest/user-data/`
-5. `curl http://169.254.169.254/latest/meta-data/`
+1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console)
+2. Go to EC2 dashboard and switch to Ireland region
+3. Pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) (configure instance -> advanced)
+4. `ssh -i your_key.pem ubuntu@instance_hostname`
+5. `curl http://169.254.169.254/latest/user-data/`
+6. `curl http://169.254.169.254/latest/meta-data/`
 
 ---
 
@@ -119,9 +120,9 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## Best practices
 
-- Split the application into small, stateless, horizontally-scalable services
-- Loosely couple services with queues and load balancers
-- Automate infrastructure setup and application deployment
+- Split the application into small, **stateless**, horizontally-scalable services
+- **Loosely couple** services with queues and load balancers
+- **Automate** infrastructure setup and application deployment
 
 ---
 
@@ -131,11 +132,11 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 ## SDKs and tools for everyone
 
-SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
-
 Java SDK: [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
 
 Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
+
+Other SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
 
 Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 
@@ -291,6 +292,10 @@ public class SqsService extends Service {
     protected CompletableFuture&lt;Message&gt; deleteMessage(CompletableFuture&lt;Message&gt; message) {}
 }
 </code></pre>
+
+--
+
+![Workshop application architecture](/images/aws_workshop_arch.png)
 
 ---
 
