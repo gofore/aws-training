@@ -141,6 +141,18 @@ Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 
 --
 
+## Java SDK
+
+- Collection of libraries to operate AWS resources in Java
+  - since version 1.9 the libraries are split in submodules for more fine grained dependency management
+  - available in maven central
+- New object oriented resource APIs are under development
+  - https://github.com/awslabs/aws-sdk-java-resources
+- For complex resource management with the SDK see [Netflix Asgard](https://github.com/Netflix/asgard)
+  - ... but it's coded in Groovy and Grails
+
+--
+
 ## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 
 For API access, we need IAM credentials. You can state fine-grained access policies.
