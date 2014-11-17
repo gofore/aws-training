@@ -347,21 +347,36 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 
 ---
 
-# Auto Scaling
+# [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html)
 
 --
 
-Elastic Load balancer, Launch configuration, ASG and Scaling policy
+## Auto Scaling instances
 
-Indirectly uses SNS and CloudWatch
-
-http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html
+- *Auto Scaling Group* contains instances whose lifecycles are automatically managed by CloudWatch alarms or schedule
+- A *scaling policy* describes how the group scales in or out. You should always have policies for both directions. [*Policy cooldowns*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html) control the rate in which scaling happens.
+- A [*launch configuration*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/LaunchConfiguration.html) describes the configuration of the instance. Having a good AMI and bootstrapping is crucial.
 
 --
 
 ![Auto Scaling Group Lifecycle](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/images/as-lifecycle-basic-diagram.png)
 
 [Auto Scaling Group Lifecycle](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/AutoScalingGroupLifecycle.html)
+
+--
+
+## [Elastic Load Balancer](http://aws.amazon.com/elasticloadbalancing/)
+
+- Route traffic to an Auto Scaling Group
+- Runs health checks to instances to decide whether to route traffic to them
+- Spread instances over multiple AZs for higher availability
+- ELB scales itself. Never use ELB IP address. Pre-warm before flash traffic.
+
+--
+
+![ELB Architecture](http://awsmedia.s3.amazonaws.com/2012-02-24-techdoc-elb-arch.png)
+
+[Best practices in ELB](https://aws.amazon.com/articles/1636185810492479)
 
 --
 
