@@ -159,6 +159,8 @@ For API access, we need IAM credentials. You can state fine-grained access polic
 
 You should not pass credentials into instances. Use IAM role instead.
 
+SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
+
 --
 
 ## [CloudFormation](http://aws.amazon.com/cloudformation/)
