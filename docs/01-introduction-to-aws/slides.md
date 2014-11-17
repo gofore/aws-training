@@ -255,14 +255,15 @@ Verify that you can find your queues from the management console
 ## Exercise: Programming with SQS
 
 1. Compile and run the `aws-workshop-ui` locally
-2. Complete programming [tasks #1 and #2](https://github.com/gofore/aws-training/tree/master/workshop/complete)
-3. Run the `aws-workshop-loader` locally
+2. Complete programming [task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)
+3. Complete programming [task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)
+4. Run the `aws-workshop-loader` locally
 
 --
 
 ## Handling SQS messages
 
-[com.gofore.aws.workshop.common.sqs.SqsService.java](https://github.com/gofore/aws-training/blob/master/workshop/complete/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/sqs/SqsService.java)
+[com.gofore.aws.workshop.common.sqs.SqsService.java](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/sqs/SqsService.java)
 
 <pre><code data-trim="" class="java">
 public class SqsService extends Service {
@@ -295,7 +296,7 @@ Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Vers
 
 ## Exercise: Put objects to S3
 
-Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)
 
 ---
 
@@ -336,13 +337,13 @@ There are plenty of different database services:
 
 ## Exercise: Put attributes to SimpleDB
 
-Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
 
 --
 
 ## Exercise: SimpleDB query
 
-Complete programming [task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete)
+Complete programming [task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)
 
 ---
 

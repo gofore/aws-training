@@ -1,5 +1,27 @@
 Complete version of the demo application. This will be constructed piece by piece during the workshop.
 
+
+## Programming tips
+
+All common code resides in `aws-workshop-common` module:
+- `com.gofore.aws.workshop.common.di.AwsModule` is the core dependency module for AWS integration
+- `com.gofore.aws.workshop.common.(s3/simpledb/sqs)` packages contain the Java 8 wrappers for AWS libraries
+
+Web servers bootstrap from the main application class of each module:
+- `com.gofore.aws.workshop.ui.UiApplication`
+- `com.gofore.aws.workshop.loader.LoaderApplication`
+- `com.gofore.aws.workshop.fetcher.FetcherApplication`
+
+Package and run from command line:
+- In root module `mvn package` (or if you want to test single module, run inside submodule but make sure your common module is up to date in local maven repository)
+- `java -jar aws-workshop-ui/target/aws-workshop-ui.jar`
+- `java -jar aws-workshop-loader/target/aws-workshop-loader.jar`
+- `java -jar aws-workshop-fetcher/target/aws-workshop-fetcher.jar`
+
+Deploy artifacts to S3:
+- In root module `mvn deploy`
+
+
 ### Task 1: SQS request
 
 The UI polls for SQS queue attributes so that the user can see what's happening in the queues. The implementation can be found at `com.gofore.aws.workshop.ui.rest.QueueAttributesResource` and your task is to create the request and return the `GetQueueAttributesResult` for the UI.
