@@ -1,7 +1,9 @@
 ---
 
 # Downloads the latest jar from S3 over the old one and restarts the service.
-# Run this with the accompanying shell script, as the parameters are a bit complex.
+#
+# To run this playbook:
+# Run the accompanying shell script, as the parameters are a bit complex.
 
 - hosts: all
   vars:
