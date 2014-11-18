@@ -9,6 +9,8 @@ import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.services.cloudformation.AmazonCloudFormationAsync;
+import com.amazonaws.services.cloudformation.AmazonCloudFormationAsyncClient;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsync;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsyncClient;
 import com.amazonaws.services.s3.AmazonS3;
@@ -18,6 +20,7 @@ import com.amazonaws.services.simpledb.AmazonSimpleDBAsyncClient;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
 import com.gofore.aws.workshop.common.async.ShutdownHelper;
+import com.gofore.aws.workshop.common.cloudformation.CloudFormationClient;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.PropertyLoader;
 import com.gofore.aws.workshop.common.s3.S3Client;
@@ -116,6 +119,23 @@ public class AwsModule implements Module {
         return iam;
     }
 
+    @Provides
+    @Singleton
+    public AmazonCloudFormationAsync cloudFormation(ApplicationProperties properties,
+                                                    AWSCredentialsProvider credentials,
+                                                    ExecutorService executor) {
+        AmazonCloudFormationAsyncClient cloudFormation = new AmazonCloudFormationAsyncClient(credentials, executor);
+        cloudFormation.setEndpoint(properties.lookup("aws.cloudformation.endpoint"));
+        ShutdownHelper.addShutdownHook(cloudFormation::getExecutorService, cloudFormation::shutdown);
+        return cloudFormation;
+    }
+    
+    @Provides
+    @Singleton
+    public CloudFormationClient cloudFormationClient(AmazonCloudFormationAsync cloudFormation) {
+        return new CloudFormationClient(cloudFormation);
+    }
+    
     /**
      * Credentials that are bound to a PropertyLoader.
      */
