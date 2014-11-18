@@ -43,7 +43,7 @@
 
 ### We will focus on the following
 
-- [Elastic Compute Cloud (EC2)](http://aws.amazon.com/ec2/) and its subservices [Elastic Block Store (EBS)](http://aws.amazon.com/ebs/), [Elastic Load Balancing (ELB)](http://aws.amazon.com/elasticloadbalancing/) and [Auto Scaling](http://aws.amazon.com/autoscaling/)
+- [Elastic Compute Cloud (EC2)](http://aws.amazon.com/ec2/) and its subservices, [Elastic Load Balancing (ELB)](http://aws.amazon.com/elasticloadbalancing/) and [Auto Scaling](http://aws.amazon.com/autoscaling/)
 - [CloudWatch](http://aws.amazon.com/cloudwatch/) monitoring service and [Simple Notification Service (SNS)](http://aws.amazon.com/sns/)
 - [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 - [Simple Queue Service (SQS)](http://aws.amazon.com/sqs/)
@@ -170,6 +170,8 @@ Create a *stack* of resources from a JSON *template*.
 
 Reusable, versionable infrastructure description that can be commited to source control.
 
+[Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
+
 --
 
 ## Structure of a template
@@ -177,19 +179,22 @@ Reusable, versionable infrastructure description that can be commited to source 
 <pre><code data-trim="" class="json">
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Structure of a cloudformation template",
+  "Description": "This template constructs a single web server",
 
-  "Resources": { ...Set of resources to be created... },
-
-  "Parameters": { ...Optional set of parameters given when creating the stack... },
-  "Outputs": { ...Optional set of outputs variables... },
+  "Parameters": {
+    "MySSHKeyName": {"Type": "String", "MinLength": "1", "MaxLength": "255"}
+  }, 
+  "Resources": {
+    "MyWebServer": {"Type": "AWS::EC2::Instance", "Properties": { ... }}
+  },
+  "Outputs": {
+    "MyDomainName": {"Value": {"Fn::GetAtt": ["MyWebServer", "PublicDnsName"]}}
+  },
 
   "Mappings": { ...Optional set of helper mappings... },
   "Conditions": { ...Optional set of conditions... }
 }
 </code></pre>
-
-[Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
 
 --
 
@@ -303,19 +308,18 @@ public class SqsService extends Service {
 
 --
 
-- Store blob objects into *buckets* over an RESTful interface.
-- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/).
-- Fine-grained access control to objects.
-
---
-
-### Let's take a look at S3 from the management console
+- Store blob objects into *buckets* over an RESTful interface
+- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
+- Fine-grained access control to objects
+- Supports static hosting of web resources
 
 --
 
 ## Exercise: Put objects to S3
 
 Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)
+
+Notes: Content length must be known when pushing files to S3. This might become an issue when streaming content straight to S3.
 
 ---
 
@@ -337,7 +341,7 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 
 - Performant NoSQL database to store flat attributes within an item
   - all attributes are indexed automatically
-- Supports only string dataformat!
+- Supports **only string** data type!
   - sorting, numbers, dates, etc. are not trivial
 - Hard limits for storage
   - 256 total attribute name-value pairs per item
@@ -356,13 +360,22 @@ Complete programming [task #3](https://github.com/gofore/aws-training/tree/maste
 
 ## Exercise: Put attributes to SimpleDB
 
-Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
+1. Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
+2. Find your files in S3, try to access their URL
+3. Fix object permissions (see hint in task)
 
 --
 
 ## Exercise: SimpleDB query
 
 Complete programming [task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)
+
+--
+
+## Exercise: Deploy your .jar files to S3
+
+1. `mvn deploy` We use a Maven Ansible plugin that uploads jar files to S3.
+2. Verify that you can find your files from the management console
 
 ---
 
@@ -396,13 +409,6 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 ![ELB Architecture](http://awsmedia.s3.amazonaws.com/2012-02-24-techdoc-elb-arch.png)
 
 [Best practices in ELB](https://aws.amazon.com/articles/1636185810492479)
-
---
-
-## Exercise: Deploy your .jar files to S3
-
-1. `mvn deploy`
-2. Verify that you can find your files from the management console
 
 --
 
@@ -444,8 +450,11 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 
 ## Things that we *should* have done
 
-- Set up a VPC and subnetting, proper security groups
+- Set up a VPC and subnetting, proper security groups. No private IPs and no public access, no public SSH.
 - Distribute credentials by a secure path
+- Versioned jar files or golden images
+
+Notes: Currently new ui-instances that are born with autoscale pull the latest jar from S3. This means that the "launch configuration" is not static, and every autoscaled instance might be different.
 
 --
 
