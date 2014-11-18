@@ -1,6 +1,5 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-
   "Description": "Complete infrastructure for AWS workshop demo application",
 
   "Parameters": {
@@ -361,7 +360,7 @@
     },
 
 
-    "Images": {
+    "ImageMetadataDomain": {
       "Type": "AWS::SDB::Domain"
     }
 
@@ -375,7 +374,7 @@
     },
     "SimpleDBDomainName": {
       "Description": "The name of the generated SimpleDB domain",
-      "Value":  { "Ref": "Images" }
+      "Value":  { "Ref": "ImageMetadataDomain" }
     }
   }
 }
