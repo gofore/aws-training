@@ -3,6 +3,8 @@
 The workshop demo consists of a Java application that is a super crappy version of google image search utilizing
 microservice architecture and CloudFormation powered infrastructure templates.
 
+See the [Getting Started](/docs/getting_started.md) guide on how to set up your tools and environment.
+
 ## Application architecture
 
 The Java application includes three modules (micro services):
@@ -16,4 +18,4 @@ The Java application includes three modules (micro services):
   The fetcher service handles all the hard lifting from parsing the images to storing the thumbnails to S3 and image
   metadata to simpledb.
 
-See the [Getting Started](docs/getting_started.md) guide on how to set up your tools and environment.
+![Workshop application architecture](/images/aws_workshop_arch.png)

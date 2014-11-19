@@ -15,6 +15,4 @@ See the [Getting Started](docs/getting_started.md) for information on how to pre
 
 ## Presentation slides
 
-Follow the [presentation online](docs/01-introduction-to-aws/slides.md)
-
-(or run the reveal.js on your computer with `./start_presentation.sh`).
+Follow the [presentation online](docs/01-introduction-to-aws/slides.md) (or run `./start_presentation.sh`).

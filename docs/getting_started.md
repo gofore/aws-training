@@ -1,7 +1,7 @@
 
 # Getting Started
 
-Before the workshop, you should have received an e-mail with your personal credentials.
+You should have received an e-mail from your instructors that includes an AWS credentials CSV file. If not, contact your instructors and ask one.
 
 If you intend to participate in the small programming exercises, you should do the preliminary tasks listed below, making sure that you have installed the tools successfully.
 
@@ -44,7 +44,7 @@ If you do not want to use Vagrant, you can also install everything manually. You
 Make sure your setup satisfies the defined prerequisites. After the tools are set up we are ready to roll.
 
 1. Clone the `aws-training` repository to your local machine with git: `git clone https://github.com/gofore/aws-training.git`
-2. You should have received an email from your instructors that includes an AWS credentials CSV file. If not, contact your instructors and ask one. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`. You can also place the file under `workshop`.
+2. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`. You can also place the file under `workshop`.
 3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
 4. Now you should have a working environment.
 5. Import the project into your IDE.
