@@ -92,6 +92,8 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 5. `curl http://169.254.169.254/latest/user-data/`
 6. `curl http://169.254.169.254/latest/meta-data/`
 
+Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+
 ---
 
 # Objective of today
