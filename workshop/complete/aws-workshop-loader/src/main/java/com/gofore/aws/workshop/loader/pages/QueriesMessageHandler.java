@@ -13,7 +13,7 @@ import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gofore.aws.workshop.common.functional.Consumers;
-import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -30,9 +30,9 @@ public class QueriesMessageHandler implements Function<Message, CompletableFutur
     private final String queueUrl;
 
     @Inject
-    public QueriesMessageHandler(ApplicationProperties properties, SqsClient sqsClient) {
+    public QueriesMessageHandler(CloudFormationOutputsPropertyLoader properties, SqsClient sqsClient) {
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("images.queue.url");
+        this.queueUrl = properties.lookup("QueueUrlsUrl");
     }
 
     @Override

@@ -31,7 +31,7 @@ public class UiApplication extends GuiceApplication {
     @Override
     public Restlet createInboundRoot() {
         // this is a workaround for restlet not able to handle static index for classpath resources
-        Redirector redirector = new Redirector(getContext(), INDEX, Redirector.MODE_CLIENT_PERMANENT);
+        Redirector rootRedirector = new Redirector(getContext(), INDEX, Redirector.MODE_CLIENT_PERMANENT);
         
         Router router = new Router(getContext());
         router.attach("/api/properties/{name}", target(ConfigurationResource.class));
@@ -39,20 +39,20 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/queries", target(QueriesResource.class));
         router.attach("/api/search", target(SearchResource.class));
         router.attach("/healthcheck",target(HealthCheckResource.class));
-        router.attach("/webjars", createWebjars());
-        router.attach("/", redirector).setMatchingMode(Template.MODE_EQUALS);
-        router.attach("/", createRoot());
+        router.attach("/webjars", webjarsTarget());
+        router.attach("/", rootRedirector).setMatchingMode(Template.MODE_EQUALS);
+        router.attach("/", rootTarget());
         return router;
     }
    
-    private Directory createRoot() {
+    private Directory rootTarget() {
         Directory directory = new UtfDirectory(getContext(), "clap://class/static/");
         directory.setDeeplyAccessible(true);
         directory.setIndexName(INDEX);
         return directory;
     }
     
-    private Directory createWebjars() {
+    private Directory webjarsTarget() {
         return new UtfDirectory(getContext(), "clap://class/META-INF/resources/webjars");
     }
 

@@ -3,8 +3,8 @@ package com.gofore.aws.workshop.ui.rest;
 import com.amazonaws.services.simpledb.model.SelectRequest;
 import com.amazonaws.services.simpledb.model.SelectResult;
 import com.gofore.aws.workshop.common.functional.Lists;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
-import com.gofore.aws.workshop.common.simpledb.DomainLookup;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
 import com.gofore.aws.workshop.ui.search.SearchItemMapper;
 import com.gofore.aws.workshop.ui.search.SearchResult;
@@ -29,9 +29,10 @@ public class SearchResource extends RestServerResource {
     private final String select;
     
     @Inject
-    public SearchResource(DomainLookup domainLookup, SimpleDBClient simpleDBClient) {
+    public SearchResource(CloudFormationOutputsPropertyLoader properties,
+                          SimpleDBClient simpleDBClient) {
         this.simpleDBClient = simpleDBClient;
-        this.select = SELECT_TEMPLATE.replace("{domain}", domainLookup.getDomain("images"));
+        this.select = SELECT_TEMPLATE.replace("{domain}", properties.lookup("ImageMetadataDomainName"));
     }
 
     @Get("json")

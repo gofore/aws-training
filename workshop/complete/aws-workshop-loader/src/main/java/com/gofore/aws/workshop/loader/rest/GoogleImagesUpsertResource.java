@@ -11,7 +11,7 @@ import javax.inject.Inject;
 
 import com.amazonaws.services.sqs.model.SendMessageRequest;
 import com.amazonaws.services.sqs.model.SendMessageResult;
-import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
 import com.gofore.aws.workshop.loader.pages.GoogleImagesFinder;
@@ -24,9 +24,9 @@ public class GoogleImagesUpsertResource extends RestServerResource {
     private final String queueUrl;
 
     @Inject
-    public GoogleImagesUpsertResource(ApplicationProperties properties, SqsClient sqsClient) {
+    public GoogleImagesUpsertResource(CloudFormationOutputsPropertyLoader properties, SqsClient sqsClient) {
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("images.queue.url");
+        this.queueUrl = properties.lookup("QueueUrlsUrl");
     }
 
     @Put("json")
