@@ -27,7 +27,7 @@ We encourage you to use Vagrant, but you may also install everything on a Linux 
 6. Inside the virtual machine, change directory to `cd /vagrant/workshop/initial` and run `mvn clean verify`. After a few minutes, the build should succeed.
 7. Import the `initial` Maven project into your IDE and look around.
 
-If you want to use an IDE on your host machine, you will then need Java 8 SDK and Maven 3+ also on your host machine. Note that Java 8 is mandadory and your IDE must support it because the code uses Java 8 syntax and features. You should follow the instructions of optio The intended workflow is that you either 1) Program with your IDE on your host machine and use the deployment tools in the virtual machine via the Vagrant shared directory or 2) you completely work inside the Vagrant machine with simple command line tools and code editors.
+If you want to use an IDE on your host machine, you will then need Java 8 SDK and Maven 3+ also on your host machine. Note that Java 8 is mandadory and your IDE must support it because the code uses Java 8 syntax and features. The intended workflow is that you either 1) Program with your IDE on your host machine and use the deployment tools in the virtual machine via the Vagrant shared directory or 2) you completely work inside the Vagrant machine with simple command line tools and code editors.
 
 ### Option B: Install tools manually
 
