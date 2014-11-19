@@ -3,18 +3,19 @@ package com.gofore.aws.workshop.ui.rest;
 import javax.inject.Inject;
 
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
-import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
+import com.gofore.aws.workshop.common.properties.PropertyLoader;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
 import org.restlet.resource.Get;
 
 public class QueueAttributesResource extends RestServerResource {
 
-    private final ApplicationProperties properties;
+    private final PropertyLoader properties;
     private final SqsClient sqsClient;
     
     @Inject
-    public QueueAttributesResource(ApplicationProperties properties, SqsClient sqsClient) {
+    public QueueAttributesResource(CloudFormationOutputsPropertyLoader properties, SqsClient sqsClient) {
         this.properties = properties;
         this.sqsClient = sqsClient;
     }

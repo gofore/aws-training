@@ -7,7 +7,7 @@ import com.amazonaws.services.sqs.model.SendMessageResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.RestServerResource;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
 import com.google.inject.Inject;
@@ -24,16 +24,16 @@ public class QueriesResource extends RestServerResource {
     private final String queueUrl;
 
     @Inject
-    public QueriesResource(ApplicationProperties properties, SqsClient sqsClient) {
+    public QueriesResource(CloudFormationOutputsPropertyLoader properties, SqsClient sqsClient) {
         this.sqsClient = sqsClient;
-        this.queueUrl = properties.lookup("queries.queue.url");
+        this.queueUrl = properties.lookup("QueueQueriesUrl");
     }
 
     @Put("json")
     public SendMessageResult submitQuery(SubmitRequest request) throws Exception {
         String query = Optional.of(request.query).get();
         long limit = Optional.ofNullable(request.limit).orElse(1L);
-        String message = createJson(query, limit);
+        String messageBody = createJson(query, limit);
         // TODO: Task 2: SQS message send
         /**
          * @see com.amazonaws.services.sqs.AmazonSQS#sendMessage(com.amazonaws.services.sqs.model.SendMessageRequest)

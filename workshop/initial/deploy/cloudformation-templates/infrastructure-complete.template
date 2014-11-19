@@ -372,7 +372,18 @@
       "Description": "The URL of the website",
       "Value":  { "Fn::Join": [ "", [ "http://", { "Fn::GetAtt": [ "UIElasticLoadBalancer", "DNSName" ]}]]}
     },
-    "SimpleDBDomainName": {
+    
+    "QueueQueriesUrl": {
+      "Description": "The URL of the queries queue",
+      "Value": { "Ref": "QueueQueries" }
+    },
+    
+    "QueueUrlsUrl": {
+      "Description": "The URL of the urls queue",
+      "Value": { "Ref": "QueueUrls" }
+    },
+    
+    "ImageMetadataDomainName": {
       "Description": "The name of the generated SimpleDB domain",
       "Value":  { "Ref": "ImageMetadataDomain" }
     }

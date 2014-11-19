@@ -1,7 +1,9 @@
 package com.gofore.aws.workshop.fetcher;
 
+import com.gofore.aws.workshop.common.cloudformation.CloudFormationClient;
 import com.gofore.aws.workshop.common.di.AwsModule;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.fetcher.images.GoogleImagesFetcher;
 import com.gofore.aws.workshop.fetcher.images.ImageFetcher;
 import com.google.inject.AbstractModule;
@@ -16,14 +18,20 @@ public class FetcherModule extends AbstractModule {
         bind(ImageFetcher.class).to(GoogleImagesFetcher.class).in(Singleton.class);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     public ApplicationProperties applicationProperties() {
         return new ApplicationProperties()
                 .withSystemPropertyLoader()
                 .withAwsCredentialsCsvLoader("credentials.csv")
                 .withAwsCredentialsEnvLoader()
-                .withClasspathPropertyLoader("fetcher.properties")
                 .withClasspathPropertyLoader("common.properties");
     }
-    
+
+    @Provides
+    @Singleton
+    public CloudFormationOutputsPropertyLoader cloudFormationOutputsPropertyLoader(
+            ApplicationProperties properties, CloudFormationClient cloudFormationClient) {
+        return new CloudFormationOutputsPropertyLoader(properties, cloudFormationClient);
+    }
 }

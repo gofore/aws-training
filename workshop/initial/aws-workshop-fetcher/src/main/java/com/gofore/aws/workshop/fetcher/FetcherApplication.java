@@ -2,7 +2,7 @@ package com.gofore.aws.workshop.fetcher;
 
 import javax.inject.Inject;
 
-import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.HealthCheckResource;
 import com.gofore.aws.workshop.common.rest.RestletServer;
@@ -18,10 +18,11 @@ import org.restlet.routing.Router;
 public class FetcherApplication extends GuiceApplication {
 
     @Inject
-    public FetcherApplication(ApplicationProperties properties, FinderFactory finderFactory,
+    public FetcherApplication(CloudFormationOutputsPropertyLoader properties, FinderFactory finderFactory,
                               SqsClient sqsClient, ImagesMessageHandler imagesMessageHandler) {
         super(finderFactory);
-        SqsService sqsService = new SqsService(sqsClient, properties.lookup("images.queue.url"))
+        
+        SqsService sqsService = new SqsService(sqsClient, properties.lookup("QueueUrlsUrl"))
                 .addMessageHandler(imagesMessageHandler);
         getServices().add(sqsService);
     }

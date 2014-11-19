@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.amazonaws.services.simpledb.model.ReplaceableAttribute;
-import com.gofore.aws.workshop.common.simpledb.DomainLookup;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
 import com.gofore.aws.workshop.fetcher.utils.TermsParser;
 import com.google.inject.Inject;
@@ -22,10 +22,10 @@ public class MetadataRepository {
     private final String domain;
 
     @Inject
-    public MetadataRepository(DomainLookup domainLookup, SimpleDBClient simpleDBClient, TermsParser termsParser) {
+    public MetadataRepository(CloudFormationOutputsPropertyLoader properties, SimpleDBClient simpleDBClient, TermsParser termsParser) {
         this.simpleDBClient = simpleDBClient;
         this.termsParser = termsParser;
-        this.domain = domainLookup.getDomain("images");
+        this.domain = properties.lookup("ImageMetadataDomainName");
     }
 
     public CompletableFuture<Void> save(String id, Image image) {

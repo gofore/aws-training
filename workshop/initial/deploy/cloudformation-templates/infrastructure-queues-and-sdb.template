@@ -13,7 +13,6 @@
     "QueueQueries": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "queries"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
       }
@@ -21,7 +20,6 @@
     "QueueUrls": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "urls"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
       }
@@ -32,6 +30,16 @@
   },
 
   "Outputs": {
+    "QueueQueriesUrl": {
+      "Description": "The URL of the queries queue",
+      "Value": { "Ref": "QueueQueries" }
+    },
+    
+    "QueueUrlsUrl": {
+      "Description": "The URL of the urls queue",
+      "Value": { "Ref": "QueueUrls" }
+    },
+    
     "ImageMetadataDomainName": {
       "Description": "The name of the generated SimpleDB domain",
       "Value":  { "Ref": "ImageMetadataDomain" }
