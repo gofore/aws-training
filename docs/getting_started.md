@@ -15,19 +15,19 @@ If you intend to participate in the small programming exercises, you should do t
 
 ### Option A: Set up the tools with Vagrant (recommended)
 
-We encourage you to use Vagrant, but you may also install everything on a Linux host if you are brave enough.
+We encourage you to use Vagrant, but you may also install everything on a Linux or OS X host if you are brave enough.
 
 **Windows users:** Note that Ansible is NOT available on Windows, so you will have to use Vagrant!
 
 1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/).
 2. Clone the git repository to your computer with `git clone https://github.com/gofore/aws-training.git` or by copying the zip file from GitHub.
-3. Copy the `credentials.csv` file you received to your working directory under the `workshop` directory.
+3. Copy the `credentials.csv` file you received to your working directory under the `workshop` directory and to your home directory in `.aws` directory.
 4. Run `vagrant up` in the main directory of the project, and wait until the provisioning has succeeded.
 5. Once the virtual machine is running, SSH into the machine with `vagrant ssh`.
-6. Inside the virtual machine, change directory to `cd /vagrant/workshop/complete` and run `mvn clean verify`. After a few minutes, the build should succeed.
-7. Import the project into your IDE.
+6. Inside the virtual machine, change directory to `cd /vagrant/workshop/initial` and run `mvn clean verify`. After a few minutes, the build should succeed.
+7. Import the `initial` Maven project into your IDE and look around.
 
-If you want to use an IDE on your host machine, you will then need Java 8 SDK and Maven 3+ also on your host machine. The intended workflow is that you either 1) Program with your IDE on your host machine and use the deployment tools in the virtual machine via the Vagrant shared directory or 2) you completely work inside the Vagrant machine with simple command line tools and code editors.
+If you want to use an IDE on your host machine, you will then need Java 8 SDK and Maven 3+ also on your host machine. Note that Java 8 is mandadory and your IDE must support it because the code uses Java 8 syntax and features. You should follow the instructions of optio The intended workflow is that you either 1) Program with your IDE on your host machine and use the deployment tools in the virtual machine via the Vagrant shared directory or 2) you completely work inside the Vagrant machine with simple command line tools and code editors.
 
 ### Option B: Install tools manually
 
@@ -35,7 +35,7 @@ If you do not want to use Vagrant, you can also install everything manually. You
 
 - Java 8 SDK
 - Maven 3+
-- IDE that supports Maven and Java projects (Idea, Eclipse, Netbeans, whatever suits you)
+- IDE that supports Maven and Java 8 projects (Idea, Eclipse, Netbeans, whatever suits you)
 - git
 - Python 2
 - Ansible 1.7.2+ (`sudo pip install ansible`)
@@ -44,10 +44,10 @@ If you do not want to use Vagrant, you can also install everything manually. You
 Make sure your setup satisfies the defined prerequisites. After the tools are set up we are ready to roll.
 
 1. Clone the `aws-training` repository to your local machine with git: `git clone https://github.com/gofore/aws-training.git`
-2. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`. You can also place the file under `workshop`.
-3. Change directory to `workshop/complete` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
+2. Copy the `credentials.csv` file to your home directory in `.aws` directory so you will end up with file `~/.aws/credentials.csv`.
+3. Change directory to `workshop/initial` where you should see `pom.xml`. In this directory run `mvn clean verify`. You should have internet access so that the integration tests can verify the access to AWS. The build should end with `BUILD SUCCESS`. If not, you can run `mvn -X clean verify` to get more detail error messages and/or contact your instructors for help.
 4. Now you should have a working environment.
-5. Import the project into your IDE.
+5. Import the `initial` Maven project into your IDE and look around.
 
 A successful initial setup should look something like this:
 ```
