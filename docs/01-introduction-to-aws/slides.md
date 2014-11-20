@@ -69,13 +69,13 @@ Notes: Usage is billed per *instance-hour* for running instances. Prices vary ba
 
 ![AWS Region map](/images/aws_map_regions.png)
 
-[Regions, Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
-
 Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney. Special regions are **GovCloud** and **Beijing**.
 
 --
 
 ![AWS EU Region map](/images/aws_map_regions_eu.png)
+
+[Regions, Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
 
 Notes: We will only use Ireland (eu-west-1) region in this workshop.
 
@@ -273,6 +273,7 @@ Reusable, versionable infrastructure description that can be commited to source 
 ## Exercise: Create a stack
 
 <pre><code data-trim="" class="ruby">
+# Run the following command in workshop/initial/deploy
 # ansible-playbook -e "user_name=FOO" -i localhost, create_queues_and_database.yml
 
 - hosts: all
@@ -298,8 +299,8 @@ Verify that you can find your queues from the management console
 ## Exercise: Programming with SQS
 
 1. Compile and run the `aws-workshop-ui` locally
-2. Complete programming [task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)
-3. Complete programming [task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)
+2. Complete [programming task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)
+3. Complete [programming task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)
 4. View your messages in the queues from the management console
 5. Run the `aws-workshop-loader` locally
 
@@ -343,7 +344,7 @@ public class SqsService extends Service {
 
 ## Exercise: Put objects to S3
 
-Complete programming [task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)
+Complete [programming task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)
 
 Notes: Content length must be known when pushing files to S3. This might become an issue when streaming content straight to S3.
 
@@ -353,7 +354,7 @@ Notes: Content length must be known when pushing files to S3. This might become 
 
 --
 
- There are plenty of different database services:
+## Plenty of database services
 
 - [Relational Database Service (RDS)](http://aws.amazon.com/rds/)
 - Non-relational [DynamoDB](http://aws.amazon.com/dynamodb/)
@@ -379,7 +380,7 @@ Notes: Content length must be known when pushing files to S3. This might become 
 
 ## Exercise: Put attributes to SimpleDB
 
-1. Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
+1. Complete [programming task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
 2. Find your files in S3, try to access their URL
 3. In your code, add an Access Control List (ACL) to fix object permissions (see hint in task)
 4. Try to access your files again.
@@ -397,7 +398,7 @@ Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overvie
 
 ## Exercise: SimpleDB query
 
-Complete programming [task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)
+Complete [programming task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)
 
 --
 
@@ -443,7 +444,9 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 
 ## Complete CloudFormation template
 
-[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/complete/deploy/cloudformation-templates/infrastructure-complete.template)
+workshop/initial/deploy/cloudformation-templates/
+
+[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/initial/deploy/cloudformation-templates/infrastructure-complete.template)
 
 --
 
