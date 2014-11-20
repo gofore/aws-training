@@ -19,7 +19,7 @@ We encourage you to use Vagrant, but you may also install everything on a Linux 
 
 **Windows users:** Note that Ansible is NOT available on Windows, so you will have to use Vagrant!
 
-1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/).
+1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/). (Note to Ubuntu trusty users -- Vagrant 1.4.x from the repo does not work.)
 2. Clone the git repository to your computer with `git clone https://github.com/gofore/aws-training.git` or by copying the zip file from GitHub.
 3. Copy the `credentials.csv` file you received to your working directory under the `workshop` directory and to your home directory in `.aws` directory.
 4. Run `vagrant up` in the main directory of the project, and wait until the provisioning has succeeded.
