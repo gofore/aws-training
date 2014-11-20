@@ -75,11 +75,27 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 --
 
+![AWS EU Region map](/images/aws_map_regions_eu.png)
+
+Notes: We will only use Ireland (eu-west-1) region in this workshop.
+
+--
+
 ## Networking in AWS
 
 - Regions and availability zones
 - *Security groups* provide firewalling
 - More detailed IP subnetting with [Virtual Private Cloud (VPC)](http://aws.amazon.com/vpc/)
+
+--
+
+## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
+
+- User-specific *access keys* for API access
+- Fine-grained access policies to services and resources
+- IAM *roles* to automatically allow API access within AWS.
+
+Notes: Always use roles, do not store credentials inside the instances, or [something bad](http://www.browserstack.com/attack-and-downtime-on-9-November) might happen.
 
 --
 
@@ -120,11 +136,12 @@ Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`.
 
 --
 
-## Best practices
+## Designing a cloud-friendly application
 
-- Split the application into small, **stateless**, horizontally-scalable services
-- **Loosely couple** services with queues and load balancers
+- Split the application into small, **stateless**, horizontally scalable services
+- **Loosely couple** services with queues, load balancers, service discovery
 - **Automate** infrastructure setup and application deployment
+- [12factor.net](http://12factor.net/) provides some design principles for cloud-friendly apps
 
 ---
 
@@ -149,20 +166,24 @@ Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 - Collection of libraries to operate AWS resources in Java
   - since version 1.9 the libraries are split in submodules for more fine grained dependency management
   - available in maven central
-- New object oriented resource APIs are under development
-  - https://github.com/awslabs/aws-sdk-java-resources
-- For complex resource management with the SDK see [Netflix Asgard](https://github.com/Netflix/asgard)
-  - ... but it's coded in Groovy and Grails
+- New object oriented resource APIs are [under development](https://github.com/awslabs/aws-sdk-java-resources)
+- For complex resource management with the SDK see [Netflix Asgard](https://github.com/Netflix/asgard) (...but it's coded in Groovy and Grails)
 
 --
 
-## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
-
-- User-specific *access keys* for API access
-- Fine-grained access policies to services and resources
-- IAM *roles* to automatically allow API access within AWS.
+## Using IAM credentials with the SDKs
 
 SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
+
+<pre><code data-trim="" class="java">
+public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
+    return new AWSCredentialsProviderChain(
+            new StaticCredentialsProvider(new PropertyLoaderCredentials(properties)),
+            new ProfileCredentialsProvider(),
+            new InstanceProfileCredentialsProvider()
+    );
+}
+</code></pre>
 
 --
 
@@ -279,7 +300,10 @@ Verify that you can find your queues from the management console
 1. Compile and run the `aws-workshop-ui` locally
 2. Complete programming [task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)
 3. Complete programming [task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)
-4. Run the `aws-workshop-loader` locally
+4. View your messages in the queues from the management console
+5. Run the `aws-workshop-loader` locally
+
+Notes: If you use Vagrant, you can access the web app at http://10.10.10.10:9001 on your host machine.
 
 --
 
@@ -353,18 +377,21 @@ Notes: Content length must be known when pushing files to S3. This might become 
 
 --
 
-### Let's take a look at SimpleDB
-
-- sdbtool (Firefox plugin) [code.google.com/p/sdbtool/](https://code.google.com/p/sdbtool/)
-- SdbNavigator (Chrome plugin) [www.kingsquare.nl/sdbnavigator](http://www.kingsquare.nl/sdbnavigator)
-
---
-
 ## Exercise: Put attributes to SimpleDB
 
 1. Complete programming [task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
 2. Find your files in S3, try to access their URL
-3. Fix object permissions (see hint in task)
+3. In your code, add an Access Control List (ACL) to fix object permissions (see hint in task)
+4. Try to access your files again.
+
+Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL) is a predefined ACL, but it is possible to create a fully customized ACL.
+
+--
+
+### Let's take a look into SimpleDB
+
+- sdbtool (Firefox plugin) [code.google.com/p/sdbtool/](https://code.google.com/p/sdbtool/)
+- SdbNavigator (Chrome plugin) [www.kingsquare.nl/sdbnavigator](http://www.kingsquare.nl/sdbnavigator)
 
 --
 
@@ -401,7 +428,7 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 
 ## [Elastic Load Balancer](http://aws.amazon.com/elasticloadbalancing/)
 
-- Route traffic to an Auto Scaling Group
+- Route traffic to an Auto Scaling Group (ASG)
 - Runs health checks to instances to decide whether to route traffic to them
 - Spread instances over multiple AZs for higher availability
 - ELB scales itself. Never use ELB IP address. Pre-warm before flash traffic.
@@ -430,6 +457,14 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 6. Try to make the aws-workshop-fetchers scale out
 7. Terminate instances from an auto scaling group and see what happens
 
+--
+
+## Exercise: Monkey time!
+
+![Chaos Monkey](/images/netflix-chaos-monkey.jpg)
+
+Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): terminate all of your `aws-workshop-ui` instances!
+
 ---
 
 # Summary
@@ -453,16 +488,29 @@ Complete programming [task #5](https://github.com/gofore/aws-training/tree/maste
 ## Things that we *should* have done
 
 - Set up a VPC and subnetting, proper security groups. No private IPs and no public access, no public SSH.
-- Distribute credentials by a secure path
-- Versioned jar files or golden images
+- Distribute credentials via secure path, least privileges in IAM
+- Break CloudFormation template into smaller pieces
+- Versioned jar files or golden images: Launch configuration should be static
 
 Notes: Currently new ui-instances that are born with autoscale pull the latest jar from S3. This means that the "launch configuration" is not static, and every autoscaled instance might be different.
 
 --
 
+![Build process](/images/netflix_build_legos.png)
+
+[Netflix tech blog: Building with Legos](http://techblog.netflix.com/2011/08/building-with-legos.html)
+
+--
+
+![AMI models](/images/ami-models.png)
+
+[Cloud-Powered CI and deployment](http://www.slideshare.net/AmazonWebServices/cloudpowered-continuous-integration-and-deployment-architectures-jinesh-varia)
+
+--
+
 ## Things that we *could* have done
 
-- User proper microservice architecture, no mixed usage of resources
+- Use proper microservice architecture, no shared usage of resources
 - Distribute static content from [CloudFront CDN](http://aws.amazon.com/cloudfront/)
 - Use a more supported(?) database than SimpleDB
 - [AWS::CloudFormation::Init](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
