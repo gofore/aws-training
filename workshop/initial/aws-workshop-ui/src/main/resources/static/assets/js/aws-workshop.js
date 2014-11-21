@@ -1,22 +1,22 @@
 'use strict';
 
 angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
-    .controller('QueryCtrl', ['$scope', '$http', function($scope, $http) {
-        $scope.submit = function() {
-            if ($scope.query) {
-                $http({
-                    url: '/api/queries',
-                    method: 'PUT',
-                    data: { q: $scope.query, l: 5 }
-                }).success(function (data) {
-                    $scope.status = { success: true, id: data.messageId };
-                }).error(function () {
-                    $scope.status = { error: true };
-                });
-                $scope.query = null;
-            }
-        };
-    }])
+.controller('QueryCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.submit = function() {
+        if ($scope.query) {
+            $http({
+                url: '/api/queries',
+                method: 'PUT',
+                data: { q: $scope.query, l: 5 }
+            }).success(function (data) {
+                $scope.status = { success: true, id: data.messageId };
+            }).error(function () {
+                $scope.status = { error: true };
+            });
+            $scope.query = null;
+        }
+    };
+}])
 .controller('SearchCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.items = [];
     $scope.loading = false;
@@ -45,7 +45,26 @@ angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
         });
     };
 }])
-.directive('sqs', ['$http', '$timeout', '$compile', function($http, $timeout, $compile) {
+.controller('LogsCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+    $scope.logs = [];
+    var retrieve = function() {
+        $http({
+            url: '/api/logs',
+            method: 'GET'
+        }).success(function (data) {
+            var formatted = _.map(data, function(entry) {
+                entry.logger = entry.logger.split('.').pop();
+                return entry;
+            });
+            $scope.logs = _.sortBy($scope.logs.concat(formatted), ['timestamp', 'logger', 'message']).reverse().slice(0, 50);
+            retrieve();
+        }).error(function () {
+            $timeout(retrieve, 5000);
+        });
+    };
+    retrieve();
+}])
+.directive('sqs', ['$http', '$timeout', function($http, $timeout) {
     return {
         scope: { },
         templateUrl: 'partials/sqs.html',

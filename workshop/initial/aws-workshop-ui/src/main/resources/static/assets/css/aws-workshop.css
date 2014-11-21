@@ -15,6 +15,12 @@
     min-height: 20px;
 }
 
+.panel-logs {
+    height: 200px;
+    overflow-y: scroll;
+    font-size: 80%;
+}
+
 .panel .bg-success {
     background-color: #dff0d8;
 }

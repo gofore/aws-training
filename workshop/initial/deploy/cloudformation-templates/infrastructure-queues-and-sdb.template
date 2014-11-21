@@ -24,6 +24,13 @@
         "MessageRetentionPeriod": 28800
       }
     },
+    "QueueLogs": {
+      "Type": "AWS::SQS::Queue",
+      "Properties": {
+        "ReceiveMessageWaitTimeSeconds": 20,
+        "MessageRetentionPeriod": 3600
+      }
+    },
     "ImageMetadataDomain": {
       "Type": "AWS::SDB::Domain"
     }
@@ -38,6 +45,11 @@
     "QueueUrlsUrl": {
       "Description": "The URL of the urls queue",
       "Value": { "Ref": "QueueUrls" }
+    },
+    
+    "QueueLogsUrl": {
+      "Description": "The URL of the logs queue",
+      "Value": { "Ref": "QueueLogs" }
     },
     
     "ImageMetadataDomainName": {
