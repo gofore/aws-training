@@ -252,7 +252,7 @@ Reusable, versionable infrastructure description that can be commited to source 
 ## [Simple Queue Service (SQS)](http://aws.amazon.com/sqs/)
 
 - Message queue with simple REST API
-- Scalable, reliable and persitent
+- Scalable, reliable and persistent
 - Does not rely on any existing standard (JMS, AMQP)
 - Lots of gotchas and need to knows
 
@@ -337,7 +337,7 @@ public class SqsService extends Service {
 
 - Store blob objects into *buckets* over an RESTful interface
 - Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
-- Fine-grained access control to objects
+- Several fine-grained access control mechanisms (IAM policies, bucket policies, Access Control Lists (ACLs) and query string authentication)
 - Supports static hosting of web resources
 
 --
