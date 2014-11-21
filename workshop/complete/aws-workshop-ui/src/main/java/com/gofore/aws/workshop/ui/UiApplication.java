@@ -2,11 +2,15 @@ package com.gofore.aws.workshop.ui;
 
 import javax.inject.Inject;
 
+import com.gofore.aws.workshop.common.logging.SqsLoggingContext;
+import com.gofore.aws.workshop.common.properties.ApplicationProperties;
+import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.ConfigurationResource;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.HealthCheckResource;
 import com.gofore.aws.workshop.common.rest.RestletServer;
 import com.gofore.aws.workshop.common.rest.UtfDirectory;
+import com.gofore.aws.workshop.ui.rest.LogsResource;
 import com.gofore.aws.workshop.ui.rest.QueriesResource;
 import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
 import com.gofore.aws.workshop.ui.rest.SearchResource;
@@ -24,8 +28,11 @@ public class UiApplication extends GuiceApplication {
     private static final String INDEX = "index.html";
     
     @Inject
-    public UiApplication(FinderFactory finderFactory) {
+    public UiApplication(FinderFactory finderFactory,
+                         ApplicationProperties applicationProperties,
+                         CloudFormationOutputsPropertyLoader cloudFormationProperties) {
         super(finderFactory);
+        SqsLoggingContext.create(applicationProperties, cloudFormationProperties);
     }
 
     @Override
@@ -38,6 +45,7 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
         router.attach("/api/queries", target(QueriesResource.class));
         router.attach("/api/search", target(SearchResource.class));
+        router.attach("/api/logs", target(LogsResource.class));
         router.attach("/healthcheck",target(HealthCheckResource.class));
         router.attach("/webjars", webjarsTarget());
         router.attach("/", rootRedirector).setMatchingMode(Template.MODE_EQUALS);

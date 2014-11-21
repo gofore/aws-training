@@ -2,6 +2,8 @@ package com.gofore.aws.workshop.fetcher;
 
 import javax.inject.Inject;
 
+import com.gofore.aws.workshop.common.logging.SqsLoggingContext;
+import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.HealthCheckResource;
@@ -18,13 +20,17 @@ import org.restlet.routing.Router;
 public class FetcherApplication extends GuiceApplication {
 
     @Inject
-    public FetcherApplication(CloudFormationOutputsPropertyLoader properties, FinderFactory finderFactory,
-                              SqsClient sqsClient, ImagesMessageHandler imagesMessageHandler) {
+    public FetcherApplication(ApplicationProperties applicationProperties,
+                              CloudFormationOutputsPropertyLoader cloudFormationProperties,
+                              FinderFactory finderFactory,
+                              SqsClient sqsClient,
+                              ImagesMessageHandler imagesMessageHandler) {
         super(finderFactory);
         
-        SqsService sqsService = new SqsService(sqsClient, properties.lookup("QueueUrlsUrl"))
+        SqsService sqsService = new SqsService(sqsClient, cloudFormationProperties.lookup("QueueUrlsUrl"))
                 .addMessageHandler(imagesMessageHandler);
         getServices().add(sqsService);
+        SqsLoggingContext.create(applicationProperties, cloudFormationProperties);
     }
 
     @Override

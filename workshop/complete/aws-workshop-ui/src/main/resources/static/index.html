@@ -19,10 +19,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-4">
-            <div sqs="QueueQueriesUrl"></div>
-            <div sqs="QueueUrlsUrl"></div>
-        </div>
-        <div class="col-md-8">
             <div ng-controller="QueryCtrl" ng-messages="status" class="panel panel-default">
                 <div class="panel-heading"><h2>Query</h2></div>
                 <div class="panel-body">
@@ -35,6 +31,21 @@
                 </div>
                 <div ng-message="success" class="panel-footer bg-success">Successfully sent query with message id {{ status.id }}</div>
                 <div ng-message="error" class="panel-footer bg-warning">Failed to sent query</div>
+            </div>
+            <div sqs="QueueQueriesUrl"></div>
+            <div sqs="QueueUrlsUrl"></div>
+        </div>
+        <div class="col-md-8">
+            <div ng-controller="LogsCtrl" class="panel panel-default">
+                <div class="panel-heading"><h2>Application logs</h2></div>
+                <div class="panel-body panel-logs">
+                    <div ng-repeat="entry in logs" class="row">
+                        <div class="col-md-2">{{entry.timestamp | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+                        <div class="col-md-1">{{entry.level}}</div>
+                        <div class="col-md-2">{{entry.logger}}</div>
+                        <div class="col-md-7">{{entry.message}}</div>
+                    </div>
+                </div>
             </div>
             <div ng-controller="SearchCtrl" class="panel panel-default">
                 <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
@@ -56,10 +67,10 @@
                     </div>
                     <div infinite-scroll="search(query, limit, next)"
                          infinite-scroll-disabled="loading || !next"
-                         infinite-scroll-distance="1">
+                         infinite-scroll-distance="0">
                         <div class="col-md-3 result" ng-repeat="item in items">
                             <a href="{{item.attributes.imageUrl}}">
-                                <img src="{{item.attributes.thumbnailUrl}}">
+                                <img ng-src="{{item.attributes.thumbnailUrl}}">
                                 <p>{{item.attributes.description}}</p>
                             </a>
                         </div>

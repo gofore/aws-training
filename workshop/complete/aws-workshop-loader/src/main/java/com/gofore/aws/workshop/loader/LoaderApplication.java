@@ -2,6 +2,8 @@ package com.gofore.aws.workshop.loader;
 
 import javax.inject.Inject;
 
+import com.gofore.aws.workshop.common.logging.SqsLoggingContext;
+import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
 import com.gofore.aws.workshop.common.rest.GuiceApplication;
 import com.gofore.aws.workshop.common.rest.HealthCheckResource;
@@ -19,12 +21,16 @@ import org.restlet.routing.Router;
 public class LoaderApplication extends GuiceApplication {
 
     @Inject
-    public LoaderApplication(CloudFormationOutputsPropertyLoader properties, FinderFactory finderFactory,
-                             SqsClient sqsClient, QueriesMessageHandler queriesMessageHandler) {
+    public LoaderApplication(ApplicationProperties applicationProperties,
+                             CloudFormationOutputsPropertyLoader cloudFormationProperties,
+                             FinderFactory finderFactory,
+                             SqsClient sqsClient,
+                             QueriesMessageHandler queriesMessageHandler) {
         super(finderFactory);
-        SqsService sqsService = new SqsService(sqsClient, properties.lookup("QueueQueriesUrl"))
+        SqsService sqsService = new SqsService(sqsClient, cloudFormationProperties.lookup("QueueQueriesUrl"))
                 .addMessageHandler(queriesMessageHandler);
         getServices().add(sqsService);
+        SqsLoggingContext.create(applicationProperties, cloudFormationProperties);
     }
 
     @Override
