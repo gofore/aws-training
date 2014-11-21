@@ -126,7 +126,7 @@ Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`.
 
 --
 
-![Workshop application architecture](/images/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
 
 --
 
@@ -327,13 +327,15 @@ public class SqsService extends Service {
 
 --
 
-![Workshop application architecture](/images/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
 
 ---
 
-# [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
+# Object Storage
 
 --
+
+## [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
 
 - Store blob objects into *buckets* over an RESTful interface
 - Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
@@ -350,7 +352,7 @@ Notes: Content length must be known when pushing files to S3. This might become 
 
 ---
 
-# [SimpleDB](http://aws.amazon.com/simpledb/)
+# Databases
 
 --
 
@@ -442,6 +444,10 @@ Complete [programming task #5](https://github.com/gofore/aws-training/tree/maste
 
 --
 
+![Autoscaling with alarms](/images/aws_workshop_arch_3_alarms.png)
+
+--
+
 ## Complete CloudFormation template
 
 workshop/initial/deploy/cloudformation-templates/
@@ -474,7 +480,7 @@ Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): te
 
 --
 
-![Workshop application architecture](/images/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch_4.png)
 
 --
 
