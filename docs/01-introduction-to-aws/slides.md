@@ -415,7 +415,7 @@ Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overvie
 
 ---
 
-# Really simple deployment pipeline
+# Simple deployment pipeline
 
 --
 
