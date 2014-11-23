@@ -390,7 +390,7 @@ Notes: Content length must be known when putting files to S3. This might become 
 
 --
 
-## Public HTTP access for S3 objects
+### Public HTTP access for S3 objects
 
 1. Submit a query and watch how it gets processed within the application
 2. Find your files in S3, try to access their URL
