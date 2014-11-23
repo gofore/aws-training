@@ -77,7 +77,7 @@ Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. Californi
 
 [Regions, Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
 
-Notes: We will only use Ireland (eu-west-1) region in this workshop.
+Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A Rare Peek Into The Massive Scale of AWS](http://www.enterprisetech.com/2014/11/14/rare-peek-massive-scale-aws/).
 
 --
 
