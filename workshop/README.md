@@ -1,4 +1,4 @@
-# Workshop Demo Application and Infrastructure as Code
+# Demo Application and Infrastructure as Code
 
 The workshop demo consists of a Java application that is a super crappy version of google image search utilizing
 microservice architecture and CloudFormation powered infrastructure templates.
@@ -18,4 +18,4 @@ The Java application includes three modules (micro services):
   The fetcher service handles all the hard lifting from parsing the images to storing the thumbnails to S3 and image
   metadata to simpledb.
 
-![Workshop application architecture](/images/aws_workshop_arch.png)
+![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
