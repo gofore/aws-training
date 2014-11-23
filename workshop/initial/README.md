@@ -45,7 +45,7 @@ Hint: See `com.amazonaws.services.s3.AmazonS3#putObject()` javadoc for help and 
 
 ### Task 4: Put attributes to SimpleDB
 
-The image metadata is stored to SimpleDB. It consists of thumbnail url (S3 url) `thumbnailUrl`, original image url `imageUrl`, description `description` and array of words `term` parsed from description to allow reasonable search. Your task is to map the attributes to the item and create the put request. You should return `CompletableFuture` of `Void` to allow the image processing tasks to run in parallel.
+The image metadata is stored to SimpleDB. It consists of thumbnail url (S3 url) `thumbnailUrl`, original image url `imageUrl`, description `description` and array of words `term` parsed from description to allow reasonable search. Your task is to map the attributes to the item and create the put request. Relevant code can be found at `com.gofore.aws.workshop.fetcher.images.MetadataRepository`. You should return `CompletableFuture` of `Void` to allow the image processing tasks to run in parallel.
 
 Hint: See `com.amazonaws.services.simpledb.AmazonSimpleDB#putAttributes()` and `com.amazonaws.services.simpledb.model.ReplaceableAttribute` javadoc for help. You should use `com.gofore.aws.workshop.fetcher.utils.TermsParser` to create the words from `description`.
 
