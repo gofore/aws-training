@@ -299,8 +299,10 @@ Verify that you can find your queues from the management console
 ## Exercise: Programming with SQS
 
 1. Compile and run the `aws-workshop-ui` locally
-2. Complete [programming task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)
-3. Complete [programming task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)
+2. Complete [programming task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)  
+   See `com.gofore.aws.workshop.ui.rest.QueueAttributesResource`
+3. Complete [programming task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)  
+   See `com.gofore.aws.workshop.ui.rest.QueriesResource`
 4. View your messages in the queues from the management console
 5. Run the `aws-workshop-loader` locally
 
@@ -346,9 +348,10 @@ public class SqsService extends Service {
 
 ## Exercise: Put objects to S3
 
-Complete [programming task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)
+1. Complete [programming task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)  
+   See `com.gofore.aws.workshop.fetcher.images.ThumbnailUploader`
 
-Notes: Content length must be known when pushing files to S3. This might become an issue when streaming content straight to S3.
+Notes: Content length must be known when putting files to S3. This might become an issue when streaming content straight to S3.
 
 ---
 
@@ -382,10 +385,17 @@ Notes: Content length must be known when pushing files to S3. This might become 
 
 ## Exercise: Put attributes to SimpleDB
 
-1. Complete [programming task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)
+1. Complete [programming task #4](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-4-put-attributes-to-simpledb)  
+   See `com.gofore.aws.workshop.fetcher.images.MetadataRepository`
+
+--
+
+## Public HTTP access for S3 objects
+
+1. Submit a query and watch how it gets processed within the application
 2. Find your files in S3, try to access their URL
-3. In your code, add an Access Control List (ACL) to fix object permissions (see hint in task)
-4. Try to access your files again.
+3. In your code, add an Access Control List (ACL) to fix the object permissions if you haven't already (see hint in task 3)
+4. Try to access your files again
 
 Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL) is a predefined ACL, but it is possible to create a fully customized ACL.
 
@@ -400,13 +410,22 @@ Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overvie
 
 ## Exercise: SimpleDB query
 
-Complete [programming task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)
+1. Complete [programming task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)  
+   See `com.gofore.aws.workshop.ui.rest.SearchResource`
+
+---
+
+# Really simple deployment pipeline
+
+--
+
+![Deployment pipeline](/images/deployment_pipeline.png)
 
 --
 
 ## Exercise: Deploy your .jar files to S3
 
-1. `mvn deploy` We use a Maven Ansible plugin that uploads jar files to S3.
+1. `mvn deploy`
 2. Verify that you can find your files from the management console
 
 ---
