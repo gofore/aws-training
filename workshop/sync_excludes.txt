@@ -1,0 +1,9 @@
+target/
+.idea/
+*.iml
+dependency-reduced-pom.xml
+*/QueueAttributesResource.java
+*/QueriesResource.java
+*/ThumbnailUploader.java
+*/MetadataRepository.java
+*/SearchResource.java
