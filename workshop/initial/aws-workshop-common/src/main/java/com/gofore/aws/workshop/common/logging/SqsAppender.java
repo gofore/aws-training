@@ -8,9 +8,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSCredentialsProviderChain;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.auth.EnvironmentVariableCredentialsProvider;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.SystemPropertiesCredentialsProvider;
@@ -133,7 +133,7 @@ public class SqsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> imple
         AWSCredentialsProvider credentials = new AWSCredentialsProviderChain(
                 new EnvironmentVariableCredentialsProvider(),
                 new SystemPropertiesCredentialsProvider(),
-                new StaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)),
+                new StaticCredentialsProvider(new AppenderCredentials()),
                 new ProfileCredentialsProvider(),
                 new InstanceProfileCredentialsProvider()
         );
@@ -179,6 +179,18 @@ public class SqsAppender extends UnsynchronizedAppenderBase<ILoggingEvent> imple
         } catch (InterruptedException ex) {
             Thread.currentThread().interrupt();
             addWarn("SQS executor shutdown interrupted for appender '" + name + "'", ex);
+        }
+    }
+    
+    class AppenderCredentials implements AWSCredentials {
+        @Override
+        public String getAWSAccessKeyId() {
+            return accessKey;
+        }
+
+        @Override
+        public String getAWSSecretKey() {
+            return secretKey;
         }
     }
 }

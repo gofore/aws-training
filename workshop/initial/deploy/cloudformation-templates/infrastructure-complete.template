@@ -307,7 +307,6 @@
     "QueueQueries": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "queries"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
       }
@@ -317,7 +316,6 @@
     "QueueUrls": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
-        "QueueName": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "urls"]]},
         "ReceiveMessageWaitTimeSeconds": 20,
         "MessageRetentionPeriod": 28800
       }

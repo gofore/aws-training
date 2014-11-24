@@ -103,21 +103,21 @@
             <goals>
               <goal>exec</goal>
             </goals>
+            <configuration>
+              <executable>ansible-playbook</executable>
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <arguments>
+                <argument>-i</argument>
+                <argument>localhost,</argument>
+
+                <argument>-e</argument>
+                <argument>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</argument>
+
+                <argument>${project.basedir}/deploy-artifact.yml</argument>
+              </arguments>
+            </configuration>
           </execution>
         </executions>
-        <configuration>
-          <executable>ansible-playbook</executable>
-          <workingDirectory>${project.basedir}</workingDirectory>
-          <arguments>
-            <argument>-i</argument>
-            <argument>localhost,</argument>
-
-            <argument>-e</argument>
-            <argument>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</argument>
-
-            <argument>${project.basedir}/deploy-artifact.yml</argument>
-          </arguments>
-        </configuration>
       </plugin>
     </plugins>
   </build>
