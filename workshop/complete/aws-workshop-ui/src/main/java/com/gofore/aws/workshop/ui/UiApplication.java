@@ -1,7 +1,5 @@
 package com.gofore.aws.workshop.ui;
 
-import javax.inject.Inject;
-
 import com.gofore.aws.workshop.common.logging.SqsLoggingContext;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
@@ -18,9 +16,9 @@ import com.google.inject.Singleton;
 import org.restlet.Restlet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.Directory;
-import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
-import org.restlet.routing.Template;
+
+import javax.inject.Inject;
 
 @Singleton
 public class UiApplication extends GuiceApplication {
@@ -37,9 +35,6 @@ public class UiApplication extends GuiceApplication {
 
     @Override
     public Restlet createInboundRoot() {
-        // this is a workaround for restlet not able to handle static index for classpath resources
-        Redirector rootRedirector = new Redirector(getContext(), INDEX, Redirector.MODE_CLIENT_PERMANENT);
-        
         Router router = new Router(getContext());
         router.attach("/api/properties/{name}", target(ConfigurationResource.class));
         router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
@@ -48,7 +43,6 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/logs", target(LogsResource.class));
         router.attach("/healthcheck",target(HealthCheckResource.class));
         router.attach("/webjars", webjarsTarget());
-        router.attach("/", rootRedirector).setMatchingMode(Template.MODE_EQUALS);
         router.attach("/", rootTarget());
         return router;
     }
