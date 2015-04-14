@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
+angular.module('aws', ['ngMessages', 'infinite-scroll'])
 .controller('QueryCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.submit = function() {
         if ($scope.query) {
