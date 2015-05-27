@@ -6,6 +6,11 @@
 
 ## Agenda
 
+1. **Introduction:** Main services and exercise description
+2. **Loose coupling**: Separating services with queues
+3. **Persistence:** Object storage and database
+4. **Elasticity:** Scaling resources based on demand
+
 ---
 
 

@@ -1,16 +1,24 @@
 
-## Introduction to Amazon Web Services
-### AWS Training Module 1
+## Amazon Web Services
 
 ---
 
-## Agenda
+## Training modules
 
-1. **Introduction:** Main services and exercise description
-2. **Loose coupling**: Separating services with queues
-3. **Persistence:** Object storage and database
-4. **Elasticity:** Scaling resources based on demand
+- Introduction to Amazon Web Services
+- Compute
+- Storage and Databases
+- Application Services / PaaS
+- Cloudformation - Infrastructure as code
+- Software development with AWS
+- Best Practice Architectures
+- Preparation for the Certificate exam
 
+--
+
+All material is available at GitHub
+
+[https://github.com/gofore/aws-training](https://github.com/gofore/aws-training)
 
 ---
 

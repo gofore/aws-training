@@ -1,8 +1,8 @@
 
-## Deployment
-### AWS Training Module 5
+## Software development with AWS
+### AWS Training Module 6
 
-API, SDK, Cloudformation, Deployment pipelines (TODO split)
+API, SDK, Deployment pipelines
 
 ---
 
