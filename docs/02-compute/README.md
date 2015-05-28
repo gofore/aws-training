@@ -6,6 +6,18 @@
 
 ## Agenda
 
+- EC2
+- IAM
+- VPC
+- ELB, ASG
+
+--
+
+## Prerequisites
+
+- Browser and Internet access
+- SSH client (e.g. [Putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) on Windows)
+
 ---
 
 # Elastic Compute Cloud
@@ -16,7 +28,7 @@
 
 - One of the core services of AWS
 - Virtual machines (or *instances*) as a service
-- ~20 different *instance types* that vary in performance and cost
+- Dozens of *instance types* that vary in performance and cost
 - Instance is created from an *Amazon Machine Image (AMI)*, which in turn can be created again from instances
 
 Notes: Usage is billed per *instance-hour* for running instances. Prices vary based on region, instance type, and operating system. Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
@@ -25,13 +37,15 @@ Notes: Usage is billed per *instance-hour* for running instances. Prices vary ba
 
 ![AWS Region map](/images/aws_map_regions.png)
 
+[Regions](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
+
 Notes: Regions: Frankfurt, Ireland, US East (N. Virginia), US West (N. California), US West (Oregon), South America (Sao Paulo), Tokyo, Singapore, Sydney. Special regions are **GovCloud** and **Beijing**.
 
 --
 
 ![AWS EU Region map](/images/aws_map_regions_eu.png)
 
-[Regions, Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html) and CDN [Edge Locations](http://aws.amazon.com/about-aws/global-infrastructure/)
+[Regions and Availability Zones (AZ)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 
 Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A Rare Peek Into The Massive Scale of AWS](http://www.enterprisetech.com/2014/11/14/rare-peek-massive-scale-aws/).
 
@@ -40,33 +54,105 @@ Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A
 ## Networking in AWS
 
 - Regions and availability zones
-- *Security groups* provide firewalling
+- *Security groups* provide port-level firewalls to instances
 - More detailed IP subnetting with [Virtual Private Cloud (VPC)](http://aws.amazon.com/vpc/)
+
+--
+
+## Exercise: Launch an EC2 instance
+
+1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console)
+2. Switch to Ireland region and go to EC2 dashboard
+3. Launch a new EC2 instance according to instructions
+4. During *"Step 3: Configure Instance Details"*, pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) under Advanced
+
+--
+
+<pre><code data-trim="" class="shell">
+#!/bin/sh
+touch /new_empty_file_we_created.txt
+echo "It works!" > /it_works.txt
+</code></pre>
+
+--
+
+## Exercise: Launch an EC2 instance
+
+SSH into the instance (find the IP address in the EC2 console)
+
+    # Putty users must convert key to .ppk
+    ssh -i your_ssh_key.pem ubuntu@instance_ip_address
+
+View instance metadata
+
+    curl http://169.254.169.254/latest/meta-data/
+
+View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) and find the changes your script made
+
+    curl http://169.254.169.254/latest/user-data/
+    ls -la /
+
+
+Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+
+---
+
+# Identity and Access Management
 
 --
 
 ## [Identity and Access Management (IAM)](http://aws.amazon.com/iam/)
 
-- User-specific *access keys* for API access
-- Fine-grained access policies to services and resources
-- IAM *roles* to automatically allow API access within AWS.
+- Manage AWS user [*credentials*](http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html) for Web console and API access
+- Fine-grained access [*policies*](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies.html) to services and resources
+- Provide temporary access with [*roles*](http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html)
 
 Notes: Always use roles, do not store credentials inside the instances, or [something bad](http://www.browserstack.com/attack-and-downtime-on-9-November) might happen.
 
 --
 
-## Exercise: Launch an instance
+## Users on many levels
 
-1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console)
-2. Go to EC2 dashboard and switch to Ireland region
-3. Pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) (configure instance -> advanced)
-4. `ssh -i your_key.pem ubuntu@instance_hostname`
-5. `curl http://169.254.169.254/latest/user-data/`
-6. `curl http://169.254.169.254/latest/meta-data/`
-
-Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+Imagine running a discussion board in EC2. On how many different levels you might have user accounts?
 
 
+---
+
+# Virtual Private Cloud
+
+--
+
+## [Virtual Private Cloud (VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html)
+
+- Heavy-weight virtual IP networking for EC2 and RDS instances. Integral part of AWS, all instances are launched into VPCs
+- An AWS root account can have many VPCs, each in a specific region
+- Each VPC is divided into [*subnets*](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html). Each subnet is in a specific availability zone
+- Each instance connects to a subnet with a Elastic Network Interface
+
+--
+
+![VPC with Public and Private Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/images/nat-instance-diagram.png)
+
+[VPC with Public and Private Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html)
+
+--
+
+![VPC with Public and Private Subnets and Hardware VPN Access](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/images/Case3_Diagram.png)
+
+[VPC with Public and Private Subnets and Hardware VPN Access](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario3.html)
+
+--
+
+## Recap
+
+- Instance and Elastic Network Interface
+- Region and Availability Zone
+- VPC and Subnet
+- ACL and Security Group
+- Internet Gateway, Virtual Private Gateway, NAT instance
+
+
+---
 
 # [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html)
 
