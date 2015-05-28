@@ -1,7 +1,7 @@
 
-![AWS Training](/images/banner.png)
+![Amazon Web Services Training](/images/banner.png)
 
-# AWS Training
+# Amazon Web Services Training
 
 This is a two-day course that teaches the basics of [Amazon Web Services](http://aws.amazon.com). The content is split into individual modules. As a whole, the course focuses on EC2, VPC, IAM, RDS, S3 and CloudFormation with brief looks into rest of the services.
 
