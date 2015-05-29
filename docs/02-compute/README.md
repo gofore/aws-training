@@ -229,3 +229,26 @@ Provisioning capacity as needed
 ![Chaos Monkey](/images/netflix-chaos-monkey.jpg)
 
 Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): terminate all of your `aws-workshop-ui` instances!
+
+---
+
+# Public networking
+
+--
+
+- [Route 53](http://aws.amazon.com/route53/) Domain Name System (DNS)
+- [CloudFront](http://aws.amazon.com/cloudfront/) Content Delivery Network (CDN)
+- [Elastic IP](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+
+---
+
+# Recap
+
+--
+
+## Recap
+
+- [EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html): Region, Availability Zone, Instance, Security group, AMI, [EBS](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html) volume, EBS snapshot, Instance store
+- [IAM](http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_Introduction.html): User, User group, Policy, Permission, Role, API access key, Root account
+- [VPC](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html): VPC, Subnet, Route table, ACL, NAT instance, Internet gateway, Virtual Private gateway
+- [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html): Auto Scaling Group, Launch configuration, Scaling policy, [Elastic Load Balancer](http://docs.aws.amazon.com/ElasticLoadBalancing/latest/DeveloperGuide/elastic-load-balancing.html)
