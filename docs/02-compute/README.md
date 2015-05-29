@@ -27,11 +27,9 @@
 ## [Elastic Compute Cloud (EC2)](http://aws.amazon.com/ec2/)
 
 - One of the core services of AWS
-- Virtual machines (or *instances*) as a service
-- Dozens of *instance types* that vary in performance and cost
-- Instance is created from an *Amazon Machine Image (AMI)*, which in turn can be created again from instances
-
-Notes: Usage is billed per *instance-hour* for running instances. Prices vary based on region, instance type, and operating system. Purchasing options include *On-Demand Instances*, *Reserved Instances*, *Spot Instances*
+- Virtual machines (or [*instances*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Instances.html)) as a service
+- Dozens of [*instance types*](http://aws.amazon.com/ec2/instance-types/) that vary in performance and cost
+- Instance is created from an [*Amazon Machine Image (AMI)*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIs.html), which in turn can be created again from instances
 
 --
 
@@ -54,7 +52,7 @@ Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A
 ## Networking in AWS
 
 - Regions and availability zones
-- *Security groups* provide port-level firewalls to instances
+- [*Security groups*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) provide port-level firewalls to instances
 - More detailed IP subnetting with [Virtual Private Cloud (VPC)](http://aws.amazon.com/vpc/)
 
 --
@@ -92,8 +90,24 @@ View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-
     curl http://169.254.169.254/latest/user-data/
     ls -la /
 
-
 Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+
+--
+
+## [Elastic Block Store (EBS)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html)
+
+- Block storage service (virtual hard drives)
+- Disks (or [*volumes*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)) are attached to instances
+- [*Snapshots*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html) can be taken from volumes
+
+--
+
+## Cost
+
+- Instances are billed every starting [*instance-hour*](http://aws.amazon.com/ec2/pricing/)
+- Purchasing options of [*On-Demand Instances*, *Reserved Instances*, *Spot Instances*](http://aws.amazon.com/ec2/purchasing-options/)
+- Storage costs for volumes, snapshots and images
+- Traffic costs (more the further the traffic is towards the Internet)
 
 ---
 
@@ -155,6 +169,25 @@ Imagine running a discussion board in EC2. On how many different levels you migh
 ---
 
 # [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/WhatIsAutoScaling.html)
+
+--
+
+![Static provisioning](/images/provisioning_static.png)
+
+Problem of traditional capacity planning
+
+--
+
+![Elastic provisioning](/images/provisioning_elastic.png)
+
+Provisioning capacity as needed
+
+--
+
+- Vertical scaling (*scale up, scale down*)
+- Horizontal scaling (scale out, scale in)
+
+- 1 instance 5 hours = 5 instances 1 hour
 
 --
 
