@@ -6,10 +6,10 @@
 
 ## Agenda
 
-- EC2
-- IAM
-- VPC
-- ELB, ASG
+- Virtual machines
+- Access management
+- Virtual networks
+- Auto Scaling and Load-balancing
 
 --
 

@@ -6,28 +6,8 @@
 
 ## Agenda
 
----
-
-
-# Object Storage
-
---
-
-## [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
-
-- Store blob objects into *buckets* over an RESTful interface
-- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
-- Several fine-grained access control mechanisms (IAM policies, bucket policies, Access Control Lists (ACLs) and query string authentication)
-- Supports static hosting of web resources
-
---
-
-## Exercise: Put objects to S3
-
-1. Complete [programming task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)  
-   See `com.gofore.aws.workshop.fetcher.images.ThumbnailUploader`
-
-Notes: Content length must be known when putting files to S3. This might become an issue when streaming content straight to S3.
+- Databases
+- Object Storage
 
 ---
 
@@ -42,6 +22,30 @@ Notes: Content length must be known when putting files to S3. This might become 
 - [Redshift](http://aws.amazon.com/redshift/) petabyte-scale data warehouse
 - [ElastiCache](http://aws.amazon.com/elasticache/) in-memory caching
 - ...Oh, and [SimpleDB](http://aws.amazon.com/simpledb/)
+
+---
+
+# Relational Database Service
+
+--
+
+## [Relational Database Service (RDS)](http://aws.amazon.com/rds/)
+
+- MySQL, PostgreSQL, Oracle, Microsoft SQL Server, AWS Aurora
+- Auto-upgrade, Auto-backup, Highly available
+
+
+--
+
+## Demo: Database under 5 minutes
+
+--
+
+
+
+
+
+
 
 --
 
@@ -88,4 +92,26 @@ Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overvie
 
 1. Complete [programming task #5](https://github.com/gofore/aws-training/tree/master/workshop/complete#task-5-simpledb-query)  
    See `com.gofore.aws.workshop.ui.rest.SearchResource`
+
+---
+
+# Object Storage
+
+--
+
+## [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
+
+- Store blob objects into *buckets* over an RESTful interface
+- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
+- Several fine-grained access control mechanisms (IAM policies, bucket policies, Access Control Lists (ACLs) and query string authentication)
+- Supports static hosting of web resources
+
+--
+
+## Exercise: Put objects to S3
+
+1. Complete [programming task #3](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-3-put-object-to-s3)  
+   See `com.gofore.aws.workshop.fetcher.images.ThumbnailUploader`
+
+Notes: Content length must be known when putting files to S3. This might become an issue when streaming content straight to S3.
 

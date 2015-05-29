@@ -6,6 +6,9 @@
 
 ## Agenda
 
+- Message queues (SQS)
+- Notifications (SNS)
+- E-mail (SES)
 
 ---
 
