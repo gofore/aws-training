@@ -44,3 +44,9 @@ All course material is available at GitHub
 ![AWS Services in this course](/images/aws_list_of_services_opinionated.png)
 
 [AWS Services](http://aws.amazon.com/products/)
+
+--
+
+![Shared responsibility model](http://d0.awsstatic.com/logos/compliance/shared_responsibility.jpg)
+
+[Shared responsibility model](http://d0.awsstatic.com/logos/compliance/shared_responsibility.jpg)

@@ -7,7 +7,7 @@
 ## Agenda
 
 - Virtual machines
-- Access management
+- Identity and Access management
 - Virtual networks
 - Auto Scaling and Load-balancing
 
@@ -64,8 +64,6 @@ Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A
 3. Launch a new EC2 instance according to instructions
 4. During *"Step 3: Configure Instance Details"*, pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) under Advanced
 
---
-
 <pre><code data-trim="" class="shell">
 #!/bin/sh
 touch /new_empty_file_we_created.txt
@@ -99,10 +97,11 @@ Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`.
 - Block storage service (virtual hard drives)
 - Disks (or [*volumes*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)) are attached to instances
 - [*Snapshots*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html) can be taken from volumes
+- Alternative to EBS is ephemeral [*instance store*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html)
 
 --
 
-## Cost
+## EC2 cost
 
 - Instances are billed every starting [*instance-hour*](http://aws.amazon.com/ec2/pricing/)
 - Purchasing options of [*On-Demand Instances*, *Reserved Instances*, *Spot Instances*](http://aws.amazon.com/ec2/purchasing-options/)
@@ -127,7 +126,7 @@ Notes: Always use roles, do not store credentials inside the instances, or [some
 
 ## Users on many levels
 
-Imagine running a discussion board in EC2. On how many different levels you might have user accounts?
+Imagine running a content management system, discussion board or blog web application in EC2. How many **different types** of user accounts you might have?
 
 
 ---
