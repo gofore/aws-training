@@ -125,7 +125,7 @@
                 <argument>localhost,</argument>
 
                 <argument>-e</argument>
-                <argument>{"user_name":"${aws.user}","artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</argument>
+                <argument>{"artifact_basedir":"${project.build.directory}","artifact":"${project.build.finalName}.jar"}</argument>
 
                 <argument>${project.basedir}/deploy-artifact.yml</argument>
               </arguments>
