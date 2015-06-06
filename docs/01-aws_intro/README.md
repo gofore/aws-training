@@ -5,14 +5,14 @@
 
 ## Training modules
 
-- Introduction to Amazon Web Services
-- Compute
-- Storage and Databases
-- Application Services / PaaS
-- Cloudformation - Infrastructure as code
-- Software development with AWS
-- Best Practice Architectures
-- Preparation for the Certificate exam
+- M1 Introduction to Amazon Web Services
+- M2 Compute
+- M3 Storage and Databases
+- M4 Application Services / PaaS
+- M5 Cloudformation - Infrastructure as code
+- M6 Software development with AWS
+- M7 Best Practice Architectures
+- M90 Preparation for the Certificate exam
 
 --
 
@@ -43,7 +43,7 @@ All course material is available at GitHub
 
 ![AWS Services in this course](/images/aws_list_of_services_opinionated.png)
 
-[AWS Services](http://aws.amazon.com/products/)
+Selected subset of [AWS Services](http://aws.amazon.com/products/)
 
 --
 

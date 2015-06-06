@@ -128,7 +128,6 @@ Notes: Always use roles, do not store credentials inside the instances, or [some
 
 Imagine running a content management system, discussion board or blog web application in EC2. How many **different types** of user accounts you might have?
 
-
 ---
 
 # Virtual Private Cloud
@@ -163,7 +162,6 @@ Imagine running a content management system, discussion board or blog web applic
 - VPC and Subnet
 - ACL and Security Group
 - Internet Gateway, Virtual Private Gateway, NAT instance
-
 
 ---
 

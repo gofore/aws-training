@@ -62,3 +62,16 @@
 1. Create an S3 bucket and upload files into it
 2. View the files in S3 and try to access their URL
 3. Fix permissions so that the files are publicly accessible
+
+
+---
+
+# Recap
+
+### M2 and M3
+
+--
+
+![How would you improve the following architecture?](/images/improvable_architecture.png)
+
+How would you improve the following architecture?

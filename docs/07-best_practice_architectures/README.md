@@ -29,6 +29,9 @@
 --
 
 ![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
+
+--
+
 ![Workshop application architecture](/images/aws_workshop_arch_4.png)
 
 --
