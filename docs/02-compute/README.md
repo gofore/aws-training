@@ -60,35 +60,61 @@ Notes: We will only use Ireland (eu-west-1) region in this workshop. See also [A
 ## Exercise: Launch an EC2 instance
 
 1. Log-in to [gofore-crew.signin.aws.amazon.com/console](https://gofore-crew.signin.aws.amazon.com/console)
-2. Switch to Ireland region and go to EC2 dashboard
-3. Launch a new EC2 instance according to instructions
-4. During *"Step 3: Configure Instance Details"*, pass a shell script as [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) under Advanced
+2. Switch to **Ireland** region and go to EC2 dashboard
+3. Launch a new EC2 instance according instructor guidance
+  - In *"Configure Instance Details"*, pass a [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) script under *Advanced*
+  - In *"Configure Security Group"*, use a recognizable, unique name
 
 <pre><code data-trim="" class="shell">
 #!/bin/sh
+# When passed as User Data, this script will be run on boot
 touch /new_empty_file_we_created.txt
 echo "It works!" > /it_works.txt
 </code></pre>
 
 --
 
-## Exercise: Launch an EC2 instance
+## Exercise: SSH into the instance
 
-SSH into the instance (find the IP address in the EC2 console)
+- SSH into the instance (find the IP address in the EC2 console)
 
-    # Putty users must convert key to .ppk
-    ssh -i your_ssh_key.pem ubuntu@instance_ip_address
+      # Windows Putty users must convert key to .ppk (see notes)
+      ssh -i your_ssh_key.pem ubuntu@instance_ip_address
 
-View instance metadata
+- View instance metadata
 
-    curl http://169.254.169.254/latest/meta-data/
+      curl http://169.254.169.254/latest/meta-data/
 
-View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) and find the changes your script made
+- View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) and find the changes your script made
 
-    curl http://169.254.169.254/latest/user-data/
-    ls -la /
+      curl http://169.254.169.254/latest/user-data/
+      ls -la /
 
-Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html)
+Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) (Conversions -> Import key -> *.pem file -> Save private key. Now you can use your *.ppk key with Putty: Connection -> SSH -> Auth -> Private key file)
+
+--
+
+## Exercise: Security groups
+
+- Setup a web server that hosts the id of the instance
+
+      mkdir ~/webserver && cd ~/webserver
+      curl http://169.254.169.254/latest/meta-data/instance-id > index.html
+      python -m SimpleHTTPServer
+
+- Configure the security group of your instance to allow inbound requests to your web server from **anywhere**. Check that you can access the page with your browser.
+
+--
+
+## Exercise: Security groups
+
+- Delete the previous rule. Ask a neighbor for the name of their security group, and allow requests to your server from your **neighbor's security group**.
+- Have your neighbor access your web server from his/her instance.
+
+      # Private IP address of the web server
+      curl 172.31.10.200:8000
+      # Public IP address of the web server
+      curl 52.16.200.200:8000
 
 --
 
@@ -124,7 +150,7 @@ Notes: Always use roles, do not store credentials inside the instances, or [some
 
 --
 
-## Users on many levels
+## Quiz: Users on many levels
 
 Imagine running a content management system, discussion board or blog web application in EC2. How many **different types** of user accounts you might have?
 
@@ -162,6 +188,17 @@ Imagine running a content management system, discussion board or blog web applic
 - VPC and Subnet
 - ACL and Security Group
 - Internet Gateway, Virtual Private Gateway, NAT instance
+
+--
+
+## Quiz: Separating environments
+
+You have *Development* and *Production* environments.
+
+Both of them have *web servers* and *database servers*.
+
+How would you separate them?
+
 
 ---
 
