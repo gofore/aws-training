@@ -77,7 +77,7 @@ public class CloudFormationClient {
     public CompletableFuture<Stack> getStackWhen(String stackName, String... statuses) {
         DescribeStacksRequest request = new DescribeStacksRequest().withStackName(stackName);
         return describeStacks(request).thenApply(firstStack()).thenComposeAsync(stack -> {
-            if (ImmutableSet.copyOf(statuses).contains(stack.getStackStatus())) {
+            if (ImmutableSet.copyOf(statuses).contains(stack.getStackStatus()) && !stack.getOutputs().isEmpty()) {
                 return CompletableFuture.completedFuture(stack);
             } else {
                 Threads.sleep(1000);
