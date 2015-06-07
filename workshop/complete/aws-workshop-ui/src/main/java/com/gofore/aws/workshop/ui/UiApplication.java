@@ -3,11 +3,7 @@ package com.gofore.aws.workshop.ui;
 import com.gofore.aws.workshop.common.logging.SqsLoggingContext;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.CloudFormationOutputsPropertyLoader;
-import com.gofore.aws.workshop.common.rest.ConfigurationResource;
-import com.gofore.aws.workshop.common.rest.GuiceApplication;
-import com.gofore.aws.workshop.common.rest.HealthCheckResource;
-import com.gofore.aws.workshop.common.rest.RestletServer;
-import com.gofore.aws.workshop.common.rest.UtfDirectory;
+import com.gofore.aws.workshop.common.rest.*;
 import com.gofore.aws.workshop.ui.rest.LogsResource;
 import com.gofore.aws.workshop.ui.rest.QueriesResource;
 import com.gofore.aws.workshop.ui.rest.QueueAttributesResource;
@@ -16,7 +12,9 @@ import com.google.inject.Singleton;
 import org.restlet.Restlet;
 import org.restlet.ext.guice.FinderFactory;
 import org.restlet.resource.Directory;
+import org.restlet.routing.Redirector;
 import org.restlet.routing.Router;
+import org.restlet.routing.Template;
 
 import javax.inject.Inject;
 
@@ -35,6 +33,9 @@ public class UiApplication extends GuiceApplication {
 
     @Override
     public Restlet createInboundRoot() {
+        // this is a workaround for restlet not able to handle static index for classpath resources
+        Redirector rootRedirector = new Redirector(getContext(), INDEX, Redirector.MODE_CLIENT_PERMANENT);
+
         Router router = new Router(getContext());
         router.attach("/api/properties/{name}", target(ConfigurationResource.class));
         router.attach("/api/queues/{name}", target(QueueAttributesResource.class));
@@ -43,6 +44,7 @@ public class UiApplication extends GuiceApplication {
         router.attach("/api/logs", target(LogsResource.class));
         router.attach("/healthcheck",target(HealthCheckResource.class));
         router.attach("/webjars", webjarsTarget());
+        router.attach("/", rootRedirector).setMatchingMode(Template.MODE_EQUALS);
         router.attach("/", rootTarget());
         return router;
     }
