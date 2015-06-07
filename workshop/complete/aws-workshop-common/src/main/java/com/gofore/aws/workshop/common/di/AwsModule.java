@@ -1,8 +1,5 @@
 package com.gofore.aws.workshop.common.di;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.AWSCredentialsProviderChain;
@@ -30,6 +27,9 @@ import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AwsModule implements Module {
 
@@ -132,8 +132,9 @@ public class AwsModule implements Module {
     
     @Provides
     @Singleton
-    public CloudFormationClient cloudFormationClient(AmazonCloudFormationAsync cloudFormation) {
-        return new CloudFormationClient(cloudFormation);
+    public CloudFormationClient cloudFormationClient(AmazonCloudFormationAsync cloudFormation,
+                                                     ExecutorService executor) {
+        return new CloudFormationClient(cloudFormation, executor);
     }
     
     /**

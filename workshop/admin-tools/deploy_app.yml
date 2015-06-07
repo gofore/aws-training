@@ -10,10 +10,10 @@
     - bucket_name: aws-workshop-demo
   tasks:
   - name: Ensure that application user exists
-    user: name={{ user_name }}
+    user: name={{ stack_name }}
 
   - name: Ensure application path exists
-    file: path=/opt/{{ app_name }} state=directory mode=0755 owner={{ user_name }} group={{ user_name }}
+    file: path=/opt/{{ app_name }} state=directory mode=0755 owner={{ stack_name }} group={{ stack_name }}
 
   - name: Download latest application from S3
     command: aws s3 cp --region eu-west-1 s3://aws-workshop-demo/artifacts/{{ app_name }}.jar /opt/{{ app_name }}/{{ app_name }}.jar

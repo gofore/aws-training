@@ -12,6 +12,11 @@ public class ApplicationProperties extends AbstractPropertyLoader {
         return this;
     }
 
+    public ApplicationProperties withEnvironmentPropertyLoader() {
+        chain.add(new EnvironmentPropertyLoader());
+        return this;
+    }
+
     public ApplicationProperties withAwsCredentialsEnvLoader() {
         chain.add(new AwsCredentialsEnvLoader());
         return this;

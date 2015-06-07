@@ -24,12 +24,12 @@
       "Description": "AMI ID to be used with all the instances",
       "Type": "String"
     },
-    "UserEmail": {
+    "Email": {
       "Description": "Email address to notify if there are any scaling operations",
       "Type": "String"
     },
-    "UserName": {
-      "Description": "Username to identify resources created by different users",
+    "StackName": {
+      "Description": "Stack name to identify resources created by different users",
       "Type": "String"
     },
     "KeyName": {
@@ -53,7 +53,7 @@
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "Subscription": [{
-            "Endpoint": { "Ref": "UserEmail" },
+            "Endpoint": { "Ref": "Email" },
             "Protocol": "email" }]
       }
     },
@@ -65,7 +65,7 @@
         "MinSize": "1",
         "MaxSize": "3",
         "LoadBalancerNames": [ { "Ref": "UIElasticLoadBalancer" } ],
-        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"ui"]]}, "PropagateAtLaunch": true }],
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "StackName" },"ui"]]}, "PropagateAtLaunch": true }],
         "NotificationConfiguration": {
           "TopicARN": { "Ref": "UIAutoScalingNotificationTopic" },
           "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
@@ -84,7 +84,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-ui\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"stack_name=",{ "Ref": "StackName" }," app_name=aws-workshop-ui\" deploy_app.yml >> bootstrap.log\n"
           ]]}},
         "SecurityGroups": [ { "Ref": "UISecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
@@ -152,7 +152,7 @@
     "UIElasticLoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
       "Properties": {
-        "LoadBalancerName": { "Ref": "UserName" },
+        "LoadBalancerName": { "Ref": "StackName" },
         "AvailabilityZones": { "Fn::GetAZs": "" },
         "Listeners": [ {
           "LoadBalancerPort": "80",
@@ -198,7 +198,7 @@
       "Type": "AWS::EC2::Instance",
       "Properties": {
         "ImageId": { "Ref": "AmiId" },
-        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" }, "loader"]]}}],
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "StackName" }, "loader"]]}}],
         "KeyName": { "Ref": "KeyName" },
         "SecurityGroups": [ { "Ref": "LoaderSecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
@@ -207,7 +207,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-loader\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"stack_name=",{ "Ref": "StackName" }," app_name=aws-workshop-loader\" deploy_app.yml >> bootstrap.log\n"
           ]]}}
       }
     },
@@ -235,7 +235,7 @@
       "Type": "AWS::SNS::Topic",
       "Properties": {
         "Subscription": [{
-            "Endpoint": { "Ref": "UserEmail" },
+            "Endpoint": { "Ref": "Email" },
             "Protocol": "email" }]
       }
     },
@@ -246,7 +246,7 @@
         "LaunchConfigurationName": { "Ref": "FetcherLaunchConfig" },
         "MinSize": "1",
         "MaxSize": "3",
-        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "UserName" },"fetcher"]]}, "PropagateAtLaunch": true }],
+        "Tags": [{ "Key": "Name", "Value": { "Fn::Join": ["-", ["aws-workshop", { "Ref": "StackName" },"fetcher"]]}, "PropagateAtLaunch": true }],
         "NotificationConfiguration": {
           "TopicARN": { "Ref": "FetcherAutoScalingNotificationTopic" },
           "NotificationTypes": [ "autoscaling:EC2_INSTANCE_LAUNCH",
@@ -265,7 +265,7 @@
           "#!/bin/bash\n",
           "cd /tmp/\n",
           "aws s3 cp --region eu-west-1 s3://aws-workshop-demo/tools/bootstrap/deploy_app.yml deploy_app.yml >> bootstrap.log\n",
-          "ansible-playbook -v -i localhost, -e \"user_name=",{ "Ref": "UserName" }," app_name=aws-workshop-fetcher\" deploy_app.yml >> bootstrap.log\n"
+          "ansible-playbook -v -i localhost, -e \"stack_name=",{ "Ref": "StackName" }," app_name=aws-workshop-fetcher\" deploy_app.yml >> bootstrap.log\n"
           ]]}},
         "SecurityGroups": [ { "Ref": "FetcherSecurityGroup" } ],
         "InstanceType": { "Ref": "InstanceType" },
