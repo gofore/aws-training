@@ -40,7 +40,7 @@ public class AwsModule implements Module {
     
     @Provides
     public ExecutorService executor() {
-        return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        return Executors.newFixedThreadPool(15);
     }
 
     /**
