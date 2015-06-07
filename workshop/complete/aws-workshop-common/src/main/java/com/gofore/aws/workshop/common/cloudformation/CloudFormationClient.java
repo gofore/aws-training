@@ -19,6 +19,12 @@ import static com.gofore.aws.workshop.common.functional.Lists.findFirst;
 
 public class CloudFormationClient {
 
+    private static final String[] STACK_COMPLETION_STATUSES = {
+            "CREATE_FAILED", "CREATE_COMPLETE",
+            "ROLLBACK_FAILED", "ROLLBACK_COMPLETE",
+            "UPDATE_COMPLETE", "UPDATE_ROLLBACK_FAILED", "UPDATE_ROLLBACK_COMPLETE"
+    };
+
     private final AmazonCloudFormationAsync cloudFormation;
     private final ExecutorService executor;
 
@@ -50,7 +56,7 @@ public class CloudFormationClient {
      * @return future of stack's outputs or failed future if stack does not exist
      */
     public CompletableFuture<List<Output>> getStackOutputs(String stackName) {
-        return getStackWhen(stackName, "CREATE_COMPLETE", "UPDATE_COMPLETE")
+        return getStackWhen(stackName, STACK_COMPLETION_STATUSES)
                 .thenApply(Stack::getOutputs);
     }
 
