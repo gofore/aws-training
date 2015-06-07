@@ -9,7 +9,7 @@
   connection: local
   vars:
     - template_file: cloudformation-templates/infrastructure-complete.template
-    - ami_id: ami-828334f5
+    - ami_id: ami-a90f70de
     - instance_type: t2.micro
     - region: eu-west-1
   tasks:
