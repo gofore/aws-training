@@ -1,18 +1,16 @@
 
-![AWS for Developers](/images/banner.png)
+![Amazon Web Services Training](/images/banner.png)
 
-# AWS for Developers
+# Amazon Web Services Training
 
-Welcome to *AWS for Developers* workshop!
+This is a two-day course that teaches the basics of [Amazon Web Services](http://aws.amazon.com). The content is split into individual modules. As a whole, the course focuses on EC2, VPC, IAM, RDS, S3 and CloudFormation, with brief looks into rest of the services.
 
-This is a one-day workshop that teaches the basics of [Amazon Web Services](http://aws.amazon.com) via the Java SDK. We will develop a Java web application that consists of several backend services, and we will deploy it to AWS as an auto-scaling cluster of servers.
-
-AWS services that will be introduced during this workshop include EC2, S3, SimpleDB, SQS, CloudFormation and IAM.
+The course guides participants roughly towards the [Solutions Architect certification](http://aws.amazon.com/certification/certified-solutions-architect-associate/), but expands slightly more towards software development, than what is required in the certification. In the later modules, we will take a look at a Java web application that consists of several backend services, and we will deploy it to AWS as an auto-scaling cluster of servers.
 
 ## Getting started
 
-See the [Getting Started](docs/getting_started.md) for information on how to prepare for the workshop and how to set up your tools.
+For modules 1-5, a laptop with a browser and SSH client is enough. Modules 6-7 include programming assignments that require JDK 8, IDE and Ansible. See the [Getting Started](docs/getting_started.md) for information on how to prepare for the programming workshop and how to set up your tools.
 
 ## Presentation slides
 
-Follow the [presentation online](docs/01-introduction-to-aws/slides.md) (or run `./start_presentation.sh`).
+View the [presentation content](docs/) (or run `./start_presentation.sh`).

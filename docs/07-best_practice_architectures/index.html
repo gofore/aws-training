@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <link rel="shortcut icon" href="../presentation_data/favicon.ico">
+        <title>AWS Training M7</title>
+        <link rel="stylesheet" href="../presentation_data/reveal.js-3.0.0/css/reveal.css">
+        <link rel="stylesheet" href="../presentation_data/reveal.js-3.0.0/css/theme/night.css" id="theme">
+        <link rel="stylesheet" href="../presentation_data/reveal.js-3.0.0/lib/css/monokai_sublime.css">
+        <link rel="stylesheet" href="../presentation_data/css/gofore.css">
+        <link rel="stylesheet" href="../presentation_data/css/custom.css">
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown="README.md"
+                         data-separator="^\n---\n$"
+                         data-separator-vertical="^\n--\n$"
+                         data-separator-notes="^Notes:">
+                </section>
+            </div>
+        </div>
+
+        <script src="../presentation_data/reveal.js-3.0.0/lib/js/head.min.js"></script>
+        <script src="../presentation_data/reveal.js-3.0.0/js/reveal.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                width: 1280,
+                height: 768,
+                transition: 'linear',
+                dependencies: [
+                    { src: '../presentation_data/reveal.js-3.0.0/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../presentation_data/reveal.js-3.0.0/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: '../presentation_data/reveal.js-3.0.0/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: '../presentation_data/reveal.js-3.0.0/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                    ]
+            });
+        </script>
+    </body>
+</html>

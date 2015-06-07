@@ -4,4 +4,6 @@ target
 dependency-reduced-pom.xml
 credentials.csv
 *.pem
+*.ppk
+*.pub
 .vagrant
