@@ -45,6 +45,28 @@ angular.module('aws', ['ngMessages', 'infinite-scroll'])
         });
     };
 }])
+.controller('AsgCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.instances = [];
+    $scope.scaling = function(ip) {
+        if (!ip) {
+            $http({
+                url: '/api/scaling',
+                method: 'GET'
+            }).success(function (data) {
+                $scope.instances = data;
+            });
+        } else {
+            $http({
+                url: '/api/scaling',
+                method: 'PUT',
+                params: { ip: ip }
+            }).success(function (data) {
+
+            });
+        }
+    };
+    $scope.scaling();
+}])
 .controller('LogsCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     $scope.logs = [];
     var retrieve = function() {

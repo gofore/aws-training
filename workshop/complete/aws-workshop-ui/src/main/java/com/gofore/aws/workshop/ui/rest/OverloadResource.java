@@ -21,12 +21,12 @@ public class OverloadResource extends RestServerResource {
 
     @Get("json")
     public OverloadStatus getOverloadStatus() {
-        return new OverloadStatus("10" /*getPrivateIp()*/, overloader.isOverloading());
+        return new OverloadStatus(getPrivateIp(), overloader.isOverloading());
     }
 
     @Put("json")
     public OverloadStatus toggleOverload() {
-        return new OverloadStatus("10" /*getPrivateIp()*/, overloader.toggleOverload());
+        return new OverloadStatus(getPrivateIp(), overloader.toggleOverload());
     }
 
     private String getPrivateIp() {

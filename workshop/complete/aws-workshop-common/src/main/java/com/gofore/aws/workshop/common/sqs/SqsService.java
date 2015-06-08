@@ -68,6 +68,9 @@ public class SqsService extends Service {
                                 .map(this::completeMessage)
                                 .map(this::deleteMessage);
                         sequence(messages).join();
+
+                        // artificial slow down to allow scaling to happen
+                        Threads.sleep(10000);
                     } catch (RuntimeException ex) {
                         LOGGER.warn("SQS receive or message handling failed", ex);
                         Threads.sleep(WAIT_AFTER_FAILURE_MILLIS);

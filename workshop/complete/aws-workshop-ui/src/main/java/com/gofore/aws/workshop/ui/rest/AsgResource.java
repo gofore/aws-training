@@ -48,7 +48,7 @@ public class AsgResource extends RestServerResource {
             String ip = getQueryValueAsString("ip").get();
             HttpURLConnection connection = (HttpURLConnection) getOverloadUrl(ip).openConnection();
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod("PUT");
             return om.readValue(connection.getInputStream(), OverloadResource.OverloadStatus.class);
         } catch (IOException ex) {
             throw  new RuntimeException(ex);

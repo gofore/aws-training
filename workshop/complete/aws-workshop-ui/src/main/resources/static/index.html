@@ -34,6 +34,15 @@
             </div>
             <div sqs="QueueQueriesUrl"></div>
             <div sqs="QueueUrlsUrl"></div>
+            <div ng-controller="AsgCtrl" class="panel panel-default">
+                <div class="panel-heading"><h2>Autoscaling</h2></div>
+                <div class="panel-body">
+                    <div ng-repeat="instance in instances" class="row">
+                        <div class="col-md-5">{{instance.privateIp}}</div>
+                        <div class="col-md-7">{{instnace.overloading}}</div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-md-8">
             <div ng-controller="LogsCtrl" class="panel panel-default">
