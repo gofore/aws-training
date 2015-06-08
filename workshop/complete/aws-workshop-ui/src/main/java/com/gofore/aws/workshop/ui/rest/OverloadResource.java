@@ -37,6 +37,8 @@ public class OverloadResource extends RestServerResource {
         public String privateIp;
         public boolean overloading;
 
+        public OverloadStatus() { }
+
         public OverloadStatus(String privateIp, boolean overloading) {
             this.privateIp = privateIp;
             this.overloading = overloading;
