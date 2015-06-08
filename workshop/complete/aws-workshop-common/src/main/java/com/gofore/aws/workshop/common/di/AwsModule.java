@@ -6,8 +6,12 @@ import com.amazonaws.auth.AWSCredentialsProviderChain;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.internal.StaticCredentialsProvider;
+import com.amazonaws.services.autoscaling.AmazonAutoScalingAsync;
+import com.amazonaws.services.autoscaling.AmazonAutoScalingAsyncClient;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationAsync;
 import com.amazonaws.services.cloudformation.AmazonCloudFormationAsyncClient;
+import com.amazonaws.services.ec2.AmazonEC2Async;
+import com.amazonaws.services.ec2.AmazonEC2AsyncClient;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsync;
 import com.amazonaws.services.identitymanagement.AmazonIdentityManagementAsyncClient;
 import com.amazonaws.services.s3.AmazonS3;
@@ -16,17 +20,16 @@ import com.amazonaws.services.simpledb.AmazonSimpleDBAsync;
 import com.amazonaws.services.simpledb.AmazonSimpleDBAsyncClient;
 import com.amazonaws.services.sqs.AmazonSQSAsync;
 import com.amazonaws.services.sqs.AmazonSQSAsyncClient;
+import com.gofore.aws.workshop.common.asg.AsgClient;
 import com.gofore.aws.workshop.common.async.ShutdownHelper;
 import com.gofore.aws.workshop.common.cloudformation.CloudFormationClient;
+import com.gofore.aws.workshop.common.ec2.Ec2Client;
 import com.gofore.aws.workshop.common.properties.ApplicationProperties;
 import com.gofore.aws.workshop.common.properties.PropertyLoader;
 import com.gofore.aws.workshop.common.s3.S3Client;
 import com.gofore.aws.workshop.common.simpledb.SimpleDBClient;
 import com.gofore.aws.workshop.common.sqs.SqsClient;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -136,7 +139,41 @@ public class AwsModule implements Module {
                                                      ExecutorService executor) {
         return new CloudFormationClient(cloudFormation, executor);
     }
-    
+
+    @Provides
+    @Singleton
+    public AmazonEC2Async ec2(ApplicationProperties properties,
+                              AWSCredentialsProvider credentials,
+                              ExecutorService executor) {
+        AmazonEC2AsyncClient ec2 = new AmazonEC2AsyncClient(credentials, executor);
+        ec2.setEndpoint(properties.lookup("aws.ec2.endpoint"));
+        ShutdownHelper.addShutdownHook(ec2::getExecutorService, ec2::shutdown);
+        return ec2;
+    }
+
+    @Provides
+    @Singleton
+    public Ec2Client ec2Client(AmazonEC2Async ec2) {
+        return new Ec2Client(ec2);
+    }
+
+    @Provides
+    @Singleton
+    public AmazonAutoScalingAsync asg(ApplicationProperties properties,
+                                      AWSCredentialsProvider credentials,
+                                      ExecutorService executor) {
+        AmazonAutoScalingAsyncClient asg = new AmazonAutoScalingAsyncClient(credentials, executor);
+        asg.setEndpoint(properties.lookup("aws.asg.endpoint"));
+        ShutdownHelper.addShutdownHook(asg::getExecutorService, asg::shutdown);
+        return asg;
+    }
+
+    @Provides
+    @Singleton
+    public AsgClient asgClient(AmazonAutoScalingAsync asg) {
+        return new AsgClient(asg);
+    }
+
     /**
      * Credentials that are bound to a PropertyLoader.
      */

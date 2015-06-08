@@ -57,6 +57,16 @@
       </dependency>
       <dependency>
         <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-ec2</artifactId>
+        <version>${aws.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk-autoscaling</artifactId>
+        <version>${aws.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.amazonaws</groupId>
         <artifactId>aws-java-sdk-simpledb</artifactId>
         <version>${aws.version}</version>
       </dependency>
