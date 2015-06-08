@@ -49,9 +49,8 @@ public class Ec2Client {
     public CompletableFuture<List<Instance>> getInstances(List<String> instanceIds, boolean requirePrivateAccessible) {
         return describeInstances(new DescribeInstancesRequest().withInstanceIds(instanceIds))
                 .thenApply(DescribeInstancesResult::getReservations)
-                .thenApply(Lists.findFirst())
-                .thenApply(Reservation::getInstances)
-                .thenApply(instances -> instances.stream().filter(accessible(requirePrivateAccessible)))
+                .thenApply(rs -> rs.stream().flatMap(r -> r.getInstances().stream()))
+                .thenApply(instances -> instances.filter(accessible(requirePrivateAccessible)))
                 .thenApply(instances -> instances.collect(Collectors.toList()));
     }
 

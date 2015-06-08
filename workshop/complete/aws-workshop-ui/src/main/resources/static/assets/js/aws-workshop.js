@@ -47,13 +47,18 @@ angular.module('aws', ['ngMessages', 'infinite-scroll'])
 }])
 .controller('AsgCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.instances = [];
+    $scope.loading = false;
     $scope.scaling = function(ip) {
+        $scope.loading = true;
         if (!ip) {
             $http({
                 url: '/api/scaling',
                 method: 'GET'
             }).success(function (data) {
                 $scope.instances = data;
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
             });
         } else {
             $http({
@@ -61,8 +66,18 @@ angular.module('aws', ['ngMessages', 'infinite-scroll'])
                 method: 'PUT',
                 params: { ip: ip }
             }).success(function (data) {
-
-            });
+                var idx = _.findIndex($scope.instances, function(instance) {
+                    return instance.privateIp == data.privateIp;
+                });
+                if (idx >= 0) {
+                    $scope.instances[idx] = data;
+                } else {
+                    $scope.instances.push(data);
+                }
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            })
         }
     };
     $scope.scaling();

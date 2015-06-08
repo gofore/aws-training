@@ -35,11 +35,11 @@
             <div sqs="QueueQueriesUrl"></div>
             <div sqs="QueueUrlsUrl"></div>
             <div ng-controller="AsgCtrl" class="panel panel-default">
-                <div class="panel-heading"><h2>Autoscaling</h2></div>
+                <div class="panel-heading"><h2>Autoscaling <span ng-show="!loading" ng-click="scaling()" class="pull-right glyphicon glyphicon-refresh"></span><img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
                 <div class="panel-body">
                     <div ng-repeat="instance in instances" class="row">
-                        <div class="col-md-5">{{instance.privateIp}}</div>
-                        <div class="col-md-7">{{instnace.overloading}}</div>
+                        <div class="col-md-7">{{instance.privateIp}}</div>
+                        <div class="col-md-5"><button ng-class="instance.overloading ? 'overload btn btn-danger' : 'overload btn btn-success'" ng-click="scaling(instance.privateIp)">{{instance.overloading ? 'Ease' : 'Overload'}}</button></div>
                     </div>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             </div>
             <div ng-controller="SearchCtrl" class="panel panel-default">
                 <div class="panel-heading"><h2>Search<img class="pull-right" ng-show="loading" src="/assets/img/ajax-loader.gif"></h2></div>
-                <div class="panel-body">-
+                <div class="panel-body">
                     <div class="input-group">
                         <input ng-model="query" ng-keypress="($event.which === 13)?search(query, 20):0" type="text" class="form-control">
                         <div class="input-group-btn">
