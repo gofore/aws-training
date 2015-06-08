@@ -119,6 +119,12 @@ Have your neighbor access your web server from his/her instance.
 
 --
 
+Speaking of IP addresses, there is also [Elastic IP Address](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html).
+
+Later on, we will see use cases for this, as well as better alternatives.
+
+--
+
 ## [Elastic Block Store (EBS)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html)
 
 - Block storage service (virtual hard drives)
@@ -227,17 +233,16 @@ Provisioning capacity as needed
 --
 
 - Vertical scaling (*scale up, scale down*)
-- Horizontal scaling (scale out, scale in)
-
+- Horizontal scaling (*scale out, scale in*)
 - 1 instance 5 hours = 5 instances 1 hour
 
 --
 
 ## Auto Scaling instances
 
-- *Auto Scaling Group* contains instances whose lifecycles are automatically managed by CloudWatch alarms or schedule
+- [*Launch Configuration*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/LaunchConfiguration.html) describes the configuration of the instance. Having a good AMI and bootstrapping is crucial.
+- [*Auto Scaling Group*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/AutoScalingGroup.html) contains instances whose lifecycles are automatically managed by CloudWatch alarms or schedule
 - A *scaling policy* describes how the group scales in or out. You should always have policies for both directions. [*Policy cooldowns*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html) control the rate in which scaling happens.
-- A [*launch configuration*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/LaunchConfiguration.html) describes the configuration of the instance. Having a good AMI and bootstrapping is crucial.
 
 --
 
@@ -262,15 +267,24 @@ Provisioning capacity as needed
 
 --
 
-![Autoscaling with alarms](/images/aws_workshop_arch_3_alarms.png)
+## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
 
+- Create Elastic Load Balancer
+- Create Launch Configuration
+  - Enable CloudWatch detailed monitoring
+  - User Data
+  - Security group: allow traffic to application port
+- Create Auto Scaling Group
+  - Several instances, all subnets, Enable CloudWatch detailed monitoring
+  - no scaling policies (yet)
 
+--
 
 ## Exercise: Monkey time!
 
 ![Chaos Monkey](/images/netflix-chaos-monkey.jpg)
 
-Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): terminate all of your `aws-workshop-ui` instances!
+Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): terminate an instance from your auto scaling group
 
 ---
 
@@ -280,7 +294,7 @@ Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): te
 
 - [Route 53](http://aws.amazon.com/route53/) Domain Name System (DNS)
 - [CloudFront](http://aws.amazon.com/cloudfront/) Content Delivery Network (CDN)
-- [Elastic IP](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+
 
 ---
 
