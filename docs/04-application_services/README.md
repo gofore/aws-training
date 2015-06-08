@@ -9,6 +9,7 @@
 - Message queues (SQS)
 - Notifications (SNS)
 - E-mail (SES)
+- Simple Workflow Service (SWF)
 
 ---
 

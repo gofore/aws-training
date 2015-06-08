@@ -28,7 +28,9 @@
 ## [Relational Database Service (RDS)](http://aws.amazon.com/rds/)
 
 - MySQL, PostgreSQL, Oracle, Microsoft SQL Server, AWS Aurora
-- Auto-upgrade, Auto-backup, Highly available
+- Auto-upgrade, Auto-backup (with maintenance window of your choice)
+- Optional Multi-AZ deployment with automatic failover
+- [Cost](http://aws.amazon.com/rds/pricing/) consists of instance hour, provisioned storage and IOPS, Multi-AZ, backups and data transfer
 
 --
 
@@ -42,10 +44,11 @@
 
 ## [Simple Storage Service (S3)](http://aws.amazon.com/s3/)
 
-- Store key-value blob objects into [*buckets*](http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) over an RESTful interface
-- Fine-grained access control mechanisms (IAM policies, bucket policies, Access Control Lists (ACLs) and query string authentication)
+- Store key-value blob objects into [*buckets*](http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingBucket.html) over an RESTful interface with eventual consistency
+- Fine-grained [access control mechanisms](http://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-overview.html) (IAM [user policies](http://docs.aws.amazon.com/AmazonS3/latest/dev/example-policies-s3.html), [bucket policies](http://docs.aws.amazon.com/AmazonS3/latest/dev/example-bucket-policies.html), [Access Control Lists (ACLs)](http://docs.aws.amazon.com/AmazonS3/latest/dev/S3_ACLs_UsingACLs.html) and query string authentication)
+- Optional server-side encryption
 - Supports static hosting of web resources
-- Supports object [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and easy archiving to [Glacier](http://aws.amazon.com/glacier/)
+- Object lifecycle management with [versioning](http://docs.aws.amazon.com/AmazonS3/latest/dev/Versioning.html) and archiving to [Glacier](http://aws.amazon.com/glacier/)
 
 --
 
@@ -53,15 +56,15 @@
 
 - 99.99% availability, 99.999999999% durability
 - Pricing consists of data stored and requests made
-- Standard storage, reduced redundancy and glacier affect pricing
+- Standard storage, [*Reduced Redundancy*](http://aws.amazon.com/s3/details/) (99.99%) and Glacier affect pricing
 
 --
 
 ## Exercise: Host files from S3
 
-1. Create an S3 bucket and upload files into it
-2. View the files in S3 and try to access their URL
-3. Fix permissions so that the files are publicly accessible
+1. Create an S3 bucket and upload a file into it
+2. View the file in S3 and try to access its URL
+3. Add an ACL that makes the file publicly accessible
 
 
 ---

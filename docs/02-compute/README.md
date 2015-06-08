@@ -127,8 +127,8 @@ Later on, we will see use cases for this, as well as better alternatives.
 
 ## [Elastic Block Store (EBS)](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html)
 
-- Block storage service (virtual hard drives)
-- Disks (or [*volumes*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)) are attached to instances
+- Block storage service (virtual hard drives) with speed and encryption options
+- Disks (or [*volumes*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)) are attached to EC2 instances
 - [*Snapshots*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html) can be taken from volumes
 - Alternative to EBS is ephemeral [*instance store*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html)
 
@@ -151,9 +151,10 @@ Later on, we will see use cases for this, as well as better alternatives.
 
 - Manage AWS user [*credentials*](http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html) for Web console and API access
 - Fine-grained access [*policies*](http://docs.aws.amazon.com/IAM/latest/UserGuide/policies.html) to services and resources
-- Provide temporary access with [*roles*](http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html)
+- [*Roles*](http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html) allow applications and external services to access resources
+- Also [*Multi-Factor Authentication (MFA)*](http://aws.amazon.com/iam/details/mfa/) and [*Security Token Service (STS)*](http://docs.aws.amazon.com/STS/latest/UsingSTS/Welcome.html)
 
-Notes: Always use roles, do not store credentials inside the instances, or [something bad](http://www.browserstack.com/attack-and-downtime-on-9-November) might happen.
+Notes: Always use roles inside instances (do not store credentials there), or [something bad](http://www.browserstack.com/attack-and-downtime-on-9-November) might happen.
 
 --
 
@@ -270,13 +271,32 @@ Provisioning capacity as needed
 ## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
 
 - Create Elastic Load Balancer
+  - Set instance port
+  - Create new sg for elb *mynameelb*, allow to connect to elb:80 from anywhere
+  - Add name tag
 - Create Launch Configuration
+  - My AMIs -> Latest AMI
+  - Role ui
   - Enable CloudWatch detailed monitoring
   - User Data
-  - Security group: allow traffic to application port
+  - Security group: allow traffic to application port from anywhere (you should really only allow from ELB)
 - Create Auto Scaling Group
-  - Several instances, all subnets, Enable CloudWatch detailed monitoring
+  - Several instances, all subnets
+  - receive traffic from your elb
+  - ec2-based health check
+  - healthcheck grace period 0
+  - Enable CloudWatch detailed monitoring
   - no scaling policies (yet)
+  - create new notification topic yourname_sns, with your email as subscriber
+  - add name tag
+
+    #!/bin/sh
+    wget https://s3-eu-west-1.amazonaws.com/aws-workshop-demo/tools/bootstrap_simple/bootstrap.sh -O - | sh
+
+
+
+- disable connection draining?
+
 
 --
 

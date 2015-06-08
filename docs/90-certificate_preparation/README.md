@@ -22,6 +22,13 @@
 
 --
 
+- Read the exam blueprint
+- Example questions and practice exam
+- [Product details](http://aws.amazon.com/ec2/), pricing, FAQ for each service
+- [User guides](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html) for each service
+
+--
+
 ## What next?
 
 - Reference architectures [aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
