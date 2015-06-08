@@ -233,9 +233,9 @@ Provisioning capacity as needed
 
 --
 
-- Vertical scaling (*scale up, scale down*)
-- Horizontal scaling (*scale out, scale in*)
-- 1 instance 5 hours = 5 instances 1 hour
+- Changing the instance type is vertical scaling (*scale up, scale down*)
+- Adding or removing instances is horizontal scaling (*scale out, scale in*)
+- 1 instance 10 hours = 10 instances 1 hour
 
 --
 
@@ -243,7 +243,16 @@ Provisioning capacity as needed
 
 - [*Launch Configuration*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/LaunchConfiguration.html) describes the configuration of the instance. Having a good AMI and bootstrapping is crucial.
 - [*Auto Scaling Group*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/AutoScalingGroup.html) contains instances whose lifecycles are automatically managed by CloudWatch alarms or schedule
-- A *scaling policy* describes how the group scales in or out. You should always have policies for both directions. [*Policy cooldowns*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html) control the rate in which scaling happens.
+- [*Scaling Plan*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/scaling_typesof.html) refers when scaling happens and what triggers it.
+
+--
+
+## [Scaling Plans](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/scaling_typesof.html)
+
+- Maintain current number of instances
+- Manual scaling by user interaction or via API
+- Scheduled scaling
+- [Dynamic Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/as-scale-based-on-demand.html). A *scaling policy* describes how the group scales in or out. You should always have policies for both directions. [*Policy cooldowns*](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/Cooldown.html) control the rate in which scaling happens.
 
 --
 
@@ -270,33 +279,52 @@ Provisioning capacity as needed
 
 ## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
 
-- Create Elastic Load Balancer
-  - Set instance port
-  - Create new sg for elb *mynameelb*, allow to connect to elb:80 from anywhere
-  - Add name tag
-- Create Launch Configuration
-  - My AMIs -> Latest AMI
-  - Role ui
-  - Enable CloudWatch detailed monitoring
-  - User Data
-  - Security group: allow traffic to application port from anywhere (you should really only allow from ELB)
-- Create Auto Scaling Group
-  - Several instances, all subnets
-  - receive traffic from your elb
-  - ec2-based health check
-  - healthcheck grace period 0
-  - Enable CloudWatch detailed monitoring
-  - no scaling policies (yet)
-  - create new notification topic yourname_sns, with your email as subscriber
-  - add name tag
+Create Elastic Load Balancer
 
-    #!/bin/sh
-    wget https://s3-eu-west-1.amazonaws.com/aws-workshop-demo/tools/bootstrap_simple/bootstrap.sh -O - | sh
+- Short name for your ELB (will show up in URLs)
+- Route traffic to instance port **9001**
+- New security group for the ELB. Allow port **80** from anywhere
+- HTTP Health Check, ping **:9001/healthcheck**. Lower interval to 15 and Healthy threshold to 3
+- Do not add any instances. Disable connection draining
+- Add Name tag
 
+--
 
+## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
 
-- disable connection draining?
+Create Launch Configuration
 
+- My AMIs -> Latest **standalone ui**. Micro instance
+- IAM role **aws-workshop-ui-role**
+- Enable CloudWatch detailed monitoring
+- New security group for the instances. Allow **22** and **9001** from anywhere (let's talk about this later)
+
+--
+
+## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
+
+Create Auto Scaling Group
+
+- Group size 1
+- Launch instances into **ALL** subnets
+- Receive traffic from your ELB
+- **EC2-based** Health Check, **20**-second Grace Period
+- Enable CloudWatch detailed monitoring
+- Use scaling policies. Create scaling policy, CloudWatch Alarm and SNS Topic for both scaling directions.
+- Send notifications to a new (third) SNS topic.
+- Add Name tag
+
+--
+
+### Does it work?
+
+- Confirm the emails in your inbox to receive notifications
+- Look at EC2 -> Auto Scaling -> Auto Scaling Groups
+- Look at EC2 -> Network & Security -> Load Balancers
+- Look at EC2 -> Instances -> Instances
+- Look at CloudWatch -> Alarms
+
+On Windows: If the ELB hostname does not seem to resolve, run `ipconfig /flushdns`
 
 --
 
@@ -312,9 +340,19 @@ Be a [Chaos Monkey](https://github.com/Netflix/SimianArmy/wiki/Chaos-Monkey): te
 
 --
 
-- [Route 53](http://aws.amazon.com/route53/) Domain Name System (DNS)
-- [CloudFront](http://aws.amazon.com/cloudfront/) Content Delivery Network (CDN)
+## [Route 53](http://aws.amazon.com/route53/)
 
+- Domain Name System (DNS)
+- Manage *DNS records* of *hosted zones*
+- Round Robin, Weighted Round Robin and Latency-based routing
+
+--
+
+## [CloudFront](http://aws.amazon.com/cloudfront/)
+
+- Content Delivery Network (CDN)
+- Replicate static content from S3 to edge locations
+- Also supports dynamic and streaming content
 
 ---
 
