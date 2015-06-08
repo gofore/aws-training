@@ -76,19 +76,19 @@ echo "It works!" > /it_works.txt
 
 ## Exercise: SSH into the instance
 
-- SSH into the instance (find the IP address in the EC2 console)
+SSH into the instance (find the IP address in the EC2 console)
 
-      # Windows Putty users must convert key to .ppk (see notes)
-      ssh -i your_ssh_key.pem ubuntu@instance_ip_address
+    # Windows Putty users must convert key to .ppk (see notes)
+    ssh -i your_ssh_key.pem ubuntu@instance_ip_address
 
-- View instance metadata
+View instance metadata
 
-      curl http://169.254.169.254/latest/meta-data/
+    curl http://169.254.169.254/latest/meta-data/
 
-- View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) and find the changes your script made
+View your [*User Data*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html) and find the changes your script made
 
-      curl http://169.254.169.254/latest/user-data/
-      ls -la /
+    curl http://169.254.169.254/latest/user-data/
+    ls -la /
 
 Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`. If you are on Windows and use Putty, you will have to convert the .pem key to .ppk key using [puttygen](http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html) (Conversions -> Import key -> *.pem file -> Save private key. Now you can use your *.ppk key with Putty: Connection -> SSH -> Auth -> Private key file)
 
@@ -96,25 +96,26 @@ Notes: You will have to reduce keyfile permissions `chmod og-xrw mykeyfile.pem`.
 
 ## Exercise: Security groups
 
-- Setup a web server that hosts the id of the instance
+Setup a web server that hosts the id of the instance
 
-      mkdir ~/webserver && cd ~/webserver
-      curl http://169.254.169.254/latest/meta-data/instance-id > index.html
-      python -m SimpleHTTPServer
+    mkdir ~/webserver && cd ~/webserver
+    curl http://169.254.169.254/latest/meta-data/instance-id > index.html
+    python -m SimpleHTTPServer
 
-- Configure the security group of your instance to allow inbound requests to your web server from **anywhere**. Check that you can access the page with your browser.
+Configure the security group of your instance to allow inbound requests to your web server from **anywhere**. Check that you can access the page with your browser.
 
 --
 
 ## Exercise: Security groups
 
-- Delete the previous rule. Ask a neighbor for the name of their security group, and allow requests to your server from your **neighbor's security group**.
-- Have your neighbor access your web server from his/her instance.
+Delete the previous rule. Ask a neighbor for the name of their security group, and allow requests to your server from your **neighbor's security group**.
 
-      # Private IP address of the web server
-      curl 172.31.10.200:8000
-      # Public IP address of the web server
-      curl 52.16.200.200:8000
+Have your neighbor access your web server from his/her instance.
+
+    # Private IP address of the web server (this should work)
+    curl 172.31.???.???:8000
+    # Public IP address of the web server (how about this one?)
+    curl 52.??.???.???:8000
 
 --
 
@@ -162,16 +163,23 @@ Imagine running a content management system, discussion board or blog web applic
 
 ## [Virtual Private Cloud (VPC)](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Introduction.html)
 
-- Heavy-weight virtual IP networking for EC2 and RDS instances. Integral part of AWS, all instances are launched into VPCs
+- Heavy-weight virtual IP networking for EC2 and RDS instances. Integral part of modern AWS, all instances are launched into VPCs (*not true for [EC2-classic](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html)*)
 - An AWS root account can have many VPCs, each in a specific region
-- Each VPC is divided into [*subnets*](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html). Each subnet is in a specific availability zone
-- Each instance connects to a subnet with a Elastic Network Interface
+- Each VPC is divided into [*subnets*](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html), each bound to an availability zone
+- Each instance connects to a subnet with a [*Elastic Network Interface*](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-eni.html)
 
 --
 
 ![VPC with Public and Private Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/images/nat-instance-diagram.png)
 
 [VPC with Public and Private Subnets](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Scenario2.html)
+
+--
+
+## Access Control Lists
+
+- Network [*Access Control List (ACL)*](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html) provide a second layer of security
+- See [Comparison of Security Groups and Network ACLs](http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Security.html#VPC_Security_Comparison)
 
 --
 
@@ -185,8 +193,8 @@ Imagine running a content management system, discussion board or blog web applic
 
 - Instance and Elastic Network Interface
 - Region and Availability Zone
-- VPC and Subnet
-- ACL and Security Group
+- VPC, Subnet, Route Table
+- Network ACL, Instance Security Group
 - Internet Gateway, Virtual Private Gateway, NAT instance
 
 --
