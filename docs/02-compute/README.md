@@ -119,9 +119,9 @@ Have your neighbor access your web server from his/her instance.
 
 --
 
-Speaking of IP addresses, there is also [Elastic IP Address](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html).
+Speaking of IP addresses, there is also [Elastic IP Address](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html). Later on, we will see use cases for this, as well as better alternatives.
 
-Later on, we will see use cases for this, as well as better alternatives.
+Also, notice the monitoring metrics. These come from CloudWatch. Later on, we will create alarms based on the metrics.
 
 --
 
@@ -277,22 +277,20 @@ Provisioning capacity as needed
 
 --
 
-## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
-
-Create Elastic Load Balancer
+### Exercise: Elastic Load Balancer
 
 - Short name for your ELB (will show up in URLs)
-- Route traffic to instance port **9001**
+- Route HTTP traffic to instance port **9001**
 - New security group for the ELB. Allow port **80** from anywhere
 - HTTP Health Check, ping **:9001/healthcheck**. Lower interval to 15 and Healthy threshold to 3
 - Do not add any instances. Disable connection draining
 - Add Name tag
 
+Notes: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
+
 --
 
-## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
-
-Create Launch Configuration
+### Exercise: Launch Configuration
 
 - My AMIs -> Latest **standalone ui**. Micro instance
 - IAM role **aws-workshop-ui-role**
@@ -301,18 +299,16 @@ Create Launch Configuration
 
 --
 
-## Exercise: [Auto Scaling](http://docs.aws.amazon.com/AutoScaling/latest/DeveloperGuide/GettingStartedTutorial.html)
+### Exercise: Auto Scaling Group
 
-Create Auto Scaling Group
-
-- Group size 1
-- Launch instances into **ALL** subnets
+- Start with **1** instance, Launch into **ALL** subnets
 - Receive traffic from your ELB
 - **EC2-based** Health Check, **20**-second Grace Period
 - Enable CloudWatch detailed monitoring
-- Use scaling policies. Create scaling policy, CloudWatch Alarm and SNS Topic for both scaling directions.
-- Send notifications to a new (third) SNS topic.
-- Add Name tag
+- Use scaling policies to scale between **1** and **3** instances. Create Scaling **Policy**, CloudWatch **Alarm** and SNS **Topic** for both scaling directions:
+  - Alarm when Average CPU > 50% for 2 periods of 5 minutes. Add 1 instance and wait 60 seconds.
+  - Alarm when Average CPU < 20% for 2 periods of 5 minutes. Remove 1 instance and wait 60 seconds.
+- Send notifications to a new (third) SNS **Topic**. Add Name tag
 
 --
 
