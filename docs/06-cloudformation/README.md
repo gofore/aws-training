@@ -1,40 +1,33 @@
 
-## CloudFormation
-### AWS Training Module 5
-
+## Infrastructure as code
+### AWS Training Module 6
 
 ---
 
 ## Agenda
 
+- Management & deployment tools
+- CloudFormation
+
 ---
 
---
+# Management
 
+![Application management services](/images/aws_application_management.png)
 
-## Using IAM credentials with the SDKs
+---
 
-SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
-
-<pre><code data-trim="" class="java">
-public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
-    return new AWSCredentialsProviderChain(
-            new StaticCredentialsProvider(new PropertyLoaderCredentials(properties)),
-            new ProfileCredentialsProvider(),
-            new InstanceProfileCredentialsProvider()
-    );
-}
-</code></pre>
+# CloudFormation
 
 --
 
 ## [CloudFormation](http://aws.amazon.com/cloudformation/)
 
-Create a *stack* of resources from a JSON *template*.
+- Create a [*stack*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html) of resources from a JSON [*template*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html)
+- Template can define [*parameters*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) that must be given during stack creation
+- Reusable, versionable infrastructure description that can be commited to source control
 
-Reusable, versionable infrastructure description that can be commited to source control.
-
-[Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
+Notes: [Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
 
 --
 
@@ -62,6 +55,32 @@ Reusable, versionable infrastructure description that can be commited to source 
 
 --
 
+## Exercise: Create a stack
+
+- Unique stack name
+- Sample template: **Multi-AZ WordPress blog**
+- Stack parameters: DBPassword at least 8 chars, KeyName, WebServerCapacity 2
+- Tags: Add Name tag
+
+--
+
+## Advanced stack settings
+
+- Notifications
+- Timeout for stack creation
+- Rollback on failure
+- [Stack policy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html)
+
+--
+
+### Update, rollback, cancel and delete
+
+- Update a stack: [*Update requires: Replacement*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-instance.html#cfn-ec2-instance-blockdevicemappings) *"Oops!"*
+- You can cancel a stack update [*simply by clicking cancel*](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-cancel-stack-update.html). *"Errr..."*
+- Delete an All-in-one template: *"Oops, there goes the database"*
+
+--
+
 ## Creating a stack with Ansible
 
 <pre><code data-trim="" class="ruby">
@@ -83,9 +102,7 @@ Reusable, versionable infrastructure description that can be commited to source 
         Project: "aws-workshop-project"
 </code></pre>
 
-
----
-
+--
 
 ## Exercise: Create a stack
 
@@ -110,42 +127,4 @@ Reusable, versionable infrastructure description that can be commited to source 
 </code></pre>
 
 Verify that you can find your queues from the management console
-
-
----
-
-# Simple deployment pipeline
-
---
-
-![Deployment pipeline](/images/deployment_pipeline.png)
-
---
-
-## Exercise: Deploy your .jar files to S3
-
-1. `mvn deploy`
-2. Verify that you can find your files from the management console
-
----
-
-
-
-## Complete CloudFormation template
-
-workshop/initial/deploy/cloudformation-templates/
-
-[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/initial/deploy/cloudformation-templates/infrastructure-complete.template)
-
---
-
-## Exercise: Deploy complete stack
-
-1. Create a stack with `create_complete_infrastructure.yml`
-2. Look at CloudFormation -> Stack -> Events until complete
-3. Look at EC2 -> Load Balancers -> Instances until InService
-4. Check your e-mail and subscribe to the notifications
-5. Try out the application
-6. Try to make the aws-workshop-fetchers scale out
-7. Terminate instances from an auto scaling group and see what happens
 

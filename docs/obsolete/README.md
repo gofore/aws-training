@@ -40,6 +40,9 @@
 
 ---
 
+# S3 programming
+
+--
 
 ## Exercise: Put objects to S3
 
@@ -58,3 +61,40 @@ Notes: Content length must be known when putting files to S3. This might become 
 4. Try to access your files again
 
 Notes: A [Canned ACL](http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#CannedACL) is a predefined ACL, but it is possible to create a fully customized ACL.
+
+---
+
+# SQS programming
+
+--
+
+## Exercise: Programming with SQS
+
+1. Compile and run the `aws-workshop-ui` locally
+2. Complete [programming task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)  
+   See `com.gofore.aws.workshop.ui.rest.QueueAttributesResource`
+3. Complete [programming task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)  
+   See `com.gofore.aws.workshop.ui.rest.QueriesResource`
+4. View your messages in the queues from the management console
+5. Run the `aws-workshop-loader` locally
+
+Notes: If you use Vagrant, you can access the web app at http://10.10.10.10:9001 on your host machine.
+
+--
+
+## Handling SQS messages
+
+[com.gofore.aws.workshop.common.sqs.SqsService.java](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/sqs/SqsService.java)
+
+<pre><code data-trim="" class="java">
+public class SqsService extends Service {
+    public SqsService(SqsClient sqsClient, String queueUrl) {}
+    public SqsService addMessageHandler(Function&lt;Message, CompletableFuture&lt;Message&gt;&gt; messageHandler) {}
+    public SqsService setCompleteHandler(BiConsumer&lt;? super Message, ? super Throwable&gt; completeHandler) {}
+    public synchronized void start() throws Exception {}
+    public synchronized void stop() throws Exception {}
+    protected CompletableFuture&lt;Message&gt; handleMessage(Message message) {}
+    protected CompletableFuture&lt;Message&gt; completeMessage(CompletableFuture&lt;Message&gt; message) {}
+    protected CompletableFuture&lt;Message&gt; deleteMessage(CompletableFuture&lt;Message&gt; message) {}
+}
+</code></pre>
