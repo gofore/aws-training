@@ -6,12 +6,9 @@
 
 ## Agenda
 
-- API
-- CLI
-- SDK
+- API and CLI
+- SDK with exercises
 - Deployment pipelines
-
----
 
 --
 
@@ -24,19 +21,28 @@
 
 ---
 
-# Programmability
+## AWS API
+
+- REST API for infrastructure and resource management
+- Authorized by access key or instance role
 
 --
 
+## AWS CLI
+
+- [aws-cli](https://github.com/aws/aws-cli) and numerous community created tools
+- Alternative to web console
+- Automate tasks and create helper scripts
+- More lightweight approach than full SDK
+
+---
+
 ## SDKs and tools for everyone
 
-Java SDK: [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
-
-Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
-
-Other SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
-
-Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
+- Java SDK: [aws.amazon.com/sdk-for-java](http://aws.amazon.com/sdk-for-java/)
+- Ansible: [docs.ansible.com/list_of_cloud_modules.html](http://docs.ansible.com/list_of_cloud_modules.html)
+- Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
+- Other SDKs and command-line tools: [aws.amazon.com/tools](http://aws.amazon.com/tools/)
 
 --
 
@@ -50,9 +56,9 @@ Boto for Python: [github.com/boto/boto](https://github.com/boto/boto)
 
 --
 
-## Using IAM credentials with the SDKs
+## Using IAM credentials with SDK
 
-SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
+SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/complete/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L58-64).
 
 <pre><code data-trim="" class="java">
 public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
@@ -64,49 +70,29 @@ public AWSCredentialsProvider credentialsProvider(ApplicationProperties properti
 }
 </code></pre>
 
+--
+
+## Programming exercises
+
+- [Initial](https://github.com/gofore/aws-training/tree/master/workshop/initial) project contains programming tasks utilizing the Java SDK
 
 ---
 
-# Simple deployment pipeline
-
---
+## Simple deployment pipeline
 
 ![Deployment pipeline](/images/deployment_pipeline.png)
 
 --
 
-## Exercise: Deploy your .jar files to S3
-
-1. `mvn deploy`
-2. Verify that you can find your files from the management console
-
----
-
-## Complete CloudFormation template
-
-workshop/initial/deploy/cloudformation-templates/
-
-[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/initial/deploy/cloudformation-templates/infrastructure-complete.template)
-
---
-
-## Exercise: Deploy complete stack
-
-1. Create a stack with `create_complete_infrastructure.yml`
-2. Look at CloudFormation -> Stack -> Events until complete
-3. Look at EC2 -> Load Balancers -> Instances until InService
-4. Check your e-mail and subscribe to the notifications
-5. Try out the application
-6. Try to make the aws-workshop-fetchers scale out
-7. Terminate instances from an auto scaling group and see what happens
-
----
+## Building with legos
 
 ![Build process](/images/netflix_build_legos.png)
 
 [Netflix tech blog: Building with Legos](http://techblog.netflix.com/2011/08/building-with-legos.html)
 
 --
+
+## AMI models
 
 ![AMI models](/images/ami-models.png)
 

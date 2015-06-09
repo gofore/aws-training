@@ -40,7 +40,7 @@ Notes: [Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/Us
 
   "Parameters": {
     "MySSHKeyName": {"Type": "String", "MinLength": "1", "MaxLength": "255"}
-  }, 
+  },
   "Resources": {
     "MyWebServer": {"Type": "AWS::EC2::Instance", "Properties": { ... }}
   },
@@ -108,23 +108,22 @@ Notes: [Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/Us
 
 <pre><code data-trim="" class="ruby">
 # Run the following command in workshop/initial/deploy
-# ansible-playbook -e "user_name=FOO" -i localhost, create_queues_and_database.yml
+# ansible-playbook -e "stack_name=FOO" -i localhost, create_queues_and_database.yml
 
 - hosts: all
   connection: local
   tasks:
   - name: "Create a stack of SQS queues and SimpleDB domain"
     cloudformation:
-      stack_name="aws-workshop-{{ user_name }}"
+      stack_name="aws-workshop-{{ stack_name }}"
       template="cloudformation-templates/infrastructure-queues-and-sdb.template"
       region="eu-west-1"
       state=present
     args:
       template_parameters:
-        UserName: "{{ user_name }}"
+        UserName: "{{ stack_name }}"
       tags:
-        Name: "aws-workshop-{{ user_name }}"
+        Name: "aws-workshop-{{ stack_name }}"
 </code></pre>
 
 Verify that you can find your queues from the management console
-
