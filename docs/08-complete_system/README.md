@@ -6,135 +6,53 @@
 
 ## Agenda
 
-1. **Introduction:** Main services and exercise description
-2. **Loose coupling**: Separating services with queues
-3. **Persistence:** Object storage and database
-4. **Elasticity:** Scaling resources based on demand
-
-## Using IAM credentials with the SDKs
-
-SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
-
-<pre><code data-trim="" class="java">
-public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
-    return new AWSCredentialsProviderChain(
-            new StaticCredentialsProvider(new PropertyLoaderCredentials(properties)),
-            new ProfileCredentialsProvider(),
-            new InstanceProfileCredentialsProvider()
-    );
-}
-</code></pre>
-
---
-
-## [CloudFormation](http://aws.amazon.com/cloudformation/)
-
-Create a *stack* of resources from a JSON *template*.
-
-Reusable, versionable infrastructure description that can be commited to source control.
-
-[Template anatomy](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-anatomy.html) | [Simple template](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/example-templates-ec2-with-security-groups.html) | [Example snippets](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/CHAP_TemplateQuickRef.html)
-
---
-
-## Structure of a template
-
-<pre><code data-trim="" class="json">
-{
-  "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This template constructs a single web server",
-
-  "Parameters": {
-    "MySSHKeyName": {"Type": "String", "MinLength": "1", "MaxLength": "255"}
-  },
-  "Resources": {
-    "MyWebServer": {"Type": "AWS::EC2::Instance", "Properties": { ... }}
-  },
-  "Outputs": {
-    "MyDomainName": {"Value": {"Fn::GetAtt": ["MyWebServer", "PublicDnsName"]}}
-  },
-
-  "Mappings": { ...Optional set of helper mappings... },
-  "Conditions": { ...Optional set of conditions... }
-}
-</code></pre>
-
---
-
-## Creating a stack with Ansible
-
-<pre><code data-trim="" class="ruby">
-- hosts: localhost
-  tasks:
-  - name: "Create CloudFormation stack"
-    cloudformation:
-      stack_name="my-precious-stack"
-      template="my-cloudformation-template.json"
-      region="eu-west-1"
-      state=present
-    args:
-      template_parameters:
-        KeyName: "my-key-in-ec2"
-        AmiId: "ami-828334f5"
-        InstanceType: "t2.micro"
-      tags:
-        Name: "name-for-all-the-resources"
-        Project: "aws-workshop-project"
-</code></pre>
-
+- Design cloud compatible system
+- Reference system architecture
+- Complete stack deployment and inspection
+- Summary
 
 ---
 
+## Content PowerMonger
 
-## Exercise: Create a stack
-
-<pre><code data-trim="" class="ruby">
-# Run the following command in workshop/initial/deploy
-# ansible-playbook -e "user_name=FOO" -i localhost, create_queues_and_database.yml
-
-- hosts: all
-  connection: local
-  tasks:
-  - name: "Create a stack of SQS queues and SimpleDB domain"
-    cloudformation:
-      stack_name="aws-workshop-{{ user_name }}"
-      template="cloudformation-templates/infrastructure-queues-and-sdb.template"
-      region="eu-west-1"
-      state=present
-    args:
-      template_parameters:
-        UserName: "{{ user_name }}"
-      tags:
-        Name: "aws-workshop-{{ user_name }}"
-</code></pre>
-
-Verify that you can find your queues from the management console
-
-
----
-
-# Simple deployment pipeline
+- Crawls images and metadata from websites and offers search engine and UI on top of the data
+- The UI scales for thousands of concurrent users
+- Users can supply queries or websites to crawl
+- Queries or websites are transformed into one or more web page crawl tasks
+- Web page crawl tasks are handled by scalable crawler nodes to keep content delivery latencies low
+- Images and content metadata are extracted from web pages and stored into datastores
+- Content is delivered efficiently to users all around the world
+- Uses central logging and gathering of interesting system events
 
 --
 
-![Deployment pipeline](/images/deployment_pipeline.png)
+## Exercise: Design AWS architecture for Content PowerMonger
 
---
-
-## Exercise: Deploy your .jar files to S3
-
-1. `mvn deploy`
-2. Verify that you can find your files from the management console
+- In groups of few people make up architecture following AWS best practices
 
 ---
 
+## Reference system architecture
 
+- Crawls images from Google image search from user provided queries
+- Offers simple search engine on top of image metadata
+- Loosely coupled microservices architecture of UI, loader and fetcher services
+- S3 based thumbnail store and SimpleDB as content metadata database
+- Central logging via SQS
+
+--
+
+![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
+
+--
+
+![Workshop application architecture](/images/aws_workshop_arch_4.png)
+
+---
 
 ## Complete CloudFormation template
 
-workshop/initial/deploy/cloudformation-templates/
-
-[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/initial/deploy/cloudformation-templates/infrastructure-complete.template)
+[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/complete/deploy/cloudformation-templates/infrastructure-complete.template)
 
 --
 
@@ -145,55 +63,10 @@ workshop/initial/deploy/cloudformation-templates/
 3. Look at EC2 -> Load Balancers -> Instances until InService
 4. Check your e-mail and subscribe to the notifications
 5. Try out the application
-6. Try to make the aws-workshop-fetchers scale out
+6. Try to make the aws-workshop-fetchers and aws-workshop-uis scale out
 7. Terminate instances from an auto scaling group and see what happens
 
-
-
 ---
-
-
-# Objective of today
-
---
-
-## Super crappy image search
-
-- Application that mimics Google image search
-- Micro service architecture:
-  - user interface (web application)
-  - page loader (does the initial image search)
-  - image fetcher (loads all the image data to AWS hosted storages)
-
---
-
-![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
-
---
-
-![Workshop application architecture](/images/aws_workshop_arch_4.png)
-
---
-
-![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
-
-[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
-
---
-
-## Designing a cloud-friendly application
-
-- Split the application into small, **stateless**, horizontally scalable services
-- **Loosely couple** services with queues, load balancers, service discovery
-- **Automate** infrastructure setup and application deployment
-- [12factor.net](http://12factor.net/) provides some design principles for cloud-friendly apps
-
-
-
----
-
-# Summary
-
 
 ## Things that we did right
 
@@ -212,7 +85,7 @@ workshop/initial/deploy/cloudformation-templates/
 - Break CloudFormation template into smaller pieces
 - Versioned jar files or golden images: Launch configuration should be static
 
-Notes: Currently new ui-instances that are born with autoscale pull the latest jar from S3. This means that the "launch configuration" is not static, and every autoscaled instance might be different.
+Notes: Currently new ui-instances that are born with autoscale pull the latest jar from S3. This means that the "launch configuration" is not idemponent, and every autoscaled instance might be different.
 
 --
 
