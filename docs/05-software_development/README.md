@@ -7,6 +7,7 @@
 ## Agenda
 
 - API
+- CLI
 - SDK
 - Deployment pipelines
 

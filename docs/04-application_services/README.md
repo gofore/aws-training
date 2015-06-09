@@ -6,10 +6,12 @@
 
 ## Agenda
 
+- Administration tools: CloudTrail, Trusted Advisor
 - Message queues (SQS)
 - Notifications (SNS)
 - E-mail (SES)
 - Simple Workflow Service (SWF)
+- EMR, Kinesis, CloudSearch, Elastic Transcoder
 
 ---
 
