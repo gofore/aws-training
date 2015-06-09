@@ -6,82 +6,74 @@
 
 ## Agenda
 
-1. **Introduction:** Main services and exercise description
-2. **Loose coupling**: Separating services with queues
-3. **Persistence:** Object storage and database
-4. **Elasticity:** Scaling resources based on demand
-
----
-
-
-# Objective of today
-
---
-
-## Super crappy image search
-
-- Application that mimics Google image search
-- Micro service architecture:
-  - user interface (web application)
-  - page loader (does the initial image search)
-  - image fetcher (loads all the image data to AWS hosted storages)
-
---
-
-![Workshop application architecture](/images/aws_workshop_arch_2_no_alarms.png)
-
---
-
-![Workshop application architecture](/images/aws_workshop_arch_4.png)
-
---
-
-![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
-
-[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
+- Loose coupling
+- Ephemeral and automated instances
+- Horizontally scalable stateless applications
+- Reference architecture
 
 --
 
 ## Designing a cloud-friendly application
 
 - Split the application into small, **stateless**, horizontally scalable services
-- **Loosely couple** services with queues, load balancers, service discovery
+- **Loosely couple** services with queues, load balancers and service discovery
 - **Automate** infrastructure setup and application deployment
 - [12factor.net](http://12factor.net/) provides some design principles for cloud-friendly apps
 
+---
 
+## Abstract resources
+
+- Abstract hardware out of everywhere
+- All you see is APIs and resource endpoint URIs
+- Use managed services instead of DIY solutions
+-
+
+--
+
+## Clusters of resources
+
+- Not a single resource, but n resources of same type
+- Access clusters via load balancers and auto scaling groups
+- Bind to
+
+--
+
+## Glue with async messaging
+
+- Parts of system are glued together with async messaging
+- SQS and SNS provide
 
 ---
 
-# Summary
+## Ephemeral instances
 
-
-## Things that we did right
-
-- Using IAM user accounts instead of sharing the root account
-- Using IAM roles on the instances
-- Load-balancing, auto-scaling and elasticity
-- Loose coupling with SQS and ELB
-- CloudFormation and bootstrapping with User Data and Ansible
+- Instances are short lived and hold no storage
+-
 
 --
 
-## Things that we *should* have done
+## Automate everything
 
-- Set up a VPC and subnetting, proper security groups. No private IPs and no public access, no public SSH.
-- Distribute credentials via secure path, least privileges in IAM
-- Break CloudFormation template into smaller pieces
-- Versioned jar files or golden images: Launch configuration should be static
+- Infrastructure as code, automatic provisioning and automatic deployment
+- Prerequisites for proper autoscaling
+- Provides repeatable and versioned infrastructure
 
-Notes: Currently new ui-instances that are born with autoscale pull the latest jar from S3. This means that the "launch configuration" is not static, and every autoscaled instance might be different.
+---
+
+## Cloud compatible software architecture
 
 --
 
-## Things that we *could* have done
+## Scale out
 
-- Use proper microservice architecture, no shared usage of resources
-- Distribute static content from [CloudFront CDN](http://aws.amazon.com/cloudfront/)
-- Use a more supported(?) database than SimpleDB
-- [AWS::CloudFormation::Init](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-init.html)
-- Build golden image / [Docker](https://www.docker.com/) container to provide fully immutable instances
+- Scaling out offers better resource and cost optimization
+-
 
+---
+
+## Reference architecture
+
+![Web hosting reference architecture](/images/aws_reference_architecture_web_hosting.png)
+
+[aws.amazon.com/architecture](http://aws.amazon.com/architecture/)
