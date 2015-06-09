@@ -9,7 +9,7 @@ The course guides participants roughly towards the [Solutions Architect certific
 
 ## Getting started
 
-For modules 1-5, a laptop with a browser and SSH client is enough. Modules 6-7 include programming assignments that require JDK 8, IDE and Ansible. See the [Getting Started](docs/getting_started.md) for information on how to prepare for the programming workshop and how to set up your tools.
+For modules 1-4, a laptop with a browser and SSH client is enough. Modules 5-8 include programming assignments that require JDK 8, IDE and Ansible. See the [Getting Started](docs/getting_started.md) for information on how to prepare for the programming workshop and how to set up your tools.
 
 ## Presentation slides
 

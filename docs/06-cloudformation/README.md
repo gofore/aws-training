@@ -1,30 +1,23 @@
 
-## CloudFormation
-### AWS Training Module 5
-
+## Infrastructure as code
+### AWS Training Module 6
 
 ---
 
 ## Agenda
 
+- Management & deployment tools
+- CloudFormation
+
 ---
 
---
+# Management
 
+(CloudFormation, BeanStalk, OpsWorks)
 
-## Using IAM credentials with the SDKs
+---
 
-SDKs support credentials provider chain, including [Java SDK](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/di/AwsModule.java#L52-58).
-
-<pre><code data-trim="" class="java">
-public AWSCredentialsProvider credentialsProvider(ApplicationProperties properties) {
-    return new AWSCredentialsProviderChain(
-            new StaticCredentialsProvider(new PropertyLoaderCredentials(properties)),
-            new ProfileCredentialsProvider(),
-            new InstanceProfileCredentialsProvider()
-    );
-}
-</code></pre>
+# CloudFormation
 
 --
 
@@ -83,9 +76,7 @@ Reusable, versionable infrastructure description that can be commited to source 
         Project: "aws-workshop-project"
 </code></pre>
 
-
----
-
+--
 
 ## Exercise: Create a stack
 
@@ -110,42 +101,4 @@ Reusable, versionable infrastructure description that can be commited to source 
 </code></pre>
 
 Verify that you can find your queues from the management console
-
-
----
-
-# Simple deployment pipeline
-
---
-
-![Deployment pipeline](/images/deployment_pipeline.png)
-
---
-
-## Exercise: Deploy your .jar files to S3
-
-1. `mvn deploy`
-2. Verify that you can find your files from the management console
-
----
-
-
-
-## Complete CloudFormation template
-
-workshop/initial/deploy/cloudformation-templates/
-
-[infrastructure-complete.template](https://github.com/gofore/aws-training/blob/master/workshop/initial/deploy/cloudformation-templates/infrastructure-complete.template)
-
---
-
-## Exercise: Deploy complete stack
-
-1. Create a stack with `create_complete_infrastructure.yml`
-2. Look at CloudFormation -> Stack -> Events until complete
-3. Look at EC2 -> Load Balancers -> Instances until InService
-4. Check your e-mail and subscribe to the notifications
-5. Try out the application
-6. Try to make the aws-workshop-fetchers scale out
-7. Terminate instances from an auto scaling group and see what happens
 
