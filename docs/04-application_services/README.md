@@ -6,16 +6,36 @@
 
 ## Agenda
 
-- Administration tools: CloudTrail, Trusted Advisor
-- Message queues (SQS)
-- Notifications (SNS)
-- E-mail (SES)
-- Simple Workflow Service (SWF)
-- EMR, Kinesis, CloudSearch, Elastic Transcoder
+- Administrative tools
+- Queues and notifications
+- Misc bits
 
 ---
 
-# Loose coupling with Queues
+# Administrative tools
+
+--
+
+## Administrative tools
+
+- [CloudTrail](http://aws.amazon.com/cloudtrail/)
+- [Trusted Advisor](https://aws.amazon.com/premiumsupport/trustedadvisor/)
+
+---
+
+# Queues and notifications
+
+--
+
+## Queues and notifications
+
+- [Simple Queue Service (SQS)](http://aws.amazon.com/sqs/)
+- [Simple Notification Service (SNS)](http://aws.amazon.com/sns/)
+- [Simple Workflow Service (SWF)](http://aws.amazon.com/swf/)
+
+--
+
+## Loose coupling with Queues
 
 --
 
@@ -38,34 +58,20 @@
   - 256kB payload limit, should use handle to S3 stored data for bigger payloads
   - maximum message retention period is 14 days
 
-## Exercise: Programming with SQS
+---
 
-1. Compile and run the `aws-workshop-ui` locally
-2. Complete [programming task #1](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-1-sqs-request)  
-   See `com.gofore.aws.workshop.ui.rest.QueueAttributesResource`
-3. Complete [programming task #2](https://github.com/gofore/aws-training/tree/master/workshop/initial#task-2-sqs-message-send)  
-   See `com.gofore.aws.workshop.ui.rest.QueriesResource`
-4. View your messages in the queues from the management console
-5. Run the `aws-workshop-loader` locally
-
-Notes: If you use Vagrant, you can access the web app at http://10.10.10.10:9001 on your host machine.
+# Misc bits
 
 --
 
-## Handling SQS messages
+- [Simple Email Service (SES)](http://aws.amazon.com/ses/) for sending outbound bulk mail
+- [Elastic MapReduce (EMR)](http://aws.amazon.com/elasticmapreduce/) Hadoop and Spark as a service
+- [Kinesis](http://aws.amazon.com/kinesis/) real-time processing of data streams
+- [Elastic Transcoder](http://aws.amazon.com/elastictranscoder/) media transcoding service
+- [CloudSearch](http://aws.amazon.com/cloudsearch/) Solr search engine as a service
 
-[com.gofore.aws.workshop.common.sqs.SqsService.java](https://github.com/gofore/aws-training/blob/master/workshop/initial/aws-workshop-common/src/main/java/com/gofore/aws/workshop/common/sqs/SqsService.java)
+--
 
-<pre><code data-trim="" class="java">
-public class SqsService extends Service {
-    public SqsService(SqsClient sqsClient, String queueUrl) {}
-    public SqsService addMessageHandler(Function&lt;Message, CompletableFuture&lt;Message&gt;&gt; messageHandler) {}
-    public SqsService setCompleteHandler(BiConsumer&lt;? super Message, ? super Throwable&gt; completeHandler) {}
-    public synchronized void start() throws Exception {}
-    public synchronized void stop() throws Exception {}
-    protected CompletableFuture&lt;Message&gt; handleMessage(Message message) {}
-    protected CompletableFuture&lt;Message&gt; completeMessage(CompletableFuture&lt;Message&gt; message) {}
-    protected CompletableFuture&lt;Message&gt; deleteMessage(CompletableFuture&lt;Message&gt; message) {}
-}
-</code></pre>
+![List of AWS Services](/images/aws_list_of_services.png)
 
+[AWS Services](http://aws.amazon.com/products/)

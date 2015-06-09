@@ -24,7 +24,6 @@
 
 ---
 
-
 # Programmability
 
 --
@@ -83,9 +82,6 @@ public AWSCredentialsProvider credentialsProvider(ApplicationProperties properti
 
 ---
 
-
-
-
 ## Complete CloudFormation template
 
 workshop/initial/deploy/cloudformation-templates/
@@ -103,8 +99,6 @@ workshop/initial/deploy/cloudformation-templates/
 5. Try out the application
 6. Try to make the aws-workshop-fetchers scale out
 7. Terminate instances from an auto scaling group and see what happens
-
-
 
 ---
 
