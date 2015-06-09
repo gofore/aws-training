@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
+angular.module('aws', ['ngMessages', 'infinite-scroll'])
 .controller('QueryCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.submit = function() {
         if ($scope.query) {
@@ -44,6 +44,43 @@ angular.module('aws', ['ngMessages', 'infinite-scroll', 'ui.bootstrap'])
             $scope.status = { error: true };
         });
     };
+}])
+.controller('AsgCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.instances = [];
+    $scope.loading = false;
+    $scope.scaling = function(ip) {
+        $scope.loading = true;
+        if (!ip) {
+            $http({
+                url: '/api/scaling',
+                method: 'GET'
+            }).success(function (data) {
+                $scope.instances = data;
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            });
+        } else {
+            $http({
+                url: '/api/scaling',
+                method: 'PUT',
+                params: { ip: ip }
+            }).success(function (data) {
+                var idx = _.findIndex($scope.instances, function(instance) {
+                    return instance.privateIp == data.privateIp;
+                });
+                if (idx >= 0) {
+                    $scope.instances[idx] = data;
+                } else {
+                    $scope.instances.push(data);
+                }
+                $scope.loading = false;
+            }).error(function () {
+                $scope.loading = false;
+            })
+        }
+    };
+    $scope.scaling();
 }])
 .controller('LogsCtrl', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     $scope.logs = [];

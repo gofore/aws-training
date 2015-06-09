@@ -19,7 +19,12 @@ public class Lists {
     public static <T> Function<List<T>, Optional<T>> findFirst(Predicate<T> predicate) {
         return l -> findFirst(l, predicate);
     }
-    
+
+    public static <T> Function<List<T>, T> findFirst() {
+        Function<List<T>, Optional<T>> f = findFirst(v -> true);
+        return f.andThen(Optional::get);
+    }
+
     private Lists() {
         
     }

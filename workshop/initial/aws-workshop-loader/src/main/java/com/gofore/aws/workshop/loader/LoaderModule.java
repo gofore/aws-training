@@ -20,6 +20,7 @@ public class LoaderModule extends AbstractModule {
     public ApplicationProperties applicationProperties() {
         return new ApplicationProperties()
                 .withSystemPropertyLoader()
+                .withEnvironmentPropertyLoader()
                 .withAwsCredentialsCsvLoader("credentials.csv")
                 .withAwsCredentialsEnvLoader()
                 .withClasspathPropertyLoader("common.properties");

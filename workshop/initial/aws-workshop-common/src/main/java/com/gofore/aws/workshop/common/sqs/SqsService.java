@@ -1,15 +1,5 @@
 package com.gofore.aws.workshop.common.sqs;
 
-import static com.gofore.aws.workshop.common.async.FutureHelper.sequence;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.amazonaws.services.sqs.model.DeleteMessageRequest;
 import com.amazonaws.services.sqs.model.Message;
 import com.amazonaws.services.sqs.model.ReceiveMessageRequest;
@@ -20,10 +10,19 @@ import org.restlet.service.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
+
+import static com.gofore.aws.workshop.common.async.FutureHelper.sequence;
+
 public class SqsService extends Service {
     
     private static final Logger LOGGER = LoggerFactory.getLogger(SqsService.class);
-    private static final long ARTIFICIAL_BUSY_MILLIS = 10000;
     private static final long WAIT_AFTER_FAILURE_MILLIS = 5000;
     private static final int LONG_POLL_SECONDS = 20;
     
@@ -64,13 +63,14 @@ public class SqsService extends Service {
                         
                         // apply the message handle chain and finally delete message if
                         // everything else succeeds
-                        result.getMessages().stream()
+                        Stream<CompletableFuture<Message>> messages = result.getMessages().stream()
                                 .map(this::handleMessage)
                                 .map(this::completeMessage)
-                                .map(this::deleteMessage)
-                                .collect(Collectors.toList()); // required to terminate the stream
-                        
-                        Threads.sleep(ARTIFICIAL_BUSY_MILLIS);
+                                .map(this::deleteMessage);
+                        sequence(messages).join();
+
+                        // artificial slow down to allow scaling to happen
+                        Threads.sleep(10000);
                     } catch (RuntimeException ex) {
                         LOGGER.warn("SQS receive or message handling failed", ex);
                         Threads.sleep(WAIT_AFTER_FAILURE_MILLIS);

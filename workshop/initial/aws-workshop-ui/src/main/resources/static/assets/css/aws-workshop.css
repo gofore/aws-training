@@ -46,3 +46,7 @@
 .container-fluid {
     margin-top: 20px;
 }
+
+.overload {
+    width: 100px;
+}
