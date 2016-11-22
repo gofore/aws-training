@@ -1,6 +1,6 @@
 
 ## Best practice architectures
-### AWS Training Module 6
+### AWS Training Module 7
 
 ---
 
