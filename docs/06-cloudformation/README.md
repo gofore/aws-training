@@ -23,7 +23,8 @@
 
 ## [CloudFormation](http://aws.amazon.com/cloudformation/)
 
-- Create a [*stack*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html) of resources from a JSON [*template*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html)
+- Create a [*stack*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html) of resources from a [*template*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-whatis-concepts.html)
+- Templates are written in JSON or YAML
 - Template can define [*parameters*](http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html) that must be given during stack creation
 - Reusable, versionable infrastructure description that can be commited to source control
 
